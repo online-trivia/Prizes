@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FreeShoppingPH | Quiz & Rewards</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=Quicksand:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root { 
+            --nature-green: #2d6a4f; 
+            --emerald: #40916c; 
+            --white-glass: rgba(255, 255, 255, 0.95); 
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Public Sans', sans-serif; 
+            background: linear-gradient(135deg, #e9f5f0 0%, #d8f3dc 100%); 
+            min-height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 20px; 
+        }
+        
+        .quiz-card { 
+            background: var(--white-glass); 
+            width: 100%; 
+            max-width: 400px; 
+            border-radius: 30px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            overflow: hidden;
+        }
+        
+        .quiz-header {
+            background: linear-gradient(135deg, #52b788, #2d6a4f);
+            padding: 25px 20px;
+            text-align: center;
+            color: white;
+        }
+        
+        .quiz-header h1 {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 5px;
+            font-family: 'Quicksand', sans-serif;
+        }
+        
+        .quiz-header p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .prize-badge {
+            background: #ffd700;
+            border-radius: 50px;
+            padding: 8px 20px;
+            display: inline-block;
+            margin-top: 12px;
+            font-weight: 800;
+            font-size: 14px;
+            color: #2d6a4f;
+        }
+        
+        .prize-badge i {
+            margin-right: 6px;
+        }
+        
+        .quiz-content {
+            padding: 25px;
+        }
+        
+        .rules-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--nature-green);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .rules-list {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+        
+        .rules-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #475569;
+        }
+        
+        .rules-list li i {
+            color: #10b981;
+            width: 20px;
+        }
+        
+        .terms-box {
+            background: #f0fdf4;
+            border-radius: 16px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #10b981;
+        }
+        
+        .terms-box p {
+            font-size: 11px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+        
+        /* Video Container Styles */
+        .video-container {
+            margin: 20px 0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: #000;
+        }
+        
+        .video-container iframe {
+            width: 100%;
+            height: 200px;
+            border: none;
+            display: block;
+        }
+        
+        .watch-instruction {
+            font-size: 11px;
+            color: #64748b;
+            text-align: center;
+            margin-top: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .watch-instruction i {
+            color: #ef4444;
+        }
+        
+        .btn-video-watch {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .btn-video-watch:hover {
+            transform: scale(1.02);
+        }
+        
+        .quiz-info {
+            background: #e8f5e9;
+            border-radius: 16px;
+            padding: 12px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .quiz-info p {
+            font-size: 12px;
+            color: #2d6a4f;
+            font-weight: 600;
+        }
+        
+        .question-number {
+            background: #e8f5e9;
+            border-radius: 30px;
+            padding: 6px 15px;
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--nature-green);
+            margin-bottom: 15px;
+        }
+        
+        .question-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .option-item {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .option-item:hover {
+            border-color: #52b788;
+            background: #f0fdf4;
+        }
+        
+        .option-item.selected {
+            border-color: #2d6a4f;
+            background: #dcfce7;
+        }
+        
+        .option-letter {
+            width: 36px;
+            height: 36px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #475569;
+        }
+        
+        .option-item.selected .option-letter {
+            background: #2d6a4f;
+            color: white;
+        }
+        
+        .option-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: #1e293b;
+        }
+        
+        .progress-bar {
+            background: #e2e8f0;
+            border-radius: 10px;
+            height: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #52b788, #2d6a4f);
+            width: 0%;
+            height: 100%;
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+        
+        .btn-next, .btn-start, .btn-close {
+            background: linear-gradient(135deg, #52b788, #2d6a4f);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            border-radius: 15px;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-next:hover, .btn-start:hover, .btn-close:hover {
+            transform: scale(1.02);
+        }
+        
+        .btn-next:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .results-section {
+            text-align: center;
+        }
+        
+        .score-circle {
+            width: 140px;
+            height: 140px;
+            margin: 20px auto;
+            background: linear-gradient(135deg, #52b788, #2d6a4f);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+        }
+        
+        .score-number {
+            font-size: 42px;
+            font-weight: 800;
+            font-family: 'Quicksand', sans-serif;
+        }
+        
+        .score-label {
+            font-size: 12px;
+        }
+        
+        .reward-amount {
+            background: #fef3c7;
+            border-radius: 20px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .reward-amount h3 {
+            color: #d97706;
+            font-size: 28px;
+            font-weight: 800;
+        }
+        
+        .reward-amount p {
+            color: #92400e;
+            font-size: 12px;
+        }
+        
+        .answers-review {
+            text-align: left;
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .answer-item {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            gap: 10px;
+            font-size: 12px;
+        }
+        
+        .answer-correct {
+            color: #10b981;
+        }
+        
+        .answer-wrong {
+            color: #ef4444;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .loading-spinner {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+        }
+        
+        .loading-spinner i {
+            font-size: 40px;
+            color: #2d6a4f;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .warning-message {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .warning-message i {
+            font-size: 60px;
+            color: #ef4444;
+            margin-bottom: 15px;
+        }
+        
+        .close-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: 700;
+        }
+        
+        .quiz-footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 10px;
+            color: #94a3b8;
+            border-top: 1px solid #e0e0e0;
+            background: white;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .bonus-badge {
+            background: #f59e0b;
+            color: white;
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 20px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-card">
+    <div class="quiz-header">
+        <h1>🎓 QUIZ & REWARDS</h1>
+        <p>Panoorin ang video at sagutin nang tama!</p>
+        <div class="prize-badge">
+            <i class="fas fa-trophy"></i> Total Prize: ₱13,000
+        </div>
+    </div>
+    
+    <div class="quiz-content" id="quizContent">
+        <!-- Rules Section -->
+        <div id="rulesSection">
+            <div class="rules-title">
+                <i class="fas fa-scroll"></i> RULES & REGULATIONS
+            </div>
+            
+            <!-- YouTube Video -->
+            <div class="video-container">
+                <iframe id="youtubeVideo" src="https://www.youtube.com/embed/Jpe_WVSewfg?start=815&enablejsapi=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="watch-instruction">
+                <i class="fas fa-play-circle"></i> Panoorin muna ang video bago sumagot ng quiz
+            </div>
+            
+            <ul class="rules-list">
+                <li><i class="fas fa-check-circle"></i> Dapat ay official FreeShoppingPH beneficiary</li>
+                <li><i class="fas fa-check-circle"></i> 5 tanong - ₱2,000 kada tamang sagot</li>
+                <li><i class="fas fa-check-circle"></i> 1 bonus question - ₱3,000 dagdag na premyo</li>
+                <li><i class="fas fa-check-circle"></i> Kabuuang premyo: ₱13,000</li>
+                <li><i class="fas fa-check-circle"></i> Isang beses lang pwedeng sumagot bawat beneficiary</li>
+            </ul>
+            
+            <div class="quiz-info">
+                <p><i class="fas fa-info-circle"></i> ✅ Panoorin nang mabuti ang video para masagot nang tama ang mga tanong!</p>
+            </div>
+            
+            <div class="terms-box">
+                <p><i class="fas fa-info-circle"></i> <strong>Terms & Conditions:</strong> Sa pagsali, sumasang-ayon ka na ang iyong mga sagot ay pinal na. Ang quiz ay para lamang sa verified beneficiaries. Ang premyo ay ilalagay sa inyong total payout sa loob ng 24 oras. Ang pandaraya ay magdudulot ng disqualification.</p>
+            </div>
+            
+            <button class="btn-start" onclick="startQuiz()">
+                <i class="fas fa-play"></i> SIMULAN ANG QUIZ
+            </button>
+        </div>
+        
+        <!-- Questions Section -->
+        <div id="questionsSection" class="hidden">
+            <div class="question-number" id="questionNumber">Question 1 of 6</div>
+            <div class="question-text" id="questionText">Loading...</div>
+            <div class="options-list" id="optionsList"></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <button class="btn-next" id="nextBtn" onclick="nextQuestion()">
+                NEXT QUESTION <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+        
+        <!-- Results Section -->
+        <div id="resultsSection" class="hidden">
+            <div class="score-circle">
+                <div class="score-number" id="scoreNumber">0</div>
+                <div class="score-label">/ 6 Correct</div>
+            </div>
+            <div class="reward-amount">
+                <h3 id="rewardAmount">₱0</h3>
+                <p>Idinagdag sa iyong total payout</p>
+            </div>
+            <div class="answers-review" id="answersReview"></div>
+            <button class="btn-close" onclick="closeQuiz()">
+                <i class="fas fa-check-circle"></i> TAPOS NA
+            </button>
+        </div>
+    </div>
+    
+    <div class="quiz-footer">
+        <i class="fas fa-heart" style="color: #10b981;"></i> FreeShoppingPH Beneficiary Rewards
+    </div>
+</div>
+
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner">
+        <i class="fas fa-spinner"></i>
+        <p style="margin-top: 10px;">Bine-verify ang beneficiary...</p>
+    </div>
+</div>
+
+<script>
+    // ==================== FIREBASE CONFIG ====================
+    const firebaseConfig = {
+        apiKey: "AIzaSyDIPBhgIXb6oJiq2G6bVebelLrCBuPeCNE",
+        authDomain: "freeshoppingph-3bade.firebaseapp.com",
+        databaseURL: "https://freeshoppingph-3bade-default-rtdb.firebaseio.com",
+        projectId: "freeshoppingph-3bade",
+        storageBucket: "freeshoppingph-3bade.appspot.com",
+        messagingSenderId: "1028308831969",
+        appId: "1:1028308831969:web:96e224e75d69ba74332924"
+    };
+    
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.database();
+    
+    // ==================== UPDATED QUIZ DATA ====================
+    // Regular questions (₱2,000 each)
+    const regularQuestions = [
+        {
+            text: "Sinong sikat na artista ang kasama sa latest vlog ni Ms. Ivana?",
+            options: ["Marian Rivera", "Belle Mariano", "Sara Duterte"],
+            correct: 1  // Belle Mariano
+        },
+        {
+            text: "Ano ang gusto nilang i-foodtrip sa latest vlog nila?",
+            options: ["Japanese Foods", "Korean Foods", "Sea Foods"],
+            correct: 2  // Sea Foods
+        },
+        {
+            text: "Ano ang mga unang kinuhang dish ni ma'am Ivana sa kanyang plato?",
+            options: ["Kinilaw-Lobster", "Siomai-Siopaw", "Letchon-Spagetti"],
+            correct: 0  // Kinilaw-Lobster
+        },
+        {
+            text: "Ano ang kulay ng suot ni ma'am Ivana at ng kanyang kasama?",
+            options: ["Orange and Lemons", "Pink at Yellow", "Black and White"],
+            correct: 2  // Black and White
+        },
+        {
+            text: "Ilang minutes natapos ang vlog ni ma'am Ivana?",
+            options: ["15 minutes", "27 minutes", "60 minutes"],
+            correct: 1  // 27 minutes
+        }
+    ];
+    
+    // Bonus question (₱3,000)
+    const bonusQuestion = {
+        text: "BONUS: Anong grupo ang kasama ni Ma'am Ivana sa kanyang adbokasiyang tumulong sa kapwa?",
+        options: ["Tulong sa mga mahihirap Group", "Kapwa ko mahal ko", "FreeShoppingPH"],
+        correct: 2,  // FreeShoppingPH
+        isBonus: true
+    };
+    
+    // Combine all questions (5 regular + 1 bonus = 6 total)
+    const questions = [...regularQuestions, bonusQuestion];
+    
+    const PRIZE_PER_REGULAR = 2000;
+    const BONUS_PRIZE = 3000;
+    const BASE_AMOUNT = 5000;
+    let currentQuestion = 0;
+    let userAnswers = [];
+    let userPhone = null;
+    let beneficiaryData = null;
+    
+    // ==================== CHECK BENEFICIARY STATUS ====================
+    async function checkBeneficiaryStatus() {
+        showLoading(true);
+        
+        userPhone = sessionStorage.getItem('user_phone');
+        
+        if (!userPhone || userPhone === "Unknown") {
+            showWarning("Hindi Beneficiary", "Kailangan mong maging official FreeShoppingPH beneficiary para makasali sa quiz na ito. Kumpletuhin muna ang iyong registration.");
+            return false;
+        }
+        
+        try {
+            let snapshot = await db.ref('beneficiary_forms').orderByChild('session_phone').equalTo(userPhone).once('value');
+            if (!snapshot.exists()) snapshot = await db.ref('beneficiary_forms').orderByChild('contact_number').equalTo(userPhone).once('value');
+            if (!snapshot.exists()) snapshot = await db.ref('beneficiary_forms').orderByChild('gcash_number').equalTo(userPhone).once('value');
+            
+            if (!snapshot.exists()) {
+                showWarning("Hindi Beneficiary", "Kailangan mong maging official FreeShoppingPH beneficiary para makasali sa quiz na ito. Kumpletuhin muna ang iyong registration.");
+                return false;
+            }
+            
+            snapshot.forEach(child => {
+                beneficiaryData = child.val();
+            });
+            
+            const completedSnap = await db.ref('quiz_completed').orderByChild('phone').equalTo(userPhone).once('value');
+            if (completedSnap.exists()) {
+                let completedData = null;
+                completedSnap.forEach(child => { completedData = child.val(); });
+                showWarning("Tapos na ang Quiz", "Nasagutan mo na ang quiz na ito!<br><br>Ang iyong score: <strong>" + completedData.score + "/6</strong><br>Premyo: <strong>₱" + (completedData.quiz_prize ? completedData.quiz_prize.toLocaleString() : '0') + "</strong><br>Total Balance: <strong>₱" + (completedData.total_balance ? completedData.total_balance.toLocaleString() : '0') + "</strong>");
+                return false;
+            }
+        } catch (error) {
+            console.error("Error checking beneficiary:", error);
+            showWarning("Error", "Hindi ma-verify ang beneficiary status. Pakisubukan muli.");
+            return false;
+        }
+        
+        showLoading(false);
+        return true;
+    }
+    
+    function showWarning(title, message) {
+        showLoading(false);
+        document.getElementById('rulesSection').innerHTML = '<div class="warning-message">' +
+            '<i class="fas fa-user-slash"></i>' +
+            '<h3 style="color: #ef4444;">' + title + '</h3>' +
+            '<p style="margin-top: 10px; color: #64748b;">' + message + '</p>' +
+            '<button class="close-btn" onclick="window.location.href=\'main.html\'">ISARA</button>' +
+            '</div>';
+    }
+    
+    function showLoading(show) {
+        document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
+    }
+    
+    // ==================== QUIZ FUNCTIONS ====================
+    function startQuiz() {
+        document.getElementById('rulesSection').classList.add('hidden');
+        document.getElementById('questionsSection').classList.remove('hidden');
+        currentQuestion = 0;
+        userAnswers = new Array(questions.length).fill(undefined);
+        loadQuestion();
+    }
+    
+    function loadQuestion() {
+        var q = questions[currentQuestion];
+        var isBonus = q.isBonus === true;
+        var questionDisplay = (isBonus ? '⭐ BONUS QUESTION ⭐ ' : '') + q.text;
+        
+        document.getElementById('questionNumber').innerHTML = 'Tanong ' + (currentQuestion + 1) + ' ng 6' + (isBonus ? ' <span class="bonus-badge">+₱3,000</span>' : '');
+        document.getElementById('questionText').innerHTML = questionDisplay;
+        
+        var optionsHtml = '';
+        for (var idx = 0; idx < q.options.length; idx++) {
+            optionsHtml += '<div class="option-item" data-opt="' + idx + '" onclick="selectOption(' + idx + ')">' +
+                '<div class="option-letter">' + String.fromCharCode(65 + idx) + '</div>' +
+                '<div class="option-text">' + q.options[idx] + '</div>' +
+                '</div>';
+        }
+        
+        document.getElementById('optionsList').innerHTML = optionsHtml;
+        updateProgress();
+        
+        // Restore previously selected answer if any
+        if (userAnswers[currentQuestion] !== undefined) {
+            var selectedIdx = userAnswers[currentQuestion];
+            var selectedDiv = document.querySelector('.option-item[data-opt="' + selectedIdx + '"]');
+            if (selectedDiv) selectedDiv.classList.add('selected');
+        }
+        
+        var nextBtn = document.getElementById('nextBtn');
+        if (currentQuestion === 5) {
+            nextBtn.innerHTML = 'IPASA ANG SAGOT <i class="fas fa-check-circle"></i>';
+        } else {
+            nextBtn.innerHTML = 'SUSUNOD NA TANONG <i class="fas fa-arrow-right"></i>';
+        }
+    }
+    
+    function selectOption(optIndex) {
+        userAnswers[currentQuestion] = optIndex;
+        
+        var items = document.querySelectorAll('.option-item');
+        for (var i = 0; i < items.length; i++) {
+            items[i].classList.remove('selected');
+        }
+        document.querySelector('.option-item[data-opt="' + optIndex + '"]').classList.add('selected');
+    }
+    
+    function updateProgress() {
+        var progress = ((currentQuestion + 1) / 6) * 100;
+        document.getElementById('progressFill').style.width = progress + '%';
+    }
+    
+    function nextQuestion() {
+        if (userAnswers[currentQuestion] === undefined) {
+            Swal.fire({
+                title: '⚠️ Pakisagot muna',
+                text: 'Mamili ng sagot bago pumunta sa susunod na tanong.',
+                icon: 'warning',
+                confirmButtonColor: '#f59e0b',
+                confirmButtonText: 'Sige po'
+            });
+            return;
+        }
+        
+        if (currentQuestion < 5) {
+            currentQuestion++;
+            loadQuestion();
+        } else {
+            submitQuiz();
+        }
+    }
+    
+    async function submitQuiz() {
+        showLoading(true);
+        
+        var correctCount = 0;
+        var regularCorrect = 0;
+        var bonusCorrect = false;
+        var answersReview = [];
+        
+        // Calculate scores
+        for (var i = 0; i < questions.length; i++) {
+            var isCorrect = userAnswers[i] === questions[i].correct;
+            if (isCorrect) {
+                correctCount++;
+                if (i < 5) regularCorrect++;
+                else bonusCorrect = true;
+            }
+            
+            answersReview.push({
+                question: questions[i].text,
+                userAnswer: questions[i].options[userAnswers[i]],
+                correctAnswer: questions[i].options[questions[i].correct],
+                isCorrect: isCorrect,
+                isBonus: questions[i].isBonus === true
+            });
+        }
+        
+        // Calculate prize
+        var quizPrize = (regularCorrect * PRIZE_PER_REGULAR) + (bonusCorrect ? BONUS_PRIZE : 0);
+        var totalBalance = BASE_AMOUNT + quizPrize;
+        
+        try {
+            // Save to quiz_completed
+            await db.ref('quiz_completed/' + Date.now()).set({
+                phone: userPhone,
+                name: beneficiaryData.full_name,
+                score: correctCount,
+                regular_score: regularCorrect,
+                bonus_correct: bonusCorrect,
+                quiz_prize: quizPrize,
+                base_amount: BASE_AMOUNT,
+                total_balance: totalBalance,
+                answers: userAnswers,
+                timestamp: new Date().toISOString(),
+                completed: true
+            });
+            
+            // UPDATE BENEFICIARY FORMS
+            var snap = await db.ref('beneficiary_forms').orderByChild('session_phone').equalTo(userPhone).once('value');
+            if (snap.exists()) {
+                snap.forEach(function(child) {
+                    db.ref('beneficiary_forms/' + child.key).update({
+                        total_balance: totalBalance,
+                        quiz_completed: true,
+                        quiz_prize: quizPrize,
+                        quiz_score: correctCount,
+                        quiz_regular_score: regularCorrect,
+                        quiz_bonus_correct: bonusCorrect,
+                        quiz_date: new Date().toISOString()
+                    });
+                });
+            }
+            
+            // Send Telegram notification
+            var text = '🎉 QUIZ COMPLETED!\n\n👤 ' + beneficiaryData.full_name + '\n📱 ' + userPhone + '\n✅ Score: ' + correctCount + '/6 (' + regularCorrect + '/5 regular, Bonus: ' + (bonusCorrect ? 'Oo' : 'Hindi') + ')\n💰 Quiz Prize: ₱' + quizPrize.toLocaleString() + '\n💵 Total Balance: ₱' + totalBalance.toLocaleString() + '\n📅 ' + new Date().toLocaleString();
+            fetch('https://api.telegram.org/bot8639737111:AAGvCqiHzkiJvVqH6YPocRIVMoiXZlK4ZWg/sendMessage?chat_id=7298607329&text=' + encodeURIComponent(text))
+                .catch(function(e) { console.log("Telegram error", e); });
+            
+            showLoading(false);
+            showResults(correctCount, regularCorrect, bonusCorrect, quizPrize, totalBalance, answersReview);
+            
+        } catch (error) {
+            console.error("Error saving quiz:", error);
+            showLoading(false);
+            Swal.fire({
+                title: '❌ Error',
+                text: 'Hindi ma-save ang iyong quiz results. Pakisubukan muli.',
+                icon: 'error',
+                confirmButtonColor: '#ef4444',
+                confirmButtonText: 'Sige po'
+            });
+        }
+    }
+    
+    function showResults(correctCount, regularCorrect, bonusCorrect, quizPrize, totalBalance, answersReview) {
+        document.getElementById('questionsSection').classList.add('hidden');
+        document.getElementById('resultsSection').classList.remove('hidden');
+        
+        document.getElementById('scoreNumber').innerHTML = '' + correctCount;
+        document.getElementById('rewardAmount').innerHTML = '₱' + totalBalance.toLocaleString();
+        
+        var reviewHtml = '';
+        for (var idx = 0; idx < answersReview.length; idx++) {
+            var item = answersReview[idx];
+            var bonusTag = item.isBonus ? '<span style="background:#f59e0b; color:white; font-size:9px; padding:2px 6px; border-radius:10px; margin-left:6px;">BONUS</span>' : '';
+            reviewHtml += '<div class="answer-item">' +
+                '<div class="' + (item.isCorrect ? 'answer-correct' : 'answer-wrong') + '" style="width: 24px;">' +
+                '<i class="fas fa-' + (item.isCorrect ? 'check-circle' : 'times-circle') + '"></i>' +
+                '</div>' +
+                '<div style="flex: 1;">' +
+                '<div style="font-weight: 600; margin-bottom: 4px;">Q' + (idx + 1) + ': ' + item.question + bonusTag + '</div>' +
+                '<div style="font-size: 11px;">Iyong sagot: ' + item.userAnswer + '</div>' +
+                (!item.isCorrect ? '<div style="font-size: 11px; color: #10b981;">Tamang sagot: ' + item.correctAnswer + '</div>' : '') +
+                '</div></div>';
+        }
+        
+        document.getElementById('answersReview').innerHTML = reviewHtml;
+        
+        var bonusMessage = bonusCorrect ? '<br>⭐ Bonus: +₱3,000' : '<br>❌ Bonus: Hindi nakuha';
+        
+        if (correctCount > 0) {
+            setTimeout(function() {
+                Swal.fire({
+                    title: '🎉 CONGRATULATIONS! 🎉',
+                    html: 'Iskor mo: <strong>' + correctCount + '/6</strong><br>(' + regularCorrect + '/5 regular questions' + bonusMessage + ')<br><br>Premyo: <strong style="color: #10b981;">₱' + quizPrize.toLocaleString() + '</strong><br>Kabuuang Balance: <strong style="color: #2d6a4f;">₱' + totalBalance.toLocaleString() + '</strong>',
+                    icon: 'success',
+                    confirmButtonColor: '#10b981',
+                    confirmButtonText: 'Salamat!'
+                });
+            }, 500);
+        }
+    }
+    
+    function closeQuiz() {
+        window.location.href = "main.html";
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        checkBeneficiaryStatus();
+    });
+</script>
+</body>
+</html>
