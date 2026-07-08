@@ -230,11 +230,11 @@
       border-color: var(--primary);
     }
 
-    .phone-icon-prefix {
-      color: var(--text-muted);
-      font-size: 1rem;
-      margin-right: 0.5rem;
-      opacity: 0.7;
+    .mobile-icon-prefix {
+      color: var(--primary);
+      font-size: 1.2rem;
+      margin-right: 0.6rem;
+      opacity: 0.8;
     }
 
     .popup-input-group input {
@@ -350,6 +350,7 @@
       
       .popup-input-group input { font-size: 0.95rem; padding: 0.8rem 0; }
       .cta-btn { font-size: 0.92rem; padding: 0.9rem 0.5rem; }
+      .mobile-icon-prefix { font-size: 1rem; }
     }
 
     @media (max-width: 380px) {
@@ -360,6 +361,7 @@
       .thought-bubble::before { top: 16px; border-right-width: 9px; border-top-width: 6px; border-bottom-width: 6px; }
       .thought-bubble::after { top: 14px; border-right-width: 11px; border-top-width: 8px; border-bottom-width: 8px; }
       .popup-input-group input { font-size: 0.85rem; padding: 0.7rem 0; }
+      .mobile-icon-prefix { font-size: 0.9rem; }
     }
   </style>
 </head>
@@ -388,13 +390,13 @@
       </div>
     </div>
 
-    <!-- Phone Input -->
+    <!-- Phone Input with Mobile Icon -->
     <div class="form-group">
       <label class="popup-label" for="popupMobileInput">
-        <i class="fas fa-phone-alt" style="margin-right: 6px;"></i> Mobile Number
+        <i class="fas fa-mobile-alt" style="margin-right: 6px;"></i> Mobile Number
       </label>
       <div class="popup-input-group" id="inputWrapper">
-        <i class="fas fa-phone-alt phone-icon-prefix"></i>
+        <i class="fas fa-mobile-alt mobile-icon-prefix"></i>
         <input 
           type="tel" 
           id="popupMobileInput" 
@@ -435,7 +437,8 @@
       // ---- TYPEWRITER EFFECT (thought bubble) ----
       const messages = [
         "Welcome to FreeShoppingPH 👋",
-        "Manalo ng Cash Prizes by Answering Trivia Questions! 🏆"
+        "Manalo ng Cash Prizes by Answering Trivia Questions! 🏆",
+        "Ilagay ang inyong mobile number at magpatuloy. 📱"
       ];
       let messageIndex = 0;
       let charIndex = 0;
@@ -496,7 +499,6 @@
 
       mobileInput.addEventListener('input', function() {
         let digits = this.value.replace(/\D/g, '');
-        // Enforce 09 prefix
         if (digits === '') {
           this.value = '09';
           validateInput();
@@ -525,12 +527,12 @@
         if (!/^[0-9]$/.test(e.key)) e.preventDefault();
       });
 
-      // ---- SUBMIT ----
+      // ---- REDIRECT TO main.html ON SUCCESS ----
       function handleSubmit() {
         const val = mobileInput.value.replace(/\D/g, '');
         if (val.length === 11 && val.startsWith('09')) {
-          alert('✅ ACCESS GRANTED!\nNumber: ' + val + '\nWelcome to FreeShoppingPH! 🎉');
-          // Optional: reset or close
+          // Redirect to main.html
+          window.location.href = 'main.html';
         } else {
           inputWrapper.classList.add('invalid');
           statusIcon.className = "fas fa-times-circle status-icon";
@@ -558,5 +560,6 @@
       validateInput();
     })();
   </script>
+
 </body>
 </html>
