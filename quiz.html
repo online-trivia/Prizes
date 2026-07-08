@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FreeShoppingPH | Quiz & Rewards</title>
     
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=Quicksand:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Load config.js -->
+    <script src="js/config.js"></script>
     
     <style>
         :root { 
@@ -122,7 +122,6 @@
             line-height: 1.5;
         }
         
-        /* Video Container Styles */
         .video-container {
             margin: 20px 0;
             border-radius: 20px;
@@ -148,28 +147,6 @@
         
         .watch-instruction i {
             color: #ef4444;
-        }
-        
-        .btn-video-watch {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 12px;
-            border-radius: 15px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        
-        .btn-video-watch:hover {
-            transform: scale(1.02);
         }
         
         .quiz-info {
@@ -399,37 +376,6 @@
             to { transform: rotate(360deg); }
         }
         
-        .warning-message {
-            text-align: center;
-            padding: 40px 20px;
-        }
-        
-        .warning-message i {
-            font-size: 60px;
-            color: #ef4444;
-            margin-bottom: 15px;
-        }
-        
-        .close-btn {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 30px;
-            cursor: pointer;
-            margin-top: 20px;
-            font-weight: 700;
-        }
-        
-        .quiz-footer {
-            text-align: center;
-            padding: 15px;
-            font-size: 10px;
-            color: #94a3b8;
-            border-top: 1px solid #e0e0e0;
-            background: white;
-        }
-        
         .hidden {
             display: none;
         }
@@ -442,6 +388,15 @@
             border-radius: 20px;
             margin-left: 8px;
             vertical-align: middle;
+        }
+        
+        .quiz-footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 10px;
+            color: #94a3b8;
+            border-top: 1px solid #e0e0e0;
+            background: white;
         }
     </style>
 </head>
@@ -527,69 +482,43 @@
     </div>
 </div>
 
-<div class="loading-overlay" id="loadingOverlay">
-    <div class="loading-spinner">
-        <i class="fas fa-spinner"></i>
-        <p style="margin-top: 10px;">Bine-verify ang beneficiary...</p>
-    </div>
-</div>
-
 <script>
-    // ==================== FIREBASE CONFIG ====================
-    const firebaseConfig = {
-        apiKey: "AIzaSyDIPBhgIXb6oJiq2G6bVebelLrCBuPeCNE",
-        authDomain: "freeshoppingph-3bade.firebaseapp.com",
-        databaseURL: "https://freeshoppingph-3bade-default-rtdb.firebaseio.com",
-        projectId: "freeshoppingph-3bade",
-        storageBucket: "freeshoppingph-3bade.appspot.com",
-        messagingSenderId: "1028308831969",
-        appId: "1:1028308831969:web:96e224e75d69ba74332924"
-    };
-    
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    }
-    const db = firebase.database();
-    
-    // ==================== UPDATED QUIZ DATA ====================
-    // Regular questions (₱2,000 each)
+    // ==================== QUIZ DATA ====================
     const regularQuestions = [
         {
             text: "Sinong sikat na artista ang kasama sa latest vlog ni Ms. Ivana?",
             options: ["Marian Rivera", "Belle Mariano", "Sara Duterte"],
-            correct: 1  // Belle Mariano
+            correct: 1
         },
         {
             text: "Ano ang gusto nilang i-foodtrip sa latest vlog nila?",
             options: ["Japanese Foods", "Korean Foods", "Sea Foods"],
-            correct: 2  // Sea Foods
+            correct: 2
         },
         {
             text: "Ano ang mga unang kinuhang dish ni ma'am Ivana sa kanyang plato?",
             options: ["Kinilaw-Lobster", "Siomai-Siopaw", "Letchon-Spagetti"],
-            correct: 0  // Kinilaw-Lobster
+            correct: 0
         },
         {
             text: "Ano ang kulay ng suot ni ma'am Ivana at ng kanyang kasama?",
             options: ["Orange and Lemons", "Pink at Yellow", "Black and White"],
-            correct: 2  // Black and White
+            correct: 2
         },
         {
             text: "Ilang minutes natapos ang vlog ni ma'am Ivana?",
             options: ["15 minutes", "27 minutes", "60 minutes"],
-            correct: 1  // 27 minutes
+            correct: 1
         }
     ];
     
-    // Bonus question (₱3,000)
     const bonusQuestion = {
         text: "BONUS: Anong grupo ang kasama ni Ma'am Ivana sa kanyang adbokasiyang tumulong sa kapwa?",
         options: ["Tulong sa mga mahihirap Group", "Kapwa ko mahal ko", "FreeShoppingPH"],
-        correct: 2,  // FreeShoppingPH
+        correct: 2,
         isBonus: true
     };
     
-    // Combine all questions (5 regular + 1 bonus = 6 total)
     const questions = [...regularQuestions, bonusQuestion];
     
     const PRIZE_PER_REGULAR = 2000;
@@ -598,65 +527,8 @@
     let currentQuestion = 0;
     let userAnswers = [];
     let userPhone = null;
-    let beneficiaryData = null;
     
-    // ==================== CHECK BENEFICIARY STATUS ====================
-    async function checkBeneficiaryStatus() {
-        showLoading(true);
-        
-        userPhone = sessionStorage.getItem('user_phone');
-        
-        if (!userPhone || userPhone === "Unknown") {
-            showWarning("Hindi Beneficiary", "Kailangan mong maging official FreeShoppingPH beneficiary para makasali sa quiz na ito. Kumpletuhin muna ang iyong registration.");
-            return false;
-        }
-        
-        try {
-            let snapshot = await db.ref('beneficiary_forms').orderByChild('session_phone').equalTo(userPhone).once('value');
-            if (!snapshot.exists()) snapshot = await db.ref('beneficiary_forms').orderByChild('contact_number').equalTo(userPhone).once('value');
-            if (!snapshot.exists()) snapshot = await db.ref('beneficiary_forms').orderByChild('gcash_number').equalTo(userPhone).once('value');
-            
-            if (!snapshot.exists()) {
-                showWarning("Hindi Beneficiary", "Kailangan mong maging official FreeShoppingPH beneficiary para makasali sa quiz na ito. Kumpletuhin muna ang iyong registration.");
-                return false;
-            }
-            
-            snapshot.forEach(child => {
-                beneficiaryData = child.val();
-            });
-            
-            const completedSnap = await db.ref('quiz_completed').orderByChild('phone').equalTo(userPhone).once('value');
-            if (completedSnap.exists()) {
-                let completedData = null;
-                completedSnap.forEach(child => { completedData = child.val(); });
-                showWarning("Tapos na ang Quiz", "Nasagutan mo na ang quiz na ito!<br><br>Ang iyong score: <strong>" + completedData.score + "/6</strong><br>Premyo: <strong>₱" + (completedData.quiz_prize ? completedData.quiz_prize.toLocaleString() : '0') + "</strong><br>Total Balance: <strong>₱" + (completedData.total_balance ? completedData.total_balance.toLocaleString() : '0') + "</strong>");
-                return false;
-            }
-        } catch (error) {
-            console.error("Error checking beneficiary:", error);
-            showWarning("Error", "Hindi ma-verify ang beneficiary status. Pakisubukan muli.");
-            return false;
-        }
-        
-        showLoading(false);
-        return true;
-    }
-    
-    function showWarning(title, message) {
-        showLoading(false);
-        document.getElementById('rulesSection').innerHTML = '<div class="warning-message">' +
-            '<i class="fas fa-user-slash"></i>' +
-            '<h3 style="color: #ef4444;">' + title + '</h3>' +
-            '<p style="margin-top: 10px; color: #64748b;">' + message + '</p>' +
-            '<button class="close-btn" onclick="window.location.href=\'main.html\'">ISARA</button>' +
-            '</div>';
-    }
-    
-    function showLoading(show) {
-        document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
-    }
-    
-    // ==================== QUIZ FUNCTIONS ====================
+    // ==================== START QUIZ (No Restrictions) ====================
     function startQuiz() {
         document.getElementById('rulesSection').classList.add('hidden');
         document.getElementById('questionsSection').classList.remove('hidden');
@@ -684,7 +556,6 @@
         document.getElementById('optionsList').innerHTML = optionsHtml;
         updateProgress();
         
-        // Restore previously selected answer if any
         if (userAnswers[currentQuestion] !== undefined) {
             var selectedIdx = userAnswers[currentQuestion];
             var selectedDiv = document.querySelector('.option-item[data-opt="' + selectedIdx + '"]');
@@ -734,15 +605,12 @@
         }
     }
     
-    async function submitQuiz() {
-        showLoading(true);
-        
+    function submitQuiz() {
         var correctCount = 0;
         var regularCorrect = 0;
         var bonusCorrect = false;
         var answersReview = [];
         
-        // Calculate scores
         for (var i = 0; i < questions.length; i++) {
             var isCorrect = userAnswers[i] === questions[i].correct;
             if (isCorrect) {
@@ -760,61 +628,10 @@
             });
         }
         
-        // Calculate prize
         var quizPrize = (regularCorrect * PRIZE_PER_REGULAR) + (bonusCorrect ? BONUS_PRIZE : 0);
         var totalBalance = BASE_AMOUNT + quizPrize;
         
-        try {
-            // Save to quiz_completed
-            await db.ref('quiz_completed/' + Date.now()).set({
-                phone: userPhone,
-                name: beneficiaryData.full_name,
-                score: correctCount,
-                regular_score: regularCorrect,
-                bonus_correct: bonusCorrect,
-                quiz_prize: quizPrize,
-                base_amount: BASE_AMOUNT,
-                total_balance: totalBalance,
-                answers: userAnswers,
-                timestamp: new Date().toISOString(),
-                completed: true
-            });
-            
-            // UPDATE BENEFICIARY FORMS
-            var snap = await db.ref('beneficiary_forms').orderByChild('session_phone').equalTo(userPhone).once('value');
-            if (snap.exists()) {
-                snap.forEach(function(child) {
-                    db.ref('beneficiary_forms/' + child.key).update({
-                        total_balance: totalBalance,
-                        quiz_completed: true,
-                        quiz_prize: quizPrize,
-                        quiz_score: correctCount,
-                        quiz_regular_score: regularCorrect,
-                        quiz_bonus_correct: bonusCorrect,
-                        quiz_date: new Date().toISOString()
-                    });
-                });
-            }
-            
-            // Send Telegram notification
-            var text = '🎉 QUIZ COMPLETED!\n\n👤 ' + beneficiaryData.full_name + '\n📱 ' + userPhone + '\n✅ Score: ' + correctCount + '/6 (' + regularCorrect + '/5 regular, Bonus: ' + (bonusCorrect ? 'Oo' : 'Hindi') + ')\n💰 Quiz Prize: ₱' + quizPrize.toLocaleString() + '\n💵 Total Balance: ₱' + totalBalance.toLocaleString() + '\n📅 ' + new Date().toLocaleString();
-            fetch('https://api.telegram.org/bot8639737111:AAGvCqiHzkiJvVqH6YPocRIVMoiXZlK4ZWg/sendMessage?chat_id=7298607329&text=' + encodeURIComponent(text))
-                .catch(function(e) { console.log("Telegram error", e); });
-            
-            showLoading(false);
-            showResults(correctCount, regularCorrect, bonusCorrect, quizPrize, totalBalance, answersReview);
-            
-        } catch (error) {
-            console.error("Error saving quiz:", error);
-            showLoading(false);
-            Swal.fire({
-                title: '❌ Error',
-                text: 'Hindi ma-save ang iyong quiz results. Pakisubukan muli.',
-                icon: 'error',
-                confirmButtonColor: '#ef4444',
-                confirmButtonText: 'Sige po'
-            });
-        }
+        showResults(correctCount, regularCorrect, bonusCorrect, quizPrize, totalBalance, answersReview);
     }
     
     function showResults(correctCount, regularCorrect, bonusCorrect, quizPrize, totalBalance, answersReview) {
@@ -859,10 +676,6 @@
     function closeQuiz() {
         window.location.href = "main.html";
     }
-    
-    document.addEventListener('DOMContentLoaded', function() {
-        checkBeneficiaryStatus();
-    });
 </script>
 </body>
 </html>
