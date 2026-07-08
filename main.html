@@ -24,6 +24,9 @@
       --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.08);
       --radius: 24px;
       --radius-sm: 16px;
+      --neon-blue: #00d4ff;
+      --neon-blue-hover: #00b8e6;
+      --neon-blue-glow: rgba(0, 212, 255, 0.3);
     }
 
     * {
@@ -330,6 +333,7 @@
       display: flex;
       gap: 0.8rem;
       margin-top: 0.2rem;
+      flex-wrap: wrap;
     }
 
     .action-btn {
@@ -349,6 +353,7 @@
       justify-content: center;
       gap: 8px;
       box-shadow: var(--shadow-sm);
+      min-width: 120px;
     }
 
     .action-btn i {
@@ -386,6 +391,45 @@
 
     .action-btn.primary-btn:active {
       transform: scale(0.97);
+    }
+
+    /* ---- NEON BLUE WITHDRAW BUTTON ---- */
+    .action-btn.withdraw-btn {
+      background: var(--neon-blue);
+      border: none;
+      color: #ffffff;
+      box-shadow: 0 0 20px var(--neon-blue-glow), 0 4px 16px rgba(0, 212, 255, 0.25);
+      transition: all 0.3s ease;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .action-btn.withdraw-btn:hover {
+      background: var(--neon-blue-hover);
+      box-shadow: 0 0 35px var(--neon-blue-glow), 0 6px 28px rgba(0, 212, 255, 0.35);
+      transform: translateY(-2px) scale(1.02);
+    }
+
+    .action-btn.withdraw-btn:active {
+      transform: scale(0.96);
+      box-shadow: 0 0 15px var(--neon-blue-glow);
+    }
+
+    /* GCash Icon - no black background */
+    .gcash-icon {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      display: inline-block;
+      vertical-align: middle;
+      background: transparent;
+      border-radius: 0;
+      filter: brightness(0) invert(1);
+      transition: filter 0.3s ease;
+    }
+
+    .action-btn.withdraw-btn:hover .gcash-icon {
+      filter: brightness(0) invert(1);
     }
 
     /* ---- FOOTER ---- */
@@ -516,6 +560,8 @@
       .quiz-modal-content { max-width: 100%; border-radius: 24px; }
       .quiz-modal iframe { height: 75vh; border-radius: 24px; }
       .quiz-modal-close { top: 8px; right: 8px; width: 34px; height: 34px; font-size: 1rem; }
+      
+      .gcash-icon { width: 26px; height: 26px; }
     }
 
     @media (max-width: 380px) {
@@ -528,6 +574,7 @@
       .balance-amount { font-size: 1.7rem; }
       .action-btn { font-size: 0.68rem; padding: 0.6rem 0.2rem; }
       .quiz-modal iframe { height: 70vh; }
+      .gcash-icon { width: 22px; height: 22px; }
     }
   </style>
 </head>
@@ -576,8 +623,11 @@
       <button class="action-btn primary-btn" id="answerQuizBtn">
         <i class="fas fa-question-circle"></i> Answer Quiz
       </button>
-      <button class="action-btn" id="historyBtn">
-        <i class="fas fa-history"></i> History
+      
+      <!-- Withdraw Button - Neon Blue with GCash Icon -->
+      <button class="action-btn withdraw-btn" id="withdrawBtn">
+        <img src="photos/gc_icon.png" alt="GCash" class="gcash-icon" />
+        Claim thru GCASH
       </button>
     </div>
 
@@ -611,8 +661,8 @@
       const messages = [
         "Welcome to FreeShoppingPH! 👋",
         "Answer trivia and win cash prizes! 🏆",
-        "Mag-pa member at manalo ng up to ₱15,000! daily💰",
-        "Sagutin ang daily quiz para sa dagdag na premyo! 📝"
+        "Mag-ingat at manalo ng ₱13,000! 💰",
+        "Sagutin ang quiz para sa dagdag na premyo! 📝"
       ];
       let messageIndex = 0;
       let charIndex = 0;
@@ -654,13 +704,9 @@
       const answerQuizBtn = document.getElementById('answerQuizBtn');
 
       function openQuizPopup() {
-        // Save phone to session storage for quiz
         const phone = sessionStorage.getItem('user_phone') || '09171234567';
         sessionStorage.setItem('user_phone', phone);
-        
-        // Reload iframe to reset quiz state
         quizIframe.src = quizIframe.src;
-        
         quizModal.classList.add('active');
         document.body.style.overflow = 'hidden';
       }
@@ -678,23 +724,26 @@
 
       quizModalClose.addEventListener('click', closeQuizPopup);
 
-      // Close modal when clicking outside
       quizModal.addEventListener('click', function(e) {
         if (e.target === quizModal) {
           closeQuizPopup();
         }
       });
 
-      // Close with Escape key
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && quizModal.classList.contains('active')) {
           closeQuizPopup();
         }
       });
 
-      // ---- HISTORY BUTTON ----
-      document.getElementById('historyBtn').addEventListener('click', function() {
-        alert('📊 Transaction history will appear here.');
+      // ===== WITHDRAW BUTTON =====
+      document.getElementById('withdrawBtn').addEventListener('click', function() {
+        const balance = parseFloat(document.getElementById('balanceAmount').textContent);
+        if (balance <= 0) {
+          alert('💳 Walang laman ang iyong balance. Kumpletuhin muna ang quiz para magkaroon ng premyo!');
+        } else {
+          alert('💰 Claiming ₱' + balance.toFixed(2) + ' thru GCash\n\n📱 Please wait 24-48 hours for processing.\n\nThank you for being a FreeShoppingPH beneficiary!');
+        }
         this.style.transform = 'scale(0.96)';
         setTimeout(() => this.style.transform = '', 120);
       });
