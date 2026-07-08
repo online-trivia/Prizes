@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+  <title>FreeShoppingPH · Dashboard</title>
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #10b981;
+      --primary-hover: #059669;
+      --primary-light: rgba(16, 185, 129, 0.08);
+      --primary-gradient: linear-gradient(145deg, #10b981, #059669);
+      --background: #f0f4f2;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-light: #e8edea;
+      --shadow-sm: 0 2px 12px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 8px 30px rgba(15, 23, 42, 0.06);
+      --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.08);
+      --radius: 24px;
+      --radius-sm: 16px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--background);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 1.2rem;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.02) 0%, transparent 50%);
+    }
+
+    /* ---- MAIN CARD ---- */
+    .main-card {
+      max-width: 440px;
+      width: 100%;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg), 0 0 0 1px rgba(15, 23, 42, 0.02);
+      padding: 2.4rem 1.8rem 2.6rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    /* Elegant geometric shapes - subtle glow */
+    .main-card::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -60px;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .main-card::after {
+      content: '';
+      position: absolute;
+      bottom: -50px;
+      left: -50px;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.04) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Geometric diamond accent */
+    .geo-accent {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      border: 2px solid rgba(16, 185, 129, 0.06);
+      transform: rotate(45deg);
+      pointer-events: none;
+      z-index: 0;
+      border-radius: 4px;
+    }
+
+    .geo-accent-2 {
+      position: absolute;
+      bottom: 60px;
+      right: 30px;
+      width: 20px;
+      height: 20px;
+      border: 1.5px solid rgba(16, 185, 129, 0.04);
+      transform: rotate(30deg);
+      pointer-events: none;
+      z-index: 0;
+      border-radius: 2px;
+    }
+
+    .main-card > * {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ---- PROFILE SECTION ---- */
+    .profile-section {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .profile-photo-container {
+      position: relative;
+      flex-shrink: 0;
+      margin-top: 0.2rem;
+    }
+
+    .profile-photo {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid #ffffff;
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.15), 0 0 0 1px rgba(16, 185, 129, 0.05);
+      background: #e8ede8;
+      transition: transform 0.3s ease;
+    }
+    .profile-photo:hover {
+      transform: scale(1.02);
+    }
+
+    .profile-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .profile-photo .fallback {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 2.2rem;
+    }
+
+    .status-dot {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 14px;
+      height: 14px;
+      background: var(--primary);
+      border: 2.5px solid #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.12);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Thought Bubble */
+    .thought-bubble-wrapper {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-height: 70px;
+    }
+
+    .thought-bubble {
+      background: #f8faf8;
+      border-radius: 18px 18px 18px 6px;
+      padding: 0.9rem 1.2rem;
+      width: 100%;
+      min-height: 62px;
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+
+    .thought-bubble::before {
+      content: '';
+      position: absolute;
+      left: -10px;
+      top: 22px;
+      width: 0;
+      height: 0;
+      border-right: 12px solid #f8faf8;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      filter: drop-shadow(-1px 0 1px rgba(0, 0, 0, 0.01));
+    }
+
+    .thought-bubble::after {
+      content: '';
+      position: absolute;
+      left: -12px;
+      top: 20px;
+      width: 0;
+      height: 0;
+      border-right: 14px solid var(--border-light);
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      z-index: 0;
+      opacity: 0.3;
+    }
+
+    .thought-bubble .message-content {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.5;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1.1em;
+      background: var(--primary);
+      margin-left: 2px;
+      vertical-align: text-bottom;
+      animation: blink 0.9s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* ---- DASHBOARD BALANCE ---- */
+    .dashboard-section {
+      background: var(--primary-gradient);
+      border-radius: var(--radius-sm);
+      padding: 1.6rem 1.8rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 6px 24px rgba(16, 185, 129, 0.20);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dashboard-section::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -20px;
+      width: 120px;
+      height: 120px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .dashboard-section::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: -10px;
+      width: 80px;
+      height: 80px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .balance-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.2rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .balance-amount {
+      font-size: 2.6rem;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+
+    .balance-amount .peso-sign {
+      font-size: 1.6rem;
+      font-weight: 700;
+      opacity: 0.8;
+    }
+
+    .balance-sub {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 0.2rem;
+      letter-spacing: 0.04em;
+    }
+
+    /* ---- ACTION BUTTONS ---- */
+    .action-grid {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 0.2rem;
+    }
+
+    .action-btn {
+      flex: 1;
+      background: var(--card-bg);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      padding: 1rem 0.5rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .action-btn i {
+      color: var(--primary);
+      font-size: 1rem;
+    }
+
+    .action-btn:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .action-btn:active {
+      transform: scale(0.97);
+    }
+
+    .action-btn.primary-btn {
+      background: var(--primary-gradient);
+      border: none;
+      color: #ffffff;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.20);
+    }
+
+    .action-btn.primary-btn i {
+      color: #fcd34d;
+    }
+
+    .action-btn.primary-btn:hover {
+      box-shadow: 0 6px 24px rgba(16, 185, 129, 0.30);
+      transform: translateY(-2px);
+      background: linear-gradient(145deg, #059669, #047857);
+    }
+
+    .action-btn.primary-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* ---- FOOTER ---- */
+    .brand-footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      opacity: 0.4;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .brand-footer i {
+      color: var(--primary);
+      opacity: 0.5;
+    }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 480px) {
+      body { padding: 0.8rem; }
+      .main-card { padding: 1.6rem 1.2rem 2rem; border-radius: 20px; }
+      
+      .profile-photo { width: 60px; height: 60px; }
+      .thought-bubble { padding: 0.7rem 0.9rem; min-height: 54px; }
+      .thought-bubble .message-content { font-size: 0.78rem; }
+      .thought-bubble::before { top: 18px; }
+      .thought-bubble::after { top: 16px; }
+
+      .dashboard-section { padding: 1.2rem 1.4rem; }
+      .balance-amount { font-size: 2rem; }
+      .balance-amount .peso-sign { font-size: 1.2rem; }
+
+      .action-btn { font-size: 0.75rem; padding: 0.8rem 0.3rem; }
+      .action-btn i { font-size: 0.85rem; }
+      
+      .geo-accent { width: 28px; height: 28px; top: 14px; right: 14px; }
+      .geo-accent-2 { width: 14px; height: 14px; bottom: 40px; right: 20px; }
+    }
+
+    @media (max-width: 380px) {
+      .main-card { padding: 1.2rem 0.9rem 1.6rem; }
+      .profile-photo { width: 50px; height: 50px; }
+      .thought-bubble .message-content { font-size: 0.72rem; }
+      .thought-bubble { min-height: 46px; padding: 0.5rem 0.8rem; }
+      .thought-bubble::before { top: 14px; border-right-width: 9px; border-top-width: 6px; border-bottom-width: 6px; }
+      .thought-bubble::after { top: 12px; border-right-width: 11px; border-top-width: 8px; border-bottom-width: 8px; }
+      .balance-amount { font-size: 1.7rem; }
+      .action-btn { font-size: 0.68rem; padding: 0.6rem 0.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="main-card">
+    <!-- Geometric accents -->
+    <div class="geo-accent"></div>
+    <div class="geo-accent-2"></div>
+    
+    <!-- Profile Section -->
+    <div class="profile-section">
+      <div class="profile-photo-container">
+        <div class="profile-photo">
+          <img src="photos/iva.jpg" alt="FreeShoppingPH" id="profileImg" />
+          <div class="fallback" id="fallbackIcon">
+            <i class="fas fa-user-circle"></i>
+          </div>
+        </div>
+        <div class="status-dot"></div>
+      </div>
+
+      <div class="thought-bubble-wrapper">
+        <div class="thought-bubble">
+          <div class="message-content">
+            <span id="typedText"></span><span class="cursor"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard: Balance (fixed at 0.00) -->
+    <div class="dashboard-section">
+      <div class="balance-label">
+        <i class="fas fa-wallet"></i> Available Balance
+      </div>
+      <div class="balance-amount">
+        <span class="peso-sign">₱</span> <span id="balanceAmount">0.00</span>
+      </div>
+      <div class="balance-sub">
+        <i class="fas fa-arrow-up" style="color: rgba(255,255,255,0.4);"></i> Updated just now
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-grid">
+      <button class="action-btn primary-btn" id="answerQuizBtn">
+        <i class="fas fa-question-circle"></i> Answer Quiz
+      </button>
+      <button class="action-btn" id="historyBtn">
+        <i class="fas fa-history"></i> History
+      </button>
+    </div>
+
+    <div class="brand-footer">
+      <i class="fas fa-gem"></i> FreeShoppingPH · Premium
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ---- IMAGE FALLBACK ----
+      const img = document.getElementById('profileImg');
+      const fallback = document.getElementById('fallbackIcon');
+
+      img.addEventListener('error', function() {
+        this.style.display = 'none';
+        fallback.style.display = 'flex';
+      });
+
+      // ---- TYPEWRITER EFFECT (Updated Messages) ----
+      const messages = [
+        "Welcome to FreeShoppingPH! 👋",
+        "Answer trivia and win cash prizes! 🏆",
+        "Mag-ingat at manalo ng ₱13,000! 💰",
+        "Sagutin ang quiz para sa dagdag na premyo! 📝"
+      ];
+      let messageIndex = 0;
+      let charIndex = 0;
+      let isDeleting = false;
+      const typedSpan = document.getElementById('typedText');
+      let typingSpeed = 36;
+
+      function typeEffect() {
+        const currentMessage = messages[messageIndex];
+        if (!isDeleting) {
+          typedSpan.textContent = currentMessage.substring(0, charIndex + 1);
+          charIndex++;
+          if (charIndex === currentMessage.length) {
+            setTimeout(() => { isDeleting = true; typeEffect(); }, 3000);
+            return;
+          }
+          setTimeout(typeEffect, typingSpeed + Math.random() * 18);
+        } else {
+          typedSpan.textContent = currentMessage.substring(0, charIndex - 1);
+          charIndex--;
+          if (charIndex === 0) {
+            isDeleting = false;
+            messageIndex = (messageIndex + 1) % messages.length;
+            setTimeout(typeEffect, 500);
+            return;
+          }
+          setTimeout(typeEffect, typingSpeed * 0.3);
+        }
+      }
+      setTimeout(typeEffect, 600);
+
+      // ---- BALANCE (fixed at 0.00) ----
+      document.getElementById('balanceAmount').textContent = '0.00';
+
+      // ---- ANSWER QUIZ BUTTON - opens quiz.html ----
+      document.getElementById('answerQuizBtn').addEventListener('click', function() {
+        // Save phone to session storage for quiz verification
+        const phone = sessionStorage.getItem('user_phone') || '09171234567';
+        sessionStorage.setItem('user_phone', phone);
+        
+        // Open quiz in new window or redirect
+        window.location.href = 'quiz.html';
+        
+        this.style.transform = 'scale(0.96)';
+        setTimeout(() => this.style.transform = '', 120);
+      });
+
+      // ---- HISTORY BUTTON ----
+      document.getElementById('historyBtn').addEventListener('click', function() {
+        alert('📊 Transaction history will appear here.');
+        this.style.transform = 'scale(0.96)';
+        setTimeout(() => this.style.transform = '', 120);
+      });
+
+    })();
+  </script>
+
+</body>
+</html>
