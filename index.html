@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-  <title>FreeShoppingPH</title>
+  <title>Buy Treats | Get Cashback</title>
   <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <!-- Google Fonts: Inter -->
@@ -13,8 +13,9 @@
       --primary: #10b981;
       --primary-hover: #059669;
       --primary-light: rgba(16, 185, 129, 0.12);
-      --background: #f1f5f9;
-      --card-bg: #ffffff;
+      --background-start: #0a1628;
+      --background-end: #1a3a6b;
+      --card-bg: rgba(255, 255, 255, 0.92);
       --text-main: #0f172a;
       --text-muted: #64748b;
       --border-light: #e2e8f0;
@@ -34,27 +35,178 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--background);
+      background: linear-gradient(145deg, var(--background-start), var(--background-end));
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       padding: 1.2rem;
-      background-image: 
-        radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.05) 0%, transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.03) 0%, transparent 50%);
+      position: relative;
+      overflow: hidden;
     }
 
-    /* ---- MAIN CARD ---- */
+    /* Bokeh Lights Background */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 10% 20%, rgba(255, 215, 0, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 30% 80%, rgba(255, 100, 100, 0.10) 0%, transparent 40%),
+        radial-gradient(circle at 70% 15%, rgba(255, 215, 0, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 90% 70%, rgba(255, 100, 100, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Floating Christmas Decorations */
+    .decoration {
+      position: absolute;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.3;
+    }
+
+    .decoration.tree {
+      bottom: 10%;
+      left: 5%;
+      font-size: 2.5rem;
+      opacity: 0.15;
+    }
+
+    .decoration.star {
+      top: 8%;
+      right: 8%;
+      font-size: 2rem;
+      opacity: 0.2;
+      animation: twinkle 2s ease-in-out infinite;
+    }
+
+    .decoration.star2 {
+      top: 15%;
+      left: 10%;
+      font-size: 1.5rem;
+      opacity: 0.15;
+      animation: twinkle 3s ease-in-out infinite 0.5s;
+    }
+
+    .decoration.gift {
+      bottom: 15%;
+      right: 8%;
+      font-size: 2rem;
+      opacity: 0.15;
+    }
+
+    .decoration.santa {
+      top: 20%;
+      right: 15%;
+      font-size: 2.2rem;
+      opacity: 0.12;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.15; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.1); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Snowflakes */
+    .snowflake {
+      position: absolute;
+      color: rgba(255, 255, 255, 0.1);
+      font-size: 1.2rem;
+      pointer-events: none;
+      z-index: 0;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.3; }
+      90% { opacity: 0.3; }
+      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+
     .brand-card {
       max-width: 440px;
       width: 100%;
       background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-radius: 32px;
-      box-shadow: var(--shadow-lg), 0 0 0 1px rgba(15, 23, 42, 0.03);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
       padding: 2.4rem 1.8rem 2.6rem;
       position: relative;
+      z-index: 1;
       transition: all 0.2s ease;
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    /* ---- PROFILE SECTION (photo + thought bubble pointing to photo) ---- */
+    /* Christmas Badge */
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: #c41e3a;
+      text-transform: uppercase;
+      background: rgba(255, 215, 0, 0.12);
+      padding: 0.35rem 1.2rem;
+      border-radius: 60px;
+      border: 1px solid rgba(255, 215, 0, 0.15);
+      margin: 0 auto 0.8rem;
+      width: fit-content;
+    }
+    .brand-badge i {
+      color: #c41e3a;
+      font-size: 0.8rem;
+    }
+
+    /* Main Headline */
+    .main-headline {
+      text-align: center;
+      margin-bottom: 1.4rem;
+    }
+
+    .main-headline h1 {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #0a1628;
+      line-height: 1.2;
+    }
+
+    .main-headline h1 .highlight {
+      color: #c41e3a;
+    }
+
+    .main-headline h1 .gold {
+      color: #d4a017;
+    }
+
+    .main-headline .sub {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 4px;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .main-headline .sub i {
+      color: #c41e3a;
+    }
+
     .profile-section {
       display: flex;
       align-items: flex-start;
@@ -63,20 +215,32 @@
       position: relative;
     }
 
-    /* Photo container with status dot */
     .profile-photo-container {
       position: relative;
       flex-shrink: 0;
       margin-top: 0.2rem;
     }
 
+    /* Santa Hat on Photo */
+    .profile-photo-container::before {
+      content: '🎅';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.4rem;
+      z-index: 5;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2));
+      animation: float 3s ease-in-out infinite;
+    }
+
     .profile-photo {
-      width: 80px;
-      height: 80px;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
       overflow: hidden;
       border: 3px solid #ffffff;
-      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.18), 0 0 0 1px rgba(16, 185, 129, 0.06);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15), 0 0 0 2px rgba(255, 215, 0, 0.1);
       background: #e8edf2;
       transition: transform 0.3s ease;
     }
@@ -104,17 +268,22 @@
 
     .status-dot {
       position: absolute;
-      bottom: 2px;
-      right: 2px;
-      width: 14px;
-      height: 14px;
-      background: var(--primary);
+      bottom: 4px;
+      right: 4px;
+      width: 16px;
+      height: 16px;
+      background: #10b981;
       border: 2.5px solid #ffffff;
       border-radius: 50%;
       box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.15);
+      animation: pulse-dot 2s ease-in-out infinite;
     }
 
-    /* Thought Bubble - with tail pointing to photo */
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
     .thought-bubble-wrapper {
       flex: 1;
       position: relative;
@@ -136,12 +305,11 @@
       position: relative;
     }
 
-    /* Bubble tail - points directly to the photo */
     .thought-bubble::before {
       content: '';
       position: absolute;
       left: -10px;
-      top: 24px;
+      top: 28px;
       width: 0;
       height: 0;
       border-right: 12px solid #f8fafc;
@@ -150,12 +318,11 @@
       filter: drop-shadow(-1px 0 1px rgba(0, 0, 0, 0.02));
     }
 
-    /* Border on tail */
     .thought-bubble::after {
       content: '';
       position: absolute;
       left: -12px;
-      top: 22px;
+      top: 26px;
       width: 0;
       height: 0;
       border-right: 14px solid var(--border-light);
@@ -190,7 +357,33 @@
       50% { opacity: 0; }
     }
 
-    /* ---- FORM GROUP ---- */
+    /* Christmas Offer Banner */
+    .offer-banner {
+      background: linear-gradient(135deg, #c41e3a, #a0172e);
+      border-radius: 14px;
+      padding: 0.8rem 1.2rem;
+      margin-bottom: 1.2rem;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(196, 30, 58, 0.2);
+    }
+
+    .offer-banner p {
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+    }
+
+    .offer-banner .highlight {
+      color: #ffd700;
+      font-weight: 900;
+    }
+
+    .offer-banner i {
+      margin: 0 4px;
+      color: #ffd700;
+    }
+
     .form-group {
       margin-bottom: 1.2rem;
     }
@@ -281,10 +474,9 @@
       font-size: 0.65rem;
     }
 
-    /* ---- CTA BUTTON ---- */
     .cta-btn {
       width: 100%;
-      background: linear-gradient(145deg, var(--primary), var(--primary-hover));
+      background: linear-gradient(145deg, #c41e3a, #a0172e);
       border: none;
       border-radius: 14px;
       padding: 1.05rem 0.5rem;
@@ -293,7 +485,7 @@
       font-size: 1rem;
       letter-spacing: 0.03em;
       color: #ffffff;
-      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.20);
+      box-shadow: 0 6px 20px rgba(196, 30, 58, 0.25);
       transition: all 0.2s ease;
       cursor: pointer;
       display: flex;
@@ -303,26 +495,25 @@
     }
 
     .cta-btn:hover {
-      background: linear-gradient(145deg, var(--primary-hover), #047857);
-      box-shadow: 0 8px 28px rgba(16, 185, 129, 0.30);
+      background: linear-gradient(145deg, #d42240, #b01832);
+      box-shadow: 0 8px 28px rgba(196, 30, 58, 0.35);
       transform: translateY(-1px);
     }
 
     .cta-btn:active {
       transform: scale(0.97);
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+      box-shadow: 0 4px 12px rgba(196, 30, 58, 0.15);
     }
 
     .cta-btn i {
-      color: #fcd34d;
+      color: #ffd700;
       font-size: 1.05rem;
     }
 
-    /* ---- BRAND FOOTER ---- */
     .brand-footer {
       text-align: center;
       margin-top: 1.2rem;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 600;
       color: var(--text-muted);
       opacity: 0.5;
@@ -333,47 +524,103 @@
       gap: 8px;
     }
     .brand-footer i {
-      color: var(--primary);
+      color: #c41e3a;
       opacity: 0.6;
     }
 
-    /* ---- RESPONSIVE ---- */
     @media (max-width: 480px) {
       body { padding: 0.8rem; }
       .brand-card { padding: 1.6rem 1.2rem 2rem; border-radius: 24px; }
       
-      .profile-photo { width: 64px; height: 64px; }
+      .profile-photo { width: 80px; height: 80px; }
       .thought-bubble { padding: 0.8rem 1rem; min-height: 58px; }
       .thought-bubble .message-content { font-size: 0.82rem; }
-      .thought-bubble::before { top: 20px; }
-      .thought-bubble::after { top: 18px; }
+      .thought-bubble::before { top: 22px; }
+      .thought-bubble::after { top: 20px; }
+      .status-dot { width: 14px; height: 14px; bottom: 2px; right: 2px; }
       
       .popup-input-group input { font-size: 0.95rem; padding: 0.8rem 0; }
       .cta-btn { font-size: 0.92rem; padding: 0.9rem 0.5rem; }
       .mobile-icon-prefix { font-size: 1rem; }
+
+      .main-headline h1 { font-size: 1.3rem; }
+      .offer-banner p { font-size: 0.75rem; }
+      .profile-photo-container::before { font-size: 1.2rem; top: -10px; }
+      .decoration { display: none; }
     }
 
     @media (max-width: 380px) {
       .brand-card { padding: 1.2rem 0.9rem 1.6rem; }
-      .profile-photo { width: 54px; height: 54px; }
+      .profile-photo { width: 70px; height: 70px; }
       .thought-bubble .message-content { font-size: 0.75rem; }
       .thought-bubble { min-height: 50px; padding: 0.6rem 0.8rem; }
       .thought-bubble::before { top: 16px; border-right-width: 9px; border-top-width: 6px; border-bottom-width: 6px; }
       .thought-bubble::after { top: 14px; border-right-width: 11px; border-top-width: 8px; border-bottom-width: 8px; }
+      .status-dot { width: 12px; height: 12px; bottom: 1px; right: 1px; }
       .popup-input-group input { font-size: 0.85rem; padding: 0.7rem 0; }
       .mobile-icon-prefix { font-size: 0.9rem; }
+      .main-headline h1 { font-size: 1.1rem; }
+      .profile-photo-container::before { font-size: 1rem; top: -8px; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Floating Christmas Decorations -->
+  <div class="decoration tree">🎄</div>
+  <div class="decoration star">⭐</div>
+  <div class="decoration star2">✨</div>
+  <div class="decoration gift">🎁</div>
+  <div class="decoration santa">🎅</div>
+
+  <!-- Snowflakes -->
+  <div class="snowflake" style="left: 5%; animation-duration: 12s; animation-delay: 0s;">❄</div>
+  <div class="snowflake" style="left: 15%; animation-duration: 14s; animation-delay: 2s;">❄</div>
+  <div class="snowflake" style="left: 25%; animation-duration: 10s; animation-delay: 4s;">❄</div>
+  <div class="snowflake" style="left: 35%; animation-duration: 16s; animation-delay: 1s;">❄</div>
+  <div class="snowflake" style="left: 45%; animation-duration: 11s; animation-delay: 3s;">❄</div>
+  <div class="snowflake" style="left: 55%; animation-duration: 13s; animation-delay: 5s;">❄</div>
+  <div class="snowflake" style="left: 65%; animation-duration: 15s; animation-delay: 2s;">❄</div>
+  <div class="snowflake" style="left: 75%; animation-duration: 12s; animation-delay: 4s;">❄</div>
+  <div class="snowflake" style="left: 85%; animation-duration: 14s; animation-delay: 1s;">❄</div>
+  <div class="snowflake" style="left: 92%; animation-duration: 11s; animation-delay: 3s;">❄</div>
+
   <div class="brand-card">
     
-    <!-- Profile Section: Photo + Thought Bubble (pointing to photo) -->
+    <!-- Christmas Badge -->
+    <div style="display: flex; justify-content: center;">
+      <div class="brand-badge">
+        <i class="fas fa-gift"></i> BUY TREATS · CASHBACK
+      </div>
+    </div>
+
+    <!-- Headline -->
+    <div class="main-headline">
+      <h1>
+        <span class="gold">✨</span> 
+        <span class="highlight">HOLIDAY</span> CASHBACK
+        <span class="gold">✨</span>
+      </h1>
+      <div class="sub">
+        <i class="fas fa-tag"></i> Earn cashback on every treat you buy!
+      </div>
+    </div>
+
+    <!-- Offer Banner -->
+    <div class="offer-banner">
+      <p>
+        <i class="fas fa-star"></i>
+        <span class="highlight">🎄 CHRISTMAS BONUS</span>
+        <i class="fas fa-star"></i><br />
+        Get <span class="highlight">₱550</span> cashback when you sign up today!
+      </p>
+    </div>
+
+    <!-- Profile Section -->
     <div class="profile-section">
       <div class="profile-photo-container">
         <div class="profile-photo">
-          <img src="photos/iva.jpg" alt="FreeShoppingPH" id="brandImg" />
+          <img src="photos/iva.png" alt="Buy Treats" id="brandImg" />
           <div class="fallback" id="fallbackIcon">
             <i class="fas fa-user-circle"></i>
           </div>
@@ -390,7 +637,7 @@
       </div>
     </div>
 
-    <!-- Phone Input with Mobile Icon -->
+    <!-- Mobile Input -->
     <div class="form-group">
       <label class="popup-label" for="popupMobileInput">
         <i class="fas fa-mobile-alt" style="margin-right: 6px;"></i> Mobile Number
@@ -415,17 +662,16 @@
     </div>
 
     <button class="cta-btn" id="popupSubmitBtn">
-      <i class="fas fa-unlock-alt"></i> CLAIM ACCESS
+      <i class="fas fa-gift"></i> GET CASHBACK NOW
     </button>
 
     <div class="brand-footer">
-      <i class="fas fa-shield-alt"></i> Secure · FreeShoppingPH
+      <i class="fas fa-shield-alt"></i> Secure · Buy Treats | Get Cashback
     </div>
   </div>
 
   <script>
     (function() {
-      // ---- IMAGE FALLBACK ----
       const img = document.getElementById('brandImg');
       const fallback = document.getElementById('fallbackIcon');
 
@@ -434,11 +680,11 @@
         fallback.style.display = 'flex';
       });
 
-      // ---- TYPEWRITER EFFECT (thought bubble) ----
       const messages = [
-        "Welcome to FreeShoppingPH 👋",
-        "Manalo ng Cash Prizes by Answering Trivia Questions! 🏆",
-        "Ilagay ang inyong mobile number at magpatuloy. 📱"
+        "🎄 Merry Christmas! Treat yourself! 🎅",
+        "Earn cashback on every treat you buy! 💰",
+        "Sign up now and get ₱550 cashback! 🎁",
+        "Buy Treats | Get Cashback this Holiday! ✨"
       ];
       let messageIndex = 0;
       let charIndex = 0;
@@ -470,7 +716,6 @@
       }
       setTimeout(typeEffect, 700);
 
-      // ---- INPUT HANDLING & VALIDATION ----
       const mobileInput = document.getElementById('popupMobileInput');
       const inputWrapper = document.getElementById('inputWrapper');
       const statusIcon = document.getElementById('statusIcon');
@@ -527,11 +772,10 @@
         if (!/^[0-9]$/.test(e.key)) e.preventDefault();
       });
 
-      // ---- REDIRECT TO main.html ON SUCCESS ----
       function handleSubmit() {
         const val = mobileInput.value.replace(/\D/g, '');
         if (val.length === 11 && val.startsWith('09')) {
-          // Redirect to main.html
+          sessionStorage.setItem('user_phone', val);
           window.location.href = 'main.html';
         } else {
           inputWrapper.classList.add('invalid');
@@ -556,7 +800,6 @@
         if (e.key === 'Enter') { e.preventDefault(); handleSubmit(); }
       });
 
-      // Initial validation
       validateInput();
     })();
   </script>
