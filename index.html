@@ -8,18 +8,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     :root {
-      /* Royal Blue Theme Colors */
       --primary: #1e40af; 
       --primary-light: #3b82f6;
       --accent-red: #c41e3a;
       --accent-red-hover: #a0172e;
       --gold: #FFD700;
-      
-      /* Vibrant Royal Blue Background */
       --background-start: #041024;
       --background-end: #0f3470;
-      
-      /* Glossy Card Design */
       --card-bg: rgba(255, 255, 255, 0.95);
       --text-main: #0f172a;
       --text-muted: #475569;
@@ -44,7 +39,6 @@
       overflow: hidden;
     }
 
-    /* Soft Glowing Bokeh Lights */
     body::before {
       content: '';
       position: absolute;
@@ -60,7 +54,6 @@
       filter: blur(8px);
     }
 
-    /* Floating Christmas Decorations */
     .decoration {
       position: absolute;
       pointer-events: none;
@@ -123,7 +116,6 @@
       50% { transform: translateY(-8px) rotate(-2deg); }
     }
 
-    /* Snowflakes */
     .snowflake {
       position: absolute;
       color: rgba(255, 255, 255, 0.4);
@@ -141,7 +133,6 @@
       100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
     }
 
-    /* Premium Brand Card */
     .brand-card {
       max-width: 440px;
       width: 100%;
@@ -163,7 +154,6 @@
       transform: translateY(-5px);
     }
 
-    /* Christmas Badge */
     .brand-badge {
       display: inline-flex;
       align-items: center;
@@ -187,7 +177,6 @@
       font-size: 0.85rem;
     }
 
-    /* Main Headline - White & Bold */
     .main-headline {
       text-align: center;
       margin-bottom: 1.6rem;
@@ -245,7 +234,6 @@
       margin-top: 0.2rem;
     }
 
-    /* Santa Hat on Wallet Icon */
     .profile-photo-container::before {
       content: '🎅';
       position: absolute;
@@ -263,7 +251,6 @@
       50% { transform: translateX(-50%) rotate(-5deg) translateY(-4px); }
     }
 
-    /* Wallet 3D Icon Container */
     .profile-photo {
       width: 90px;
       height: 90px;
@@ -288,12 +275,11 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: none; /* Hidden by default to show wallet icon */
+      display: block;
     }
 
-    /* Wallet Icon Style */
     .profile-photo .fallback {
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       width: 100%;
@@ -380,7 +366,6 @@
       50% { opacity: 0; }
     }
 
-    /* Glossy Christmas Offer Banner */
     .offer-banner {
       background: linear-gradient(135deg, var(--accent-red), #901125);
       border-radius: 16px;
@@ -436,6 +421,10 @@
       text-transform: uppercase;
       margin-bottom: 0.6rem;
       display: block;
+    }
+
+    .popup-label i {
+      display: none; /* Hide the first mobile icon */
     }
 
     .popup-input-group {
@@ -510,7 +499,6 @@
       gap: 6px;
     }
 
-    /* Premium Glossy Red CTA Button */
     .cta-btn {
       width: 100%;
       background: linear-gradient(135deg, var(--accent-red), #901125);
@@ -588,7 +576,7 @@
       .main-headline h1 { font-size: 1.5rem; }
       .offer-banner p { font-size: 0.8rem; }
       .profile-photo-container::before { font-size: 1.6rem; top: -12px; }
-      .decoration { display: none; } /* Hide large decorations on very small screens to keep UI clean */
+      .decoration { display: none; }
     }
 
     @media (max-width: 380px) {
@@ -626,7 +614,7 @@
     
     <div style="display: flex; justify-content: center;">
       <div class="brand-badge">
-        <i class="fas fa-wallet"></i> BUY TREATS · CASHBACK
+        <i class="fas fa-gift"></i> BUY TREATS · CASHBACK
       </div>
     </div>
 
@@ -672,7 +660,7 @@
 
     <div class="form-group">
       <label class="popup-label" for="popupMobileInput">
-        <i class="fas fa-mobile-alt" style="margin-right: 6px;"></i> Mobile Number
+        Mobile Number
       </label>
       <div class="popup-input-group" id="inputWrapper">
         <i class="fas fa-mobile-alt mobile-icon-prefix"></i>
@@ -707,17 +695,10 @@
       const img = document.getElementById('brandImg');
       const fallback = document.getElementById('fallbackIcon');
 
-      // Enhanced image loading logic to favor the new wallet icon if image is missing
       img.addEventListener('error', function() {
         this.style.display = 'none';
         fallback.style.display = 'flex';
       });
-
-      // Force fallback if src is mostly just a placeholder path
-      if (!img.getAttribute('src') || img.getAttribute('src') === 'photos/iva.png') {
-         img.style.display = 'none';
-         fallback.style.display = 'flex';
-      }
 
       const messages = [
         "🎄 Merry Christmas! Treat yourself! 🎅",
