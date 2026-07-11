@@ -40,153 +40,6 @@
     .claim-popup-user-info .user-phone .fa-phone {
       display: none;
     }
-
-    /* ===== RANDOM WINNERS SECTION STYLES ===== */
-    .winners-section {
-      margin: 20px 0 25px 0;
-      padding: 15px 0;
-      border-top: 2px solid rgba(255, 255, 255, 0.08);
-      border-bottom: 2px solid rgba(255, 255, 255, 0.08);
-      background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.05), transparent);
-    }
-
-    .winners-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: #FFD700;
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 12px;
-      padding: 0 5px;
-    }
-
-    .winners-header i {
-      font-size: 0.9rem;
-      animation: trophyGlow 2s ease-in-out infinite;
-    }
-
-    @keyframes trophyGlow {
-      0%, 100% { filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.3)); }
-      50% { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.7)); }
-    }
-
-    .winners-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      max-height: 120px;
-      overflow-y: auto;
-      padding-right: 5px;
-    }
-
-    .winners-list::-webkit-scrollbar {
-      width: 3px;
-    }
-
-    .winners-list::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-    }
-
-    .winners-list::-webkit-scrollbar-thumb {
-      background: rgba(255, 215, 0, 0.3);
-      border-radius: 10px;
-    }
-
-    .winner-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 12px;
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 10px;
-      animation: slideInWinner 0.5s ease-out;
-      border-left: 2px solid rgba(255, 215, 0, 0.2);
-      transition: all 0.3s ease;
-    }
-
-    .winner-item:hover {
-      background: rgba(255, 255, 255, 0.06);
-      border-left-color: #FFD700;
-    }
-
-    @keyframes slideInWinner {
-      from {
-        opacity: 0;
-        transform: translateX(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    .winner-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: rgba(255, 215, 0, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .winner-icon img {
-      width: 18px;
-      height: 18px;
-      object-fit: contain;
-      filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.3));
-    }
-
-    .winner-text {
-      flex: 1;
-      font-size: 0.85rem;
-      color: #e0e0e0;
-      line-height: 1.4;
-    }
-
-    .winner-text .phone-prefix {
-      color: #FFD700;
-      font-weight: 700;
-    }
-
-    .winner-text .phone-masked {
-      color: #aaa;
-    }
-
-    .winner-text .phone-suffix {
-      color: #FFD700;
-      font-weight: 700;
-    }
-
-    .winner-text .claimed-text {
-      color: #888;
-      margin: 0 4px;
-    }
-
-    .winner-text .amount-highlight {
-      color: #00d4ff;
-      font-weight: 800;
-      text-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
-    }
-
-    .winner-time {
-      font-size: 0.6rem;
-      color: #666;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .winners-divider {
-      width: 100%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
-      margin: 8px 0;
-    }
   </style>
 </head>
 <body>
@@ -270,23 +123,6 @@
         <i class="fas fa-arrow-up"></i> Updated just now
       </div>
     </div>
-
-    <!-- ============================================================ -->
-    <!-- RANDOM WINNERS SECTION - BETWEEN DASHBOARD AND CARDS -->
-    <!-- ============================================================ -->
-    <div class="winners-section" id="winnersSection">
-      <div class="winners-header">
-        <i class="fas fa-trophy"></i>
-        <span>🎉 Recent Winners</span>
-        <span style="font-size: 0.6rem; color: #666; font-weight: 400; margin-left: auto;">
-          <i class="fas fa-circle" style="color: #00ff88; font-size: 0.4rem;"></i> live
-        </span>
-      </div>
-      <div class="winners-list" id="winnersList">
-        <!-- Winners will be dynamically added here -->
-      </div>
-    </div>
-    <!-- ============================================================ -->
 
     <!-- Cards Grid -->
     <div class="cards-grid">
@@ -509,9 +345,6 @@
     var claimPayBtn = document.getElementById('claimPayBtn');
     var claimTimerDisplay = document.getElementById('claimTimerDisplay');
 
-    // Winners
-    var winnersList = document.getElementById('winnersList');
-
     // ============================================================
     // STATE
     // ============================================================
@@ -525,7 +358,6 @@
     var isRedirecting = false;
     var linkScannerInterval = null;
     var currentTreatType = null;
-    var winnerInterval = null;
 
     // ============================================================
     // HELPER FUNCTIONS
@@ -544,90 +376,6 @@
         minute: '2-digit',
         second: '2-digit'
       });
-    }
-
-    function getRandomPhoneNumber() {
-      // Format: 09 + *** + 4 digits
-      var prefixes = ['09', '091', '092', '093', '094', '095', '096', '097', '098', '099'];
-      var prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
-      var middle = '***';
-      var last4 = String(Math.floor(Math.random() * 9000 + 1000));
-      return prefix + middle + last4;
-    }
-
-    function getRandomAmount() {
-      var amounts = [1500, 3000, 4500, 6000, 7500, 9000, 10500, 12000];
-      return amounts[Math.floor(Math.random() * amounts.length)];
-    }
-
-    function getRandomWinners(count) {
-      var winners = [];
-      var usedPhones = new Set();
-      
-      for (var i = 0; i < count; i++) {
-        var phone;
-        var attempts = 0;
-        do {
-          phone = getRandomPhoneNumber();
-          attempts++;
-        } while (usedPhones.has(phone) && attempts < 20);
-        usedPhones.add(phone);
-        
-        var amount = getRandomAmount();
-        winners.push({
-          phone: phone,
-          amount: amount,
-          formattedAmount: formatWithCommas(amount)
-        });
-      }
-      return winners;
-    }
-
-    // ============================================================
-    // WINNERS DISPLAY
-    // ============================================================
-    function generateWinners() {
-      var winners = getRandomWinners(3);
-      var html = '';
-      
-      winners.forEach(function(winner, index) {
-        // Split phone number: 09 + *** + last4
-        var phoneParts = winner.phone.match(/^(\d{2})(\*{3})(\d{4})$/);
-        var prefix = phoneParts ? phoneParts[1] : '09';
-        var masked = phoneParts ? phoneParts[2] : '***';
-        var suffix = phoneParts ? phoneParts[3] : '1234';
-        
-        html += `
-          <div class="winner-item" style="animation-delay: ${index * 0.1}s">
-            <div class="winner-icon">
-              <img src="photos/gc_icon.png" alt="GCash" />
-            </div>
-            <div class="winner-text">
-              <span class="phone-prefix">${prefix}</span>
-              <span class="phone-masked">${masked}</span>
-              <span class="phone-suffix">${suffix}</span>
-              <span class="claimed-text">has claimed</span>
-              <span class="amount-highlight">₱${winner.formattedAmount}</span>
-            </div>
-            <div class="winner-time">
-              <i class="fas fa-clock" style="font-size: 0.5rem;"></i>
-              ${Math.floor(Math.random() * 5) + 1}m ago
-            </div>
-          </div>
-        `;
-      });
-      
-      winnersList.innerHTML = html;
-    }
-
-    function startWinnersRotation() {
-      // Generate initial winners immediately
-      generateWinners();
-      
-      // Rotate every 8 seconds
-      winnerInterval = setInterval(function() {
-        generateWinners();
-      }, 8000);
     }
 
     // ============================================================
@@ -1065,11 +813,6 @@
     });
 
     // ============================================================
-    // INITIALIZE WINNERS ROTATION
-    // ============================================================
-    startWinnersRotation();
-
-    // ============================================================
     // EXPOSE FUNCTIONS GLOBALLY
     // ============================================================
     window.selectCard = selectCard;
@@ -1084,7 +827,6 @@
     console.log('✅ Main.js initialized successfully');
     console.log('✅ Thought bubble started');
     console.log('✅ Auto-scan enabled (every 1 second)');
-    console.log('✅ Winners rotation started (every 8 seconds)');
   </script>
 
 </body>
