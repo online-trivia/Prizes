@@ -11,13 +11,11 @@
       --primary: #0d9488;
       --primary-light: #14b8a6;
       --primary-dark: #0f766e;
-      --teal-start: #0d9488;
-      --cyan-end: #06b6d4;
-      --accent-red: #c41e3a;
-      --gold: #FFD700;
-      --background-start: #0a3d3b;
-      --background-end: #0a6b6b;
-      --card-bg: rgba(255, 255, 255, 0.95);
+      --neon-blue: #00d4ff;
+      --neon-blue-light: #8ae2ff;
+      --background-start: #d4f1ff;
+      --background-end: #b0e6ff;
+      --card-bg: rgba(255, 255, 255, 0.92);
       --text-main: #0f172a;
       --text-muted: #475569;
     }
@@ -40,17 +38,17 @@
       overflow: hidden;
     }
 
-    /* Bokeh Lights */
+    /* Soft Glowing Bokeh Lights */
     body::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
       background: 
-        radial-gradient(circle at 10% 20%, rgba(20, 184, 166, 0.3) 0%, transparent 40%),
-        radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.25) 0%, transparent 45%),
-        radial-gradient(circle at 50% 80%, rgba(255, 215, 0, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 20% 70%, rgba(255, 255, 255, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 75% 60%, rgba(20, 184, 166, 0.15) 0%, transparent 45%);
+        radial-gradient(circle at 15% 25%, rgba(0, 212, 255, 0.25) 0%, transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(0, 212, 255, 0.2) 0%, transparent 45%),
+        radial-gradient(circle at 50% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 20% 70%, rgba(255, 255, 255, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 75% 60%, rgba(0, 212, 255, 0.15) 0%, transparent 45%);
       pointer-events: none;
       z-index: 0;
       filter: blur(6px);
@@ -61,81 +59,73 @@
       position: absolute;
       pointer-events: none;
       z-index: 0;
-      filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.2));
+      filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.08));
     }
 
     .decoration.tree {
       bottom: 5%;
       left: 4%;
-      font-size: 4rem;
-      opacity: 0.6;
+      font-size: 3.5rem;
+      opacity: 0.25;
       animation: float-slow 6s ease-in-out infinite;
     }
 
     .decoration.star {
       top: 6%;
       right: 8%;
-      font-size: 2.5rem;
-      opacity: 0.7;
+      font-size: 2rem;
+      opacity: 0.3;
       animation: twinkle 2s ease-in-out infinite;
     }
 
     .decoration.gift {
       bottom: 10%;
       right: 6%;
-      font-size: 3rem;
-      opacity: 0.5;
+      font-size: 2.5rem;
+      opacity: 0.2;
       animation: float-slow 5s ease-in-out infinite 1s;
     }
 
-    .decoration.lights {
-      top: 12%;
-      left: 6%;
-      font-size: 2rem;
-      opacity: 0.5;
-      animation: twinkle 1.5s ease-in-out infinite 0.3s;
-    }
-
     @keyframes twinkle {
-      0%, 100% { opacity: 0.4; transform: scale(1); }
-      50% { opacity: 0.9; transform: scale(1.1); }
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.1); }
     }
 
     @keyframes float-slow {
       0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-10px) rotate(-3deg); }
+      50% { transform: translateY(-8px) rotate(-2deg); }
     }
 
     /* Snowflakes */
     .snowflake {
       position: absolute;
-      color: rgba(255, 255, 255, 0.3);
-      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 1rem;
       pointer-events: none;
       z-index: 0;
       animation: fall linear infinite;
-      text-shadow: 0 0 5px rgba(255,255,255,0.5);
+      text-shadow: 0 0 5px rgba(255,255,255,0.3);
     }
 
     @keyframes fall {
       0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
-      10% { opacity: 0.6; }
-      90% { opacity: 0.6; }
+      10% { opacity: 0.5; }
+      90% { opacity: 0.5; }
       100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
     }
 
-    /* Main Card - Premium Glass */
+    /* Main Card */
     .main-card {
-      max-width: 460px;
+      max-width: 440px;
       width: 100%;
       background: var(--card-bg);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-radius: 32px;
       box-shadow: 
-        0 20px 50px rgba(0, 0, 0, 0.3), 
+        0 20px 50px rgba(0, 0, 0, 0.06), 
         inset 0 1px 1px rgba(255, 255, 255, 0.8),
-        0 0 0 1px rgba(255, 255, 255, 0.1);
+        0 0 0 1px rgba(255, 255, 255, 0.3);
       padding: 2.4rem 1.8rem 2.6rem;
       position: relative;
       z-index: 1;
@@ -156,16 +146,16 @@
       letter-spacing: 0.1em;
       color: var(--primary);
       text-transform: uppercase;
-      background: rgba(13, 148, 136, 0.1);
+      background: rgba(13, 148, 136, 0.08);
       padding: 0.3rem 1.2rem;
       border-radius: 60px;
-      border: 1px solid rgba(13, 148, 136, 0.15);
+      border: 1px solid rgba(13, 148, 136, 0.1);
       margin: 0 auto 0.8rem;
       width: fit-content;
     }
     
     .brand-badge i {
-      color: var(--gold);
+      color: #FFD700;
     }
 
     /* Header */
@@ -182,7 +172,7 @@
     }
 
     .dashboard-header h1 .highlight {
-      background: linear-gradient(to right, var(--teal-start), var(--cyan-end));
+      background: linear-gradient(to right, #0d9488, #06b6d4);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -195,10 +185,10 @@
       letter-spacing: 0.04em;
     }
 
-    /* Profile Section - Side by Side */
+    /* Profile Section - Photo + Thought Bubble */
     .profile-section {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 1.2rem;
       margin-bottom: 1.8rem;
       padding: 0.5rem 0;
@@ -209,7 +199,7 @@
       flex-shrink: 0;
     }
 
-    /* Projector Zoom Effect on Profile Photo */
+    /* Projector Zoom Effect */
     .profile-photo-wrapper {
       position: relative;
       width: 80px;
@@ -225,8 +215,8 @@
       border-radius: 50%;
       overflow: hidden;
       border: 3px solid #ffffff;
-      box-shadow: 0 4px 20px rgba(13, 148, 136, 0.25);
-      background: linear-gradient(135deg, var(--teal-start), var(--cyan-end));
+      box-shadow: 0 4px 20px rgba(0, 212, 255, 0.25);
+      background: linear-gradient(135deg, #0d9488, #06b6d4);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -257,7 +247,7 @@
       border: 3px solid rgba(255, 215, 0, 0.5);
       box-shadow: 
         0 0 30px rgba(255, 215, 0, 0.2),
-        0 0 60px rgba(13, 148, 136, 0.15),
+        0 0 60px rgba(0, 212, 255, 0.15),
         inset 0 0 30px rgba(255, 215, 0, 0.05);
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(4px);
@@ -287,7 +277,7 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: conic-gradient(from 0deg, transparent 0%, rgba(255, 215, 0, 0.06) 10%, transparent 20%, rgba(13, 148, 136, 0.06) 30%, transparent 40%, rgba(255, 215, 0, 0.06) 50%, transparent 60%, rgba(13, 148, 136, 0.06) 70%, transparent 80%, rgba(255, 215, 0, 0.06) 90%, transparent 100%);
+      background: conic-gradient(from 0deg, transparent 0%, rgba(255, 215, 0, 0.06) 10%, transparent 20%, rgba(0, 212, 255, 0.06) 30%, transparent 40%, rgba(255, 215, 0, 0.06) 50%, transparent 60%, rgba(0, 212, 255, 0.06) 70%, transparent 80%, rgba(255, 215, 0, 0.06) 90%, transparent 100%);
       animation: projector-spin 8s linear infinite;
       pointer-events: none;
       z-index: 0;
@@ -312,7 +302,7 @@
 
     .profile-photo-wrapper:hover .profile-photo,
     .profile-photo-wrapper.active .profile-photo {
-      box-shadow: 0 4px 20px rgba(13, 148, 136, 0.3), 0 0 0 2px rgba(255, 215, 0, 0.3);
+      box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3), 0 0 0 2px rgba(255, 215, 0, 0.3);
     }
 
     @media (hover: none) {
@@ -327,7 +317,7 @@
         transform: scale(1.25);
       }
       .profile-photo-wrapper.active .profile-photo {
-        box-shadow: 0 4px 20px rgba(13, 148, 136, 0.3), 0 0 0 2px rgba(255, 215, 0, 0.3);
+        box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3), 0 0 0 2px rgba(255, 215, 0, 0.3);
       }
     }
 
@@ -350,51 +340,87 @@
       50% { transform: scale(1.15); opacity: 0.7; }
     }
 
-    /* User Info beside photo */
-    .user-info {
+    /* Thought Bubble */
+    .thought-bubble-wrapper {
       flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-height: 70px;
     }
 
-    .user-info .greeting {
-      font-size: 0.7rem;
+    .thought-bubble {
+      background: #f8fafc;
+      border-radius: 18px 18px 18px 6px;
+      padding: 1rem 1.2rem;
+      width: 100%;
+      min-height: 62px;
+      display: flex;
+      align-items: center;
+      border: 1px solid rgba(0,0,0,0.04);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+      position: relative;
+    }
+
+    .thought-bubble::before {
+      content: '';
+      position: absolute;
+      left: -10px;
+      top: 24px;
+      width: 0;
+      height: 0;
+      border-right: 12px solid #f8fafc;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      filter: drop-shadow(-1px 0 1px rgba(0, 0, 0, 0.01));
+    }
+
+    .thought-bubble::after {
+      content: '';
+      position: absolute;
+      left: -12px;
+      top: 22px;
+      width: 0;
+      height: 0;
+      border-right: 14px solid rgba(0,0,0,0.04);
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      z-index: 0;
+      opacity: 0.3;
+    }
+
+    .thought-bubble .message-content {
+      font-size: 0.88rem;
       font-weight: 600;
-      color: var(--text-muted);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .user-info .name {
-      font-size: 1.2rem;
-      font-weight: 800;
       color: var(--text-main);
-      margin-top: 2px;
+      line-height: 1.5;
+      width: 100%;
+      position: relative;
+      z-index: 1;
     }
 
-    .user-info .name i {
-      color: var(--gold);
-      font-size: 0.9rem;
-    }
-
-    .user-info .member-tag {
+    .cursor {
       display: inline-block;
-      background: rgba(13, 148, 136, 0.1);
-      color: var(--primary);
-      font-size: 0.6rem;
-      font-weight: 700;
-      padding: 2px 12px;
-      border-radius: 30px;
-      margin-top: 4px;
-      letter-spacing: 0.04em;
-      border: 1px solid rgba(13, 148, 136, 0.1);
+      width: 2px;
+      height: 1.1em;
+      background: #0d9488;
+      margin-left: 2px;
+      vertical-align: text-bottom;
+      animation: blink 0.9s step-end infinite;
     }
 
-    /* Dashboard Balance - Premium Card */
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Dashboard Balance - Neon Blue */
     .dashboard-section {
-      background: linear-gradient(145deg, var(--teal-start), var(--cyan-end));
+      background: linear-gradient(145deg, #00d4ff, #00b8e6);
       border-radius: 20px;
       padding: 1.6rem 1.8rem;
       margin-bottom: 1.5rem;
-      box-shadow: 0 8px 30px rgba(13, 148, 136, 0.25);
+      box-shadow: 0 8px 30px rgba(0, 212, 255, 0.25);
       position: relative;
       overflow: hidden;
     }
@@ -406,7 +432,7 @@
       right: -30px;
       width: 150px;
       height: 150px;
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.08);
       border-radius: 50%;
       pointer-events: none;
     }
@@ -418,7 +444,7 @@
       left: -20px;
       width: 100px;
       height: 100px;
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.05);
       border-radius: 50%;
       pointer-events: none;
     }
@@ -426,7 +452,7 @@
     .balance-label {
       font-size: 0.65rem;
       font-weight: 700;
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.85);
       text-transform: uppercase;
       letter-spacing: 0.08em;
       display: flex;
@@ -443,18 +469,19 @@
       align-items: baseline;
       gap: 4px;
       margin-top: 2px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
     .balance-amount .peso-sign {
       font-size: 1.8rem;
       font-weight: 700;
-      opacity: 0.8;
+      opacity: 0.9;
     }
 
     .balance-sub {
       font-size: 0.65rem;
       font-weight: 500;
-      color: rgba(255, 255, 255, 0.5);
+      color: rgba(255, 255, 255, 0.6);
       margin-top: 4px;
       letter-spacing: 0.04em;
       display: flex;
@@ -464,42 +491,6 @@
 
     .balance-sub i {
       color: #fcd34d;
-    }
-
-    /* Stats Row */
-    .stats-row {
-      display: flex;
-      gap: 0.8rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .stat-item {
-      flex: 1;
-      background: #f8fafc;
-      border-radius: 16px;
-      padding: 0.8rem 0.6rem;
-      text-align: center;
-      border: 1px solid #e2e8f0;
-    }
-
-    .stat-item .stat-number {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--text-main);
-    }
-
-    .stat-item .stat-label {
-      font-size: 0.6rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-top: 2px;
-    }
-
-    .stat-item .stat-icon {
-      color: var(--primary);
-      margin-right: 4px;
     }
 
     /* Action Grid */
@@ -528,12 +519,12 @@
     }
 
     .action-btn i {
-      color: var(--primary);
+      color: #0d9488;
       font-size: 0.95rem;
     }
 
     .action-btn:hover {
-      border-color: var(--primary);
+      border-color: #0d9488;
       background: rgba(13, 148, 136, 0.05);
       transform: translateY(-2px);
       box-shadow: 0 4px 16px rgba(13, 148, 136, 0.08);
@@ -544,7 +535,7 @@
     }
 
     .action-btn.primary-btn {
-      background: linear-gradient(145deg, var(--teal-start), var(--cyan-end));
+      background: linear-gradient(145deg, #0d9488, #06b6d4);
       border: none;
       color: #ffffff;
       box-shadow: 0 4px 16px rgba(13, 148, 136, 0.25);
@@ -563,7 +554,6 @@
       transform: scale(0.97);
     }
 
-    /* Neon Blue Withdraw Button */
     .action-btn.withdraw-btn {
       background: #00d4ff;
       border: none;
@@ -607,7 +597,7 @@
       gap: 8px;
     }
     .brand-footer i {
-      color: var(--primary);
+      color: #0d9488;
       opacity: 0.5;
     }
 
@@ -620,14 +610,17 @@
       .profile-photo { width: 70px; height: 70px; }
       .profile-photo-wrapper .projector-zoom { width: 150px; height: 150px; }
       
-      .user-info .name { font-size: 1rem; }
+      .thought-bubble { padding: 0.8rem 1rem; min-height: 54px; }
+      .thought-bubble .message-content { font-size: 0.8rem; }
+      .thought-bubble::before { top: 20px; }
+      .thought-bubble::after { top: 18px; }
+      
       .dashboard-header h1 { font-size: 1.3rem; }
       
       .balance-amount { font-size: 2.2rem; }
       .balance-amount .peso-sign { font-size: 1.4rem; }
       
       .dashboard-section { padding: 1.2rem 1.4rem; }
-      .stat-item .stat-number { font-size: 0.95rem; }
       
       .action-btn { font-size: 0.7rem; padding: 0.7rem 0.3rem; }
       .action-btn i { font-size: 0.85rem; }
@@ -641,7 +634,8 @@
       .profile-photo-wrapper { width: 60px; height: 60px; }
       .profile-photo { width: 60px; height: 60px; }
       .profile-photo-wrapper .projector-zoom { width: 130px; height: 130px; }
-      .user-info .name { font-size: 0.9rem; }
+      .thought-bubble .message-content { font-size: 0.72rem; }
+      .thought-bubble { min-height: 46px; padding: 0.5rem 0.8rem; }
       .balance-amount { font-size: 1.8rem; }
       .action-btn { font-size: 0.65rem; padding: 0.6rem 0.2rem; }
     }
@@ -653,7 +647,6 @@
   <div class="decoration tree">🎄</div>
   <div class="decoration star">⭐</div>
   <div class="decoration gift">🎁</div>
-  <div class="decoration lights">✨</div>
 
   <!-- Snowflakes -->
   <div class="snowflake" style="left: 5%; animation-duration: 12s; animation-delay: 0s;">❄</div>
@@ -686,7 +679,7 @@
       </div>
     </div>
 
-    <!-- Profile Section - Side by Side -->
+    <!-- Profile Section - Photo + Thought Bubble -->
     <div class="profile-section">
       <div class="profile-photo-container">
         <div class="profile-photo-wrapper" id="photoWrapper">
@@ -700,10 +693,12 @@
         <div class="status-dot"></div>
       </div>
 
-      <div class="user-info">
-        <div class="greeting"><i class="fas fa-hand-wave"></i> Welcome back!</div>
-        <div class="name">Ivana <i class="fas fa-crown"></i></div>
-        <span class="member-tag"><i class="fas fa-check-circle"></i> Premium Member</span>
+      <div class="thought-bubble-wrapper">
+        <div class="thought-bubble">
+          <div class="message-content">
+            <span id="typedText"></span><span class="cursor"></span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -717,22 +712,6 @@
       </div>
       <div class="balance-sub">
         <i class="fas fa-arrow-up"></i> Updated just now
-      </div>
-    </div>
-
-    <!-- Stats Row -->
-    <div class="stats-row">
-      <div class="stat-item">
-        <div class="stat-number"><i class="fas fa-trophy stat-icon"></i> 0</div>
-        <div class="stat-label">Quizzes Won</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number"><i class="fas fa-star stat-icon"></i> 0</div>
-        <div class="stat-label">Cashback Earned</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number"><i class="fas fa-gem stat-icon"></i> 0</div>
-        <div class="stat-label">Bonuses</div>
       </div>
     </div>
 
@@ -754,9 +733,9 @@
   </div>
 
   <!-- ===== QUIZ POPUP MODAL ===== -->
-  <div class="quiz-modal" id="quizModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); z-index:9999; align-items:center; justify-content:center; padding:1.5rem;">
-    <div style="position:relative; width:100%; max-width:460px; max-height:90vh; background:transparent; border-radius:32px; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,0.25); animation:slideUp 0.35s cubic-bezier(0.16,1,0.3,1);">
-      <button onclick="closeQuizPopup()" style="position:absolute; top:12px; right:12px; width:40px; height:40px; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); border:none; border-radius:50%; color:#fff; font-size:1.2rem; cursor:pointer; z-index:10; transition:all 0.2s; display:flex; align-items:center; justify-content:center;">
+  <div class="quiz-modal" id="quizModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); backdrop-filter:blur(8px); z-index:9999; align-items:center; justify-content:center; padding:1.5rem;">
+    <div style="position:relative; width:100%; max-width:460px; max-height:90vh; background:transparent; border-radius:32px; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,0.2); animation:slideUp 0.35s cubic-bezier(0.16,1,0.3,1);">
+      <button onclick="closeQuizPopup()" style="position:absolute; top:12px; right:12px; width:40px; height:40px; background:rgba(0,0,0,0.4); backdrop-filter:blur(4px); border:none; border-radius:50%; color:#fff; font-size:1.2rem; cursor:pointer; z-index:10; transition:all 0.2s; display:flex; align-items:center; justify-content:center;">
         <i class="fas fa-times"></i>
       </button>
       <iframe id="quizIframe" src="quiz.html" style="width:100%; height:80vh; max-height:85vh; border:none; display:block; background:#ffffff; border-radius:32px;"></iframe>
@@ -805,6 +784,43 @@
         this.parentElement.appendChild(placeholder);
       });
 
+      // ---- THOUGHT BUBBLE TYPEWRITER ----
+      const messages = [
+        "🎄 Advance Merry Christmas! 🎅",
+        "Earn cashback on every treat you buy! 💰",
+        "Your balance is ready to use! ✨",
+        "Buy Treats & Get Cashback! 🎁"
+      ];
+      let messageIndex = 0;
+      let charIndex = 0;
+      let isDeleting = false;
+      const typedSpan = document.getElementById('typedText');
+      let typingSpeed = 36;
+
+      function typeEffect() {
+        const currentMessage = messages[messageIndex];
+        if (!isDeleting) {
+          typedSpan.textContent = currentMessage.substring(0, charIndex + 1);
+          charIndex++;
+          if (charIndex === currentMessage.length) {
+            setTimeout(() => { isDeleting = true; typeEffect(); }, 2800);
+            return;
+          }
+          setTimeout(typeEffect, typingSpeed + Math.random() * 18);
+        } else {
+          typedSpan.textContent = currentMessage.substring(0, charIndex - 1);
+          charIndex--;
+          if (charIndex === 0) {
+            isDeleting = false;
+            messageIndex = (messageIndex + 1) % messages.length;
+            setTimeout(typeEffect, 500);
+            return;
+          }
+          setTimeout(typeEffect, typingSpeed * 0.3);
+        }
+      }
+      setTimeout(typeEffect, 600);
+
       // ---- PROJECTOR ZOOM - TAP TOGGLE ----
       const photoWrapper = document.getElementById('photoWrapper');
       
@@ -820,7 +836,6 @@
       });
 
       // ---- BALANCE ----
-      // Get phone from localStorage
       const phone = localStorage.getItem('user_phone') || '09171234567';
       document.getElementById('balanceAmount').textContent = '0.00';
 
@@ -846,14 +861,12 @@
         setTimeout(() => this.style.transform = '', 120);
       });
 
-      // Close modal when clicking outside
       quizModal.addEventListener('click', function(e) {
         if (e.target === quizModal) {
           closeQuizPopup();
         }
       });
 
-      // Close with Escape key
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && quizModal.classList.contains('active')) {
           closeQuizPopup();
