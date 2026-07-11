@@ -43,7 +43,6 @@
       filter: brightness(0.6) saturate(0.7);
     }
 
-    /* ===== VIBRANT FIN TECH OVERLAY - SUBTLE ===== */
     body::after {
       content: '';
       position: fixed;
@@ -112,45 +111,6 @@
       50% { opacity: 0.5; transform: rotate(var(--rotation)) scaleY(1.2); }
     }
 
-    /* ===== LENS FLARE ===== */
-    .lens-flare {
-      position: fixed;
-      pointer-events: none;
-      z-index: 0;
-      width: 300px;
-      height: 300px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(0, 200, 255, 0.05), transparent 70%);
-      animation: flarePulse 6s ease-in-out infinite;
-    }
-
-    .lens-flare:nth-child(1) {
-      top: 10%;
-      left: 5%;
-      animation-delay: 0s;
-    }
-    .lens-flare:nth-child(2) {
-      bottom: 10%;
-      right: 5%;
-      animation-delay: 2s;
-      width: 200px;
-      height: 200px;
-    }
-    .lens-flare:nth-child(3) {
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      animation-delay: 4s;
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(255, 215, 0, 0.03), transparent 70%);
-    }
-
-    @keyframes flarePulse {
-      0%, 100% { opacity: 0.3; transform: scale(1); }
-      50% { opacity: 0.6; transform: scale(1.2); }
-    }
-
     .admin-container {
       max-width: 860px;
       width: 100%;
@@ -184,15 +144,6 @@
       mask-composite: exclude;
       pointer-events: none;
       opacity: 0.6;
-    }
-
-    .glass-panel::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 48px;
-      background: radial-gradient(ellipse at 50% 0%, rgba(0, 200, 255, 0.02), transparent 70%);
-      pointer-events: none;
     }
 
     /* ========== LOGIN SECTION ========== */
@@ -1075,11 +1026,6 @@
   <div class="light-ray" style="left: 70%; --rotation: -5deg;"></div>
   <div class="light-ray" style="left: 90%; --rotation: 15deg;"></div>
 
-  <!-- ===== LENS FLARES ===== -->
-  <div class="lens-flare"></div>
-  <div class="lens-flare"></div>
-  <div class="lens-flare"></div>
-
   <div class="admin-container">
     <!-- Main Glass Panel -->
     <div class="glass-panel">
@@ -1437,7 +1383,7 @@
         document.body.style.overflow = '';
       }
 
-      // ========== DEPLOY LINK ==========
+      // ========== DEPLOY LINK - STORE IN FIREBASE ==========
       function deployLinkWithType(url, type) {
         const hash = generateHash(url);
         const linkId = database.ref('treat_links').push().key;
