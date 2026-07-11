@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
   <title>Buy Treats | Get Cashback</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     :root {
       --primary: #0d9488;
@@ -752,7 +752,7 @@
       background: var(--neon-blue);
     }
 
-    /* ===== MODERN MINIMALIST FINANCE POPUP ===== */
+    /* ===== FUTURISTIC FINANCE POPUP ===== */
     .popup-overlay {
       display: none;
       position: fixed;
@@ -760,9 +760,9 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(10, 20, 50, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(4, 16, 36, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       z-index: 9999;
       align-items: center;
       justify-content: center;
@@ -782,14 +782,15 @@
     .popup-content {
       max-width: 420px;
       width: 100%;
-      background: linear-gradient(160deg, #ffffff 0%, #f0f4ff 100%);
+      background: linear-gradient(145deg, #0a1a3a, #0d2b5e);
       border-radius: 32px;
       padding: 2rem 1.8rem 2.2rem;
       position: relative;
       box-shadow: 
-        0 30px 80px rgba(0, 0, 0, 0.15),
-        0 0 40px rgba(0, 212, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+        0 30px 80px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(0, 212, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.1);
       animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       overflow: hidden;
     }
@@ -802,8 +803,22 @@
       width: 200%;
       height: 200%;
       background: 
-        radial-gradient(circle at 20% 30%, rgba(0, 212, 255, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 20% 30%, rgba(0, 212, 255, 0.05) 0%, transparent 40%),
         radial-gradient(circle at 80% 70%, rgba(0, 212, 255, 0.03) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Holographic connection lines */
+    .popup-content::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        linear-gradient(90deg, transparent 0%, rgba(0, 212, 255, 0.02) 20%, transparent 40%, rgba(0, 212, 255, 0.02) 60%, transparent 80%, rgba(0, 212, 255, 0.02) 100%);
       pointer-events: none;
       z-index: 0;
     }
@@ -819,10 +834,11 @@
       right: 16px;
       width: 36px;
       height: 36px;
-      background: rgba(0, 0, 0, 0.03);
-      border: 1px solid rgba(0, 0, 0, 0.06);
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 50%;
-      color: #64748b;
+      color: rgba(255, 255, 255, 0.6);
       font-size: 1rem;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -833,9 +849,9 @@
     }
 
     .popup-close:hover {
-      background: rgba(239, 68, 68, 0.08);
-      border-color: rgba(239, 68, 68, 0.15);
-      color: #ef4444;
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #ffffff;
       transform: rotate(90deg);
     }
 
@@ -843,73 +859,16 @@
       transform: rotate(90deg) scale(0.9);
     }
 
-    /* User Info */
-    .popup-user-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 1.2rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-    }
-
-    .popup-user-avatar {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #00d4ff, #0099cc);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ffffff;
-      font-weight: 800;
-      font-size: 1.1rem;
-      box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
-    }
-
-    .popup-user-details {
-      flex: 1;
-    }
-
-    .popup-user-details .user-name {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 0.95rem;
-      color: #0f172a;
-    }
-
-    .popup-user-details .user-phone {
-      font-family: 'Inter', sans-serif;
-      font-weight: 500;
-      font-size: 0.7rem;
-      color: #94a3b8;
-      letter-spacing: 0.04em;
-    }
-
-    .popup-user-details .user-card {
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
-      font-size: 0.65rem;
-      color: #0d9488;
-      background: rgba(13, 148, 136, 0.08);
-      padding: 2px 10px;
-      border-radius: 30px;
-      display: inline-block;
-      margin-top: 2px;
-    }
-
-    .popup-user-details .user-card i {
-      margin-right: 4px;
-    }
-
     .popup-image-wrapper {
       width: 100%;
       aspect-ratio: 1 / 1;
       border-radius: 20px;
       overflow: hidden;
-      margin-bottom: 1rem;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-      border: 1px solid rgba(0, 0, 0, 0.04);
+      margin-bottom: 1.2rem;
+      box-shadow: 
+        0 8px 30px rgba(0, 0, 0, 0.3),
+        0 0 40px rgba(0, 212, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.08);
     }
 
     .popup-image-wrapper img {
@@ -923,19 +882,20 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.6rem;
     }
 
     .popup-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(13, 148, 136, 0.08);
-      color: #0d9488;
+      background: rgba(255, 215, 0, 0.1);
+      color: #ffd700;
       font-size: 0.65rem;
       font-weight: 700;
       padding: 0.3rem 0.8rem;
       border-radius: 30px;
+      border: 1px solid rgba(255, 215, 0, 0.1);
     }
 
     .popup-badge i {
@@ -943,123 +903,49 @@
     }
 
     .popup-discount {
-      background: rgba(239, 68, 68, 0.08);
-      color: #ef4444;
+      background: rgba(239, 68, 68, 0.2);
+      color: #fca5a5;
       font-size: 0.65rem;
       font-weight: 700;
       padding: 0.3rem 0.8rem;
       border-radius: 30px;
+      border: 1px solid rgba(239, 68, 68, 0.1);
     }
 
     .popup-price-row {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 1rem;
+      margin-bottom: 0.6rem;
     }
 
     .popup-price-row .old-price {
       font-size: 0.85rem;
       text-decoration: line-through;
-      color: #94a3b8;
+      color: rgba(255, 255, 255, 0.35);
       font-weight: 600;
     }
 
     .popup-price-row .new-price {
       font-size: 2rem;
       font-weight: 900;
-      color: #0d9488;
-      font-family: 'Inter', sans-serif;
+      color: #ffd700;
     }
 
     .popup-price-row .new-price .peso {
       font-size: 1.2rem;
     }
 
-    /* Steps / Messages */
-    .popup-steps {
-      background: #f8fafc;
-      border-radius: 16px;
-      padding: 0.8rem 1rem;
-      margin-bottom: 1rem;
-      border: 1px solid rgba(0, 0, 0, 0.03);
-    }
-
-    .popup-steps .step-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 4px 0;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.7rem;
-      color: #475569;
-      line-height: 1.4;
-    }
-
-    .popup-steps .step-item .step-icon {
-      color: #0d9488;
-      font-size: 0.6rem;
-      margin-top: 2px;
-      width: 16px;
-      text-align: center;
-    }
-
-    .popup-steps .step-item .step-text {
-      flex: 1;
-    }
-
-    .popup-steps .step-item .step-text strong {
-      color: #0f172a;
-    }
-
-    /* Help Widget */
-    .popup-help-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-      padding-top: 0.4rem;
-      border-top: 1px solid rgba(0, 0, 0, 0.04);
-    }
-
-    .popup-help-text {
-      font-family: 'Inter', sans-serif;
+    .popup-label {
+      color: rgba(255, 255, 255, 0.4);
       font-size: 0.6rem;
       font-weight: 600;
-      color: #94a3b8;
-      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.8rem;
     }
 
-    .popup-help-link {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.6rem;
-      font-weight: 700;
-      color: #0d9488;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      padding: 4px 12px;
-      border-radius: 30px;
-      background: rgba(13, 148, 136, 0.06);
-      border: 1px solid rgba(13, 148, 136, 0.08);
-    }
-
-    .popup-help-link:hover {
-      background: rgba(13, 148, 136, 0.12);
-      transform: scale(1.02);
-    }
-
-    .popup-help-link img {
-      width: 18px;
-      height: 18px;
-      display: block;
-    }
-
-    /* PROCEED Button */
-    .popup-btn-proceed {
+    .popup-btn-select {
       width: 100%;
       background: linear-gradient(145deg, #00d4ff, #0099cc);
       border: none;
@@ -1071,49 +957,43 @@
       color: #ffffff;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 0 30px rgba(0, 212, 255, 0.15);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      margin-top: 0.2rem;
+      margin-top: 0.5rem;
     }
 
-    .popup-btn-proceed:hover {
+    .popup-btn-select:hover {
       background: linear-gradient(145deg, #00e5ff, #00aadd);
-      box-shadow: 0 0 50px rgba(0, 212, 255, 0.25);
+      box-shadow: 0 0 50px rgba(0, 212, 255, 0.3);
       transform: scale(1.02);
     }
 
-    .popup-btn-proceed:active {
+    .popup-btn-select:active {
       transform: scale(0.96);
     }
 
-    .popup-btn-proceed i {
-      color: #ffffff;
+    .popup-btn-select i {
+      color: #fcd34d;
     }
 
-    .popup-btn-proceed.disabled {
-      background: #94a3b8;
-      cursor: not-allowed;
+    .popup-btn-select.selected-popup {
+      background: linear-gradient(145deg, #4a5568, #2d3748);
       box-shadow: none;
-      transform: none !important;
     }
 
-    .popup-btn-proceed.disabled:hover {
-      background: #94a3b8;
-      box-shadow: none;
+    .popup-btn-select.selected-popup:hover {
+      background: linear-gradient(145deg, #4a5568, #2d3748);
       transform: none;
+      box-shadow: none;
     }
 
-    .popup-btn-proceed .timer-display {
-      color: #ef4444;
-      font-weight: 900;
-      font-size: 1.1rem;
-      margin-left: 6px;
-      font-variant-numeric: tabular-nums;
+    .popup-btn-select.selected-popup i {
+      color: #a0aec0;
     }
 
     @keyframes slideUp {
@@ -1173,8 +1053,7 @@
       
       .popup-content { padding: 1.5rem 1.2rem 1.8rem; }
       .popup-price-row .new-price { font-size: 1.6rem; }
-      .popup-btn-proceed { font-size: 0.85rem; padding: 0.8rem 0.5rem; }
-      .popup-steps .step-item { font-size: 0.65rem; }
+      .popup-btn-select { font-size: 0.85rem; padding: 0.8rem 0.5rem; }
       
       .decoration { display: none; }
     }
@@ -1310,22 +1189,12 @@
     </div>
   </div>
 
-  <!-- ===== MODERN MINIMALIST FINANCE POPUP ===== -->
+  <!-- ===== FUTURISTIC FINANCE POPUP ===== -->
   <div class="popup-overlay" id="popupOverlay" onclick="if(event.target===this) closePopup()">
     <div class="popup-content">
       <button class="popup-close" onclick="closePopup()">
         <i class="fas fa-times"></i>
       </button>
-      
-      <!-- User Info -->
-      <div class="popup-user-info">
-        <div class="popup-user-avatar">👤</div>
-        <div class="popup-user-details">
-          <div class="user-name" id="popupUserName">Ivana</div>
-          <div class="user-phone" id="popupUserPhone">📱 09171234567</div>
-          <div class="user-card" id="popupUserCard"><i class="fas fa-gift"></i> <span id="popupCardBadge">₱1,500</span> Reward</div>
-        </div>
-      </div>
       
       <div class="popup-image-wrapper">
         <img src="" alt="Reward" id="popupImage" />
@@ -1341,39 +1210,10 @@
         <span class="new-price"><span class="peso">₱</span><span id="popupNewPrice">545</span></span>
       </div>
       
-      <!-- Steps / Messages -->
-      <div class="popup-steps">
-        <div class="step-item">
-          <span class="step-icon"><i class="fas fa-check-circle"></i></span>
-          <span class="step-text"><strong>Successful Payments</strong> can receive mega cashback.</span>
-        </div>
-        <div class="step-item">
-          <span class="step-icon"><i class="fas fa-check-circle"></i></span>
-          <span class="step-text">Cashback will be received <strong>instantly</strong> after purchased treats.</span>
-        </div>
-        <div class="step-item">
-          <span class="step-icon"><i class="fas fa-check-circle"></i></span>
-          <span class="step-text">Click <strong>PROCEED</strong> after the countdown.</span>
-        </div>
-        <div class="step-item">
-          <span class="step-icon"><i class="fas fa-check-circle"></i></span>
-          <span class="step-text">You will receive <strong>SMS confirmation</strong>.</span>
-        </div>
-      </div>
+      <div class="popup-label"><i class="fas fa-gift"></i> Treat Reward</div>
       
-      <!-- Help Widget -->
-      <div class="popup-help-row">
-        <span class="popup-help-text"><i class="fas fa-life-ring"></i> For any concern</span>
-        <a class="popup-help-link" href="#" onclick="openHelp()">
-          <img src="https://cdn.prod.website-files.com/6385b55675a0bd614777a5c1/6401880e8f2d075927b56e39_icon-light.svg" alt="Help" />
-          HELP
-        </a>
-      </div>
-      
-      <!-- PROCEED Button -->
-      <button class="popup-btn-proceed" id="popupProceedBtn" onclick="startTimer()">
-        <i class="fas fa-arrow-right"></i> PROCEED
-        <span class="timer-display" id="timerDisplay"></span>
+      <button class="popup-btn-select" id="popupSelectBtn" onclick="popupSelectCard()">
+        <i class="fas fa-check-circle"></i> Select Treat
       </button>
     </div>
   </div>
@@ -1483,31 +1323,15 @@
         }
       };
 
-      // ===== USER DATA =====
-      const userPhone = localStorage.getItem('user_phone') || '09171234567';
-      const userName = 'Ivana';
-
       // ===== POPUP LOGIC =====
       let popupCardNumber = null;
-      let timerInterval = null;
-      let timeRemaining = 0;
-      let isTimerRunning = false;
-
       const popupOverlay = document.getElementById('popupOverlay');
       const popupImage = document.getElementById('popupImage');
       const popupBadge = document.getElementById('popupBadge');
       const popupDiscount = document.getElementById('popupDiscount');
       const popupOldPrice = document.getElementById('popupOldPrice');
       const popupNewPrice = document.getElementById('popupNewPrice');
-      const popupCardBadge = document.getElementById('popupCardBadge');
-      const popupUserName = document.getElementById('popupUserName');
-      const popupUserPhone = document.getElementById('popupUserPhone');
-      const popupProceedBtn = document.getElementById('popupProceedBtn');
-      const timerDisplay = document.getElementById('timerDisplay');
-
-      // Set user info
-      popupUserName.textContent = userName;
-      popupUserPhone.textContent = '📱 ' + userPhone;
+      const popupSelectBtn = document.getElementById('popupSelectBtn');
 
       window.openPopup = function(cardNumber) {
         popupCardNumber = cardNumber;
@@ -1518,12 +1342,8 @@
         popupDiscount.textContent = data.discount;
         popupOldPrice.textContent = data.oldPrice;
         popupNewPrice.textContent = data.newPrice;
-        popupCardBadge.textContent = data.badge;
         
-        // Reset timer state
-        resetTimer();
-        
-        // Update button state
+        // Update button state based on selection
         updatePopupButtonState();
         
         popupOverlay.classList.add('active');
@@ -1531,7 +1351,6 @@
       };
 
       window.closePopup = function() {
-        resetTimer();
         popupOverlay.classList.remove('active');
         document.body.style.overflow = '';
       };
@@ -1542,78 +1361,20 @@
         const isSelected = card.classList.contains('selected');
         
         if (isSelected) {
-          popupProceedBtn.innerHTML = '<i class="fas fa-check-circle"></i> SELECTED <span class="timer-display" id="timerDisplay"></span>';
-          popupProceedBtn.classList.add('disabled');
+          popupSelectBtn.classList.add('selected-popup');
+          popupSelectBtn.innerHTML = '<i class="fas fa-check-circle"></i> ✓ Selected';
         } else {
-          popupProceedBtn.innerHTML = '<i class="fas fa-arrow-right"></i> PROCEED <span class="timer-display" id="timerDisplay"></span>';
-          popupProceedBtn.classList.remove('disabled');
-        }
-        // Reattach timer display reference
-        const newTimerDisplay = popupProceedBtn.querySelector('.timer-display');
-        if (newTimerDisplay) {
-          timerDisplay.textContent = newTimerDisplay.textContent;
+          popupSelectBtn.classList.remove('selected-popup');
+          popupSelectBtn.innerHTML = '<i class="fas fa-check-circle"></i> Select Treat';
         }
       }
 
-      // ===== TIMER FUNCTION =====
-      function startTimer() {
-        const cardId = 'card' + popupCardNumber;
-        const card = document.getElementById(cardId);
-        const isSelected = card.classList.contains('selected');
-        
-        if (isSelected) {
-          alert('✅ This reward is already selected!');
-          return;
+      window.popupSelectCard = function() {
+        if (popupCardNumber) {
+          selectCard(popupCardNumber);
+          updatePopupButtonState();
         }
-        
-        if (isTimerRunning) return;
-        
-        // Select the card first
-        selectCard(popupCardNumber);
-        
-        // Start timer
-        timeRemaining = 300;
-        isTimerRunning = true;
-        popupProceedBtn.classList.add('disabled');
-        popupProceedBtn.innerHTML = '<i class="fas fa-hourglass-half"></i> WAIT <span class="timer-display" id="timerDisplay">5:00</span>';
-        
-        timerInterval = setInterval(function() {
-          timeRemaining--;
-          const minutes = Math.floor(timeRemaining / 60);
-          const seconds = timeRemaining % 60;
-          const timeStr = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
-          
-          const display = document.getElementById('timerDisplay');
-          if (display) {
-            display.textContent = timeStr;
-          }
-          
-          if (timeRemaining <= 0) {
-            clearInterval(timerInterval);
-            timerInterval = null;
-            isTimerRunning = false;
-            popupProceedBtn.classList.remove('disabled');
-            popupProceedBtn.innerHTML = '<i class="fas fa-check-circle"></i> PROCEED NOW <span class="timer-display" id="timerDisplay"></span>';
-            alert('⏰ Time is up! You can now proceed.');
-          }
-        }, 1000);
-      }
-
-      function resetTimer() {
-        if (timerInterval) {
-          clearInterval(timerInterval);
-          timerInterval = null;
-        }
-        isTimerRunning = false;
-        timeRemaining = 0;
-        popupProceedBtn.classList.remove('disabled');
-        const display = document.getElementById('timerDisplay');
-        if (display) {
-          display.textContent = '';
-        }
-        // Reset button text based on selection state
-        updatePopupButtonState();
-      }
+      };
 
       // ===== CARD SELECTION LOGIC =====
       let selectedCard = null;
@@ -1641,7 +1402,6 @@
         const amount = cardData[cardNumber].amount;
         const cardId = 'card' + cardNumber;
 
-        // If clicking the already selected card - unselect it
         if (selectedCard === cardId) {
           card.classList.remove('selected');
           btn.classList.remove('selected-btn');
@@ -1649,15 +1409,9 @@
           selectedCard = null;
           currentBalance = 0;
           updateBalance(0, false);
-          // Reset timer if popup is open
-          if (popupOverlay.classList.contains('active')) {
-            resetTimer();
-            updatePopupButtonState();
-          }
           return;
         }
 
-        // If another card is selected, unselect it first
         if (selectedCard !== null) {
           const prevCard = document.getElementById(selectedCard);
           const prevBtn = prevCard.querySelector('.card-btn');
@@ -1666,26 +1420,15 @@
           prevBtn.textContent = 'Select Treat';
         }
 
-        // Select the new card
         card.classList.add('selected');
         btn.classList.add('selected-btn');
         btn.textContent = '✓ Selected';
         selectedCard = cardId;
         currentBalance = amount;
         updateBalance(amount, true);
-        
-        // Update popup button state if open
-        if (popupOverlay.classList.contains('active')) {
-          updatePopupButtonState();
-        }
       };
 
-      // ===== HELP WIDGET =====
-      window.openHelp = function() {
-        window.open('https://facebook.com/FreeShoppingPH', '_blank');
-      };
-
-      // ===== CLAIM NOW BUTTON =====
+      // ---- CLAIM NOW BUTTON ----
       document.getElementById('claimNowBtn').addEventListener('click', function() {
         if (currentBalance <= 0) {
           alert('💳 Please select a treat reward first!');
