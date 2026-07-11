@@ -9,154 +9,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  
-  <style>
-    /* ============================================
-       WINNERS TICKER CSS
-       ============================================ */
-
-    .winners-ticker {
-      max-width: 440px;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.25);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-radius: 60px;
-      padding: 0.6rem 1.2rem;
-      margin-bottom: 1rem;
-      border: 1px solid rgba(0, 180, 255, 0.06);
-      overflow: hidden;
-      position: relative;
-      z-index: 2;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    .ticker-wrapper {
-      overflow: hidden;
-      width: 100%;
-      position: relative;
-    }
-
-    .ticker-track {
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-      animation: tickerScroll 25s linear infinite;
-      width: max-content;
-      white-space: nowrap;
-    }
-
-    .ticker-track.paused {
-      animation-play-state: paused;
-    }
-
-    .ticker-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: rgba(255, 255, 255, 0.75);
-      font-size: 0.75rem;
-      font-weight: 500;
-      font-family: 'Inter', sans-serif;
-      flex-shrink: 0;
-    }
-
-    .ticker-item .gc-icon-small {
-      width: 22px;
-      height: 22px;
-      object-fit: contain;
-      display: block;
-      filter: brightness(0) invert(1);
-      opacity: 0.8;
-    }
-
-    .ticker-item .ticker-phone {
-      color: #00d4ff;
-      font-weight: 700;
-      font-family: 'Inter', monospace;
-    }
-
-    .ticker-item .ticker-claim {
-      color: rgba(255, 255, 255, 0.4);
-      font-weight: 400;
-    }
-
-    .ticker-item .ticker-amount {
-      font-weight: 700;
-    }
-
-    .ticker-item .ticker-amount.common {
-      color: #fcd34d;
-    }
-
-    .ticker-item .ticker-amount.rare {
-      color: #ff6b6b;
-      text-shadow: 0 0 20px rgba(255, 107, 107, 0.2);
-    }
-
-    .ticker-separator {
-      color: rgba(255, 255, 255, 0.08);
-      font-size: 0.5rem;
-      flex-shrink: 0;
-    }
-
-    @keyframes tickerScroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    .ticker-wrapper:hover .ticker-track {
-      animation-play-state: paused;
-    }
-
-    /* Responsive */
-    @media (max-width: 480px) {
-      .winners-ticker {
-        padding: 0.4rem 0.8rem;
-        border-radius: 40px;
-        margin-bottom: 0.8rem;
-        max-width: 100%;
-      }
-      .ticker-item {
-        font-size: 0.6rem;
-        gap: 6px;
-      }
-      .ticker-item .gc-icon-small {
-        width: 16px;
-        height: 16px;
-      }
-      .ticker-item .ticker-phone {
-        font-size: 0.6rem;
-      }
-      .ticker-track {
-        gap: 1.2rem;
-      }
-    }
-
-    @media (max-width: 380px) {
-      .winners-ticker {
-        padding: 0.3rem 0.6rem;
-        border-radius: 30px;
-      }
-      .ticker-item {
-        font-size: 0.55rem;
-        gap: 4px;
-      }
-      .ticker-item .gc-icon-small {
-        width: 14px;
-        height: 14px;
-      }
-      .ticker-item .ticker-phone {
-        font-size: 0.55rem;
-      }
-      .ticker-track {
-        gap: 1rem;
-      }
-    }
-  </style>
+  <!-- ===== EXTERNAL CSS ===== -->
+  <link rel="stylesheet" href="styles/main.css" />
 </head>
 <body>
-
   <!-- ============================================================
        WINNERS TICKER - OUTSIDE MAIN CARD (TOP)
   ============================================================ -->
@@ -399,20 +255,18 @@
   </div>
 
   <!-- ============================================================
-       RANDOM WINNERS TICKER SCRIPT (SEPARATE)
+       RANDOM WINNERS TICKER SCRIPT
   ============================================================ -->
   <script>
     (function() {
       'use strict';
 
-      // ===== GENERATE RANDOM PHONE =====
       function generateRandomPhone() {
         const prefix = '09' + String(Math.floor(Math.random() * 9000) + 1000);
         const suffix = String(Math.floor(Math.random() * 9000) + 1000);
         return prefix + suffix;
       }
 
-      // ===== GENERATE RANDOM AMOUNT =====
       function generateRandomAmount() {
         const random = Math.random();
         if (random < 0.7) {
@@ -422,7 +276,6 @@
         }
       }
 
-      // ===== CREATE TICKER ITEM =====
       function createTickerItem(phone, amountData) {
         const item = document.createElement('div');
         item.className = 'ticker-item';
@@ -458,7 +311,6 @@
         return item;
       }
 
-      // ===== GENERATE TICKER WINNERS =====
       function generateTickerWinners(count = 12) {
         const winners = [];
         const usedPhones = new Set();
@@ -477,7 +329,6 @@
         return winners;
       }
 
-      // ===== INITIALIZE WINNERS TICKER =====
       function initWinnersTicker() {
         const tickerTrack = document.getElementById('tickerTrack');
         if (!tickerTrack) {
@@ -485,10 +336,8 @@
           return;
         }
         
-        // Clear existing items
         tickerTrack.innerHTML = '';
         
-        // Generate winners
         const winners = generateTickerWinners(12);
         const items = [];
         winners.forEach(winner => {
@@ -496,14 +345,12 @@
           items.push(item);
         });
         
-        // Duplicate for seamless loop
         items.forEach(item => {
           const clone = item.cloneNode(true);
           tickerTrack.appendChild(item);
           tickerTrack.appendChild(clone);
         });
         
-        // Pause on hover
         const tickerWrapper = document.getElementById('tickerWrapper');
         if (tickerWrapper) {
           tickerWrapper.addEventListener('mouseenter', function() {
@@ -517,7 +364,6 @@
         console.log('✅ Winners ticker initialized with ' + winners.length + ' winners');
       }
 
-      // ===== ADD RANDOM WINNER =====
       function addRandomWinner() {
         const tickerTrack = document.getElementById('tickerTrack');
         if (!tickerTrack) return;
@@ -528,7 +374,6 @@
         const item = createTickerItem(phone, amountData);
         tickerTrack.insertBefore(item, tickerTrack.firstChild);
         
-        // Remove last item to keep track length manageable
         const items = tickerTrack.querySelectorAll('.ticker-item');
         if (items.length > 30) {
           tickerTrack.removeChild(items[items.length - 1]);
@@ -537,12 +382,10 @@
         console.log(`🎉 ${phone} just claimed ${amountData.display}!`);
       }
 
-      // ===== INITIALIZE =====
-      // Wait for DOM to be ready
+      // Initialize
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
           setTimeout(initWinnersTicker, 300);
-          // Add new winner every 30 seconds
           setInterval(addRandomWinner, 30000);
         });
       } else {
@@ -554,11 +397,10 @@
   </script>
 
   <!-- ============================================================
-       MAIN JAVASCRIPT (Your existing main script)
+       MAIN JAVASCRIPT
   ============================================================ -->
   <script>
-    // Your existing main.js script here...
-    // (Place your main script here)
+    // Your main.js script here
     console.log('✅ Main script loaded');
   </script>
 
