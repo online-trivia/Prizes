@@ -12,574 +12,9 @@
   
   <style>
     /* ============================================
-       BUY TREATS | GET CASHBACK - MAIN STYLES
+       WINNERS TICKER CSS
        ============================================ */
 
-    :root {
-      --primary: #0d9488;
-      --primary-light: #14b8a6;
-      --primary-dark: #0f766e;
-      --neon-blue: #00d4ff;
-      --neon-blue-light: #8ae2ff;
-      --neon-blue-glow: rgba(0, 212, 255, 0.3);
-      --background-start: #d4f1ff;
-      --background-end: #b0e6ff;
-      --card-bg: rgba(255, 255, 255, 0.92);
-      --text-main: #0f172a;
-      --text-muted: #475569;
-      --border-light: #e2e8f0;
-      --shadow-sm: 0 2px 12px rgba(15, 23, 42, 0.04);
-      --shadow-md: 0 8px 30px rgba(15, 23, 42, 0.06);
-      --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.08);
-      --radius: 24px;
-      --radius-sm: 16px;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(145deg, var(--background-start), var(--background-end));
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      padding: 1.2rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* === BOKEH LIGHTS === */
-    body::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: 
-        radial-gradient(circle at 15% 25%, rgba(0, 212, 255, 0.25) 0%, transparent 40%),
-        radial-gradient(circle at 85% 30%, rgba(0, 212, 255, 0.2) 0%, transparent 45%),
-        radial-gradient(circle at 50% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 20% 70%, rgba(255, 255, 255, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 75% 60%, rgba(0, 212, 255, 0.15) 0%, transparent 45%);
-      pointer-events: none;
-      z-index: 0;
-      filter: blur(6px);
-    }
-
-    /* === DECORATIONS === */
-    .decoration {
-      position: absolute;
-      pointer-events: none;
-      z-index: 0;
-      filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.08));
-    }
-
-    .decoration.tree {
-      bottom: 5%;
-      left: 4%;
-      font-size: 3.5rem;
-      opacity: 0.25;
-      animation: float-slow 6s ease-in-out infinite;
-    }
-
-    .decoration.star {
-      top: 6%;
-      right: 8%;
-      font-size: 2rem;
-      opacity: 0.3;
-      animation: twinkle 2s ease-in-out infinite;
-    }
-
-    .decoration.gift {
-      bottom: 10%;
-      right: 6%;
-      font-size: 2.5rem;
-      opacity: 0.2;
-      animation: float-slow 5s ease-in-out infinite 1s;
-    }
-
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.2; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(1.1); }
-    }
-
-    @keyframes float-slow {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-8px) rotate(-2deg); }
-    }
-
-    /* === SNOWFLAKES === */
-    .snowflake {
-      position: absolute;
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 1rem;
-      pointer-events: none;
-      z-index: 0;
-      animation: fall linear infinite;
-      text-shadow: 0 0 5px rgba(255,255,255,0.3);
-    }
-
-    @keyframes fall {
-      0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
-      10% { opacity: 0.5; }
-      90% { opacity: 0.5; }
-      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-    }
-
-    /* === MAIN CARD === */
-    .main-card {
-      max-width: 440px;
-      width: 100%;
-      background: var(--card-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-radius: var(--radius);
-      box-shadow: 
-        0 20px 50px rgba(0, 0, 0, 0.06), 
-        inset 0 1px 1px rgba(255, 255, 255, 0.8),
-        0 0 0 1px rgba(255, 255, 255, 0.3);
-      padding: 2.4rem 1.8rem 2.6rem;
-      position: relative;
-      z-index: 1;
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .main-card:hover {
-      transform: translateY(-3px);
-    }
-
-    /* === BADGE === */
-    .brand-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 800;
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      color: var(--primary);
-      text-transform: uppercase;
-      background: rgba(13, 148, 136, 0.08);
-      padding: 0.3rem 1.2rem;
-      border-radius: 60px;
-      border: 1px solid rgba(13, 148, 136, 0.1);
-      margin: 0 auto 0.8rem;
-      width: fit-content;
-    }
-
-    .brand-badge i {
-      color: #FFD700;
-    }
-
-    /* === HEADER === */
-    .dashboard-header {
-      text-align: center;
-      margin-bottom: 1.4rem;
-    }
-
-    .dashboard-header h1 {
-      font-size: 1.6rem;
-      font-weight: 900;
-      color: var(--text-main);
-      line-height: 1.2;
-    }
-
-    .dashboard-header h1 .highlight {
-      background: linear-gradient(to right, #0d9488, #06b6d4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .dashboard-header .sub {
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-top: 4px;
-      letter-spacing: 0.04em;
-    }
-
-    /* === PROFILE SECTION === */
-    .profile-section {
-      display: flex;
-      align-items: flex-start;
-      gap: 1.2rem;
-      margin-bottom: 1.8rem;
-      padding: 0.5rem 0;
-    }
-
-    .profile-photo-container {
-      position: relative;
-      flex-shrink: 0;
-    }
-
-    .profile-photo-wrapper {
-      position: relative;
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      overflow: visible;
-      cursor: pointer;
-    }
-
-    .profile-photo {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      overflow: hidden;
-      border: 3px solid #ffffff;
-      box-shadow: 0 4px 20px rgba(0, 212, 255, 0.25);
-      background: linear-gradient(135deg, #0d9488, #06b6d4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      position: relative;
-    }
-
-    .profile-photo:hover {
-      transform: scale(1.03);
-    }
-
-    .profile-photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    /* === PROJECTOR ZOOM === */
-    .profile-photo-wrapper .projector-zoom {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      border: 3px solid rgba(255, 215, 0, 0.5);
-      box-shadow: 
-        0 0 30px rgba(255, 215, 0, 0.2),
-        0 0 60px rgba(0, 212, 255, 0.15),
-        inset 0 0 30px rgba(255, 215, 0, 0.05);
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(4px);
-      transform: translate(-50%, -50%) scale(0);
-      opacity: 0;
-      pointer-events: none;
-      z-index: 20;
-      overflow: hidden;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .profile-photo-wrapper .projector-zoom img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-      display: block;
-    }
-
-    .profile-photo-wrapper .projector-zoom::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: conic-gradient(from 0deg, transparent 0%, rgba(255, 215, 0, 0.06) 10%, transparent 20%, rgba(0, 212, 255, 0.06) 30%, transparent 40%, rgba(255, 215, 0, 0.06) 50%, transparent 60%, rgba(0, 212, 255, 0.06) 70%, transparent 80%, rgba(255, 215, 0, 0.06) 90%, transparent 100%);
-      animation: projector-spin 8s linear infinite;
-      pointer-events: none;
-      z-index: 0;
-      border-radius: 50%;
-    }
-
-    @keyframes projector-spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .profile-photo-wrapper:hover .projector-zoom,
-    .profile-photo-wrapper.active .projector-zoom {
-      transform: translate(-50%, -50%) scale(1);
-      opacity: 1;
-    }
-
-    .profile-photo-wrapper:hover .profile-photo img,
-    .profile-photo-wrapper.active .profile-photo img {
-      transform: scale(1.25);
-    }
-
-    .profile-photo-wrapper:hover .profile-photo,
-    .profile-photo-wrapper.active .profile-photo {
-      box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3), 0 0 0 2px rgba(255, 215, 0, 0.3);
-    }
-
-    @media (hover: none) {
-      .profile-photo-wrapper .projector-zoom {
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      }
-      .profile-photo-wrapper.active .projector-zoom {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1;
-      }
-      .profile-photo-wrapper.active .profile-photo img {
-        transform: scale(1.25);
-      }
-      .profile-photo-wrapper.active .profile-photo {
-        box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3), 0 0 0 2px rgba(255, 215, 0, 0.3);
-      }
-    }
-
-    /* === STATUS DOT === */
-    .status-dot {
-      position: absolute;
-      bottom: 2px;
-      right: 2px;
-      width: 16px;
-      height: 16px;
-      background: #10b981;
-      border: 2.5px solid #ffffff;
-      border-radius: 50%;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
-      animation: pulse-dot 2s ease-in-out infinite;
-      z-index: 10;
-    }
-
-    @keyframes pulse-dot {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.15); opacity: 0.7; }
-    }
-
-    /* === THOUGHT BUBBLE === */
-    .thought-bubble-wrapper {
-      flex: 1;
-      position: relative;
-      display: flex;
-      align-items: center;
-      min-height: 70px;
-    }
-
-    .thought-bubble {
-      background: #f8fafc;
-      border-radius: 18px 18px 18px 6px;
-      padding: 1rem 1.2rem;
-      width: 100%;
-      min-height: 62px;
-      display: flex;
-      align-items: center;
-      border: 1px solid rgba(0,0,0,0.04);
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
-      position: relative;
-    }
-
-    .thought-bubble::before {
-      content: '';
-      position: absolute;
-      left: -10px;
-      top: 24px;
-      width: 0;
-      height: 0;
-      border-right: 12px solid #f8fafc;
-      border-top: 8px solid transparent;
-      border-bottom: 8px solid transparent;
-      filter: drop-shadow(-1px 0 1px rgba(0, 0, 0, 0.01));
-    }
-
-    .thought-bubble::after {
-      content: '';
-      position: absolute;
-      left: -12px;
-      top: 22px;
-      width: 0;
-      height: 0;
-      border-right: 14px solid rgba(0,0,0,0.04);
-      border-top: 10px solid transparent;
-      border-bottom: 10px solid transparent;
-      z-index: 0;
-      opacity: 0.3;
-    }
-
-    .thought-bubble .message-content {
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--text-main);
-      line-height: 1.5;
-      width: 100%;
-      position: relative;
-      z-index: 1;
-    }
-
-    .cursor {
-      display: inline-block;
-      width: 2px;
-      height: 1.1em;
-      background: #0d9488;
-      margin-left: 2px;
-      vertical-align: text-bottom;
-      animation: blink 0.9s step-end infinite;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-
-    /* === DASHBOARD BALANCE === */
-    .dashboard-section {
-      background: linear-gradient(145deg, #00d4ff, #00b8e6);
-      border-radius: 20px;
-      padding: 1.6rem 1.8rem;
-      margin-bottom: 1.2rem;
-      box-shadow: 0 8px 30px rgba(0, 212, 255, 0.25);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .dashboard-section::before {
-      content: '';
-      position: absolute;
-      top: -40px;
-      right: -30px;
-      width: 150px;
-      height: 150px;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    .dashboard-section::after {
-      content: '';
-      position: absolute;
-      bottom: -30px;
-      left: -20px;
-      width: 100px;
-      height: 100px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    .balance-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .balance-label {
-      font-size: 0.65rem;
-      font-weight: 700;
-      color: rgba(255, 255, 255, 0.85);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .claim-btn {
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(4px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 30px;
-      padding: 0.4rem 1rem;
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 0.65rem;
-      color: #ffffff;
-      cursor: pointer !important;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      pointer-events: auto !important;
-      position: relative;
-      z-index: 10;
-    }
-
-    .claim-btn:hover {
-      background: rgba(255, 255, 255, 0.35);
-      transform: scale(1.05);
-    }
-
-    .claim-btn:active {
-      transform: scale(0.95);
-    }
-
-    .claim-btn .gcash-icon-small {
-      width: 20px;
-      height: 20px;
-      object-fit: contain;
-      display: block;
-      pointer-events: none;
-    }
-
-    .balance-amount {
-      font-size: 2.8rem;
-      font-weight: 900;
-      color: #ffffff;
-      letter-spacing: -0.02em;
-      display: flex;
-      align-items: baseline;
-      gap: 4px;
-      margin-top: 2px;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      transition: all 0.3s ease;
-    }
-
-    .balance-amount .peso-sign {
-      font-size: 1.8rem;
-      font-weight: 700;
-      opacity: 0.9;
-    }
-
-    .balance-amount .amount-change {
-      display: inline-block;
-      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .balance-amount .amount-change.increment {
-      animation: incrementPop 0.6s ease;
-    }
-
-    .balance-amount .amount-change.decrement {
-      animation: decrementPop 0.6s ease;
-    }
-
-    @keyframes incrementPop {
-      0% { transform: scale(1); color: #ffffff; }
-      30% { transform: scale(1.3); color: #fcd34d; }
-      70% { transform: scale(1.1); color: #fcd34d; }
-      100% { transform: scale(1); color: #ffffff; }
-    }
-
-    @keyframes decrementPop {
-      0% { transform: scale(1); color: #ffffff; }
-      30% { transform: scale(0.8); color: #fca5a5; }
-      70% { transform: scale(0.9); color: #fca5a5; }
-      100% { transform: scale(1); color: #ffffff; }
-    }
-
-    .balance-sub {
-      font-size: 0.65rem;
-      font-weight: 500;
-      color: rgba(255, 255, 255, 0.6);
-      margin-top: 4px;
-      letter-spacing: 0.04em;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .balance-sub i {
-      color: #fcd34d;
-    }
-
-    /* === WINNERS TICKER === */
     .winners-ticker {
       max-width: 440px;
       width: 100%;
@@ -674,839 +109,49 @@
       animation-play-state: paused;
     }
 
-    /* === CARDS GRID === */
-    .cards-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.8rem;
-      margin-top: 0.5rem;
-    }
-
-    .card-item {
-      position: relative;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-      transition: all 0.3s ease;
-      aspect-ratio: 1 / 1.15;
-      background: #f8fafc;
-      border: 2px solid transparent;
-    }
-
-    .card-item:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-    }
-
-    .card-item.selected {
-      border-color: var(--neon-blue);
-      box-shadow: 0 0 30px rgba(0, 212, 255, 0.25);
-    }
-
-    .card-item .card-image-wrapper {
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card-item .card-image-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.3s ease;
-    }
-
-    .card-item .card-image-wrapper:hover img {
-      transform: scale(1.05);
-    }
-
-    .card-item .card-overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 0.6rem 0.6rem 0.8rem;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
-      z-index: 15;
-      pointer-events: none;
-    }
-
-    .card-item .card-overlay .card-label {
-      color: #ffffff;
-      font-weight: 700;
-      font-size: 0.55rem;
-      letter-spacing: 0.04em;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      opacity: 0.7;
-    }
-
-    .card-item .card-overlay .card-label i {
-      margin-right: 4px;
-      color: #fcd34d;
-    }
-
-    .card-item .card-overlay .prize-display {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      color: #ffffff;
-      font-weight: 700;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    }
-
-    .card-item .card-overlay .prize-display .old-price {
-      font-size: 0.6rem;
-      text-decoration: line-through;
-      opacity: 0.5;
-      color: #fca5a5;
-    }
-
-    .card-item .card-overlay .prize-display .new-price {
-      font-size: 0.9rem;
-      font-weight: 800;
-      color: #fcd34d;
-    }
-
-    .card-item .card-overlay .prize-display .new-price .peso {
-      font-size: 0.65rem;
-    }
-
-    .card-item .card-btn {
-      background: var(--neon-blue);
-      border: none;
-      border-radius: 30px;
-      padding: 0.3rem 0.8rem;
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 0.55rem;
-      color: #ffffff;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      width: 100%;
-      justify-content: center;
-      margin-top: 2px;
-      pointer-events: auto;
-      position: relative;
-      z-index: 20;
-    }
-
-    .card-item .card-btn:hover {
-      background: #00b8e6;
-      box-shadow: 0 0 25px rgba(0, 212, 255, 0.4);
-    }
-
-    .card-item .card-btn:active {
-      transform: scale(0.95);
-    }
-
-    .card-item .card-btn.selected-btn {
-      background: #94a3b8;
-      box-shadow: none;
-    }
-
-    .card-item .card-btn.selected-btn:hover {
-      background: #94a3b8;
-      box-shadow: none;
-    }
-
-    .card-item .card-btn i {
-      font-size: 0.6rem;
-    }
-
-    .card-item .card-badge {
-      position: absolute;
-      top: 6px;
-      right: 6px;
-      background: rgba(255, 215, 0, 0.9);
-      color: #0f172a;
-      font-size: 0.5rem;
-      font-weight: 800;
-      padding: 2px 8px;
-      border-radius: 20px;
-      letter-spacing: 0.04em;
-      z-index: 20;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-      pointer-events: none;
-    }
-
-    .card-item .card-badge i {
-      margin-right: 3px;
-    }
-
-    .card-item.selected .card-badge {
-      background: var(--neon-blue);
-      color: #ffffff;
-    }
-
-    .card-item .discount-tag {
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      background: rgba(239, 68, 68, 0.9);
-      color: #ffffff;
-      font-size: 0.5rem;
-      font-weight: 800;
-      padding: 2px 8px;
-      border-radius: 20px;
-      letter-spacing: 0.04em;
-      z-index: 20;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-      pointer-events: none;
-    }
-
-    .card-item .discount-tag i {
-      margin-right: 3px;
-    }
-
-    .card-item.selected .discount-tag {
-      background: var(--neon-blue);
-    }
-
-    /* === CARD POPUP === */
-    .card-popup-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      z-index: 9999;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .card-popup-overlay.active {
-      display: flex;
-    }
-
-    .card-popup-content {
-      max-width: 440px;
-      width: 100%;
-      background: #ffffff;
-      border-radius: 28px;
-      padding: 2rem 1.5rem 2rem;
-      position: relative;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
-      border: 1px solid rgba(0, 0, 0, 0.04);
-      animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .card-popup-close {
-      position: absolute;
-      top: 12px;
-      right: 14px;
-      width: 34px;
-      height: 34px;
-      background: rgba(0, 0, 0, 0.04);
-      border: 1px solid rgba(0, 0, 0, 0.06);
-      border-radius: 50%;
-      color: #94a3b8;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-    }
-
-    .card-popup-close:hover {
-      background: rgba(239, 68, 68, 0.08);
-      border-color: rgba(239, 68, 68, 0.15);
-      color: #ef4444;
-      transform: rotate(90deg);
-    }
-
-    .card-popup-close:active {
-      transform: rotate(90deg) scale(0.9);
-    }
-
-    .card-popup-image-wrapper {
-      width: 260px;
-      height: 260px;
-      margin: 0 auto 0.8rem;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-      border: 1px solid rgba(0, 0, 0, 0.04);
-    }
-
-    .card-popup-image-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    /* === CARD POPUP DISPLAY FORMAT === */
-    .card-popup-price-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 0.3rem;
-    }
-
-    .card-popup-price-row .old-price {
-      font-size: 0.85rem;
-      text-decoration: line-through;
-      color: #94a3b8;
-      font-weight: 600;
-    }
-
-    .card-popup-price-row .new-price {
-      font-size: 1.8rem;
-      font-weight: 900;
-      color: var(--neon-blue);
-    }
-
-    .card-popup-price-row .new-price .peso {
-      font-size: 1.1rem;
-    }
-
-    .card-popup-discount-badge {
-      display: inline-block;
-      background: rgba(239, 68, 68, 0.08);
-      color: #ef4444;
-      font-size: 0.65rem;
-      font-weight: 700;
-      padding: 0.2rem 0.8rem;
-      border-radius: 30px;
-      margin-left: 6px;
-    }
-
-    .card-popup-label {
-      color: rgba(0, 0, 0, 0.3);
-      font-size: 0.6rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      text-align: center;
-      margin-bottom: 0.2rem;
-    }
-
-    .card-popup-reward {
-      text-align: center;
-      font-size: 1.6rem;
-      font-weight: 900;
-      color: var(--neon-blue);
-      margin-bottom: 0.8rem;
-    }
-
-    .card-popup-reward .peso {
-      font-size: 1.1rem;
-    }
-
-    /* === STAR ICON ANIMATION === */
-    .animated-star {
-      display: inline-block;
-      animation: starJumpRotate 2.5s ease-in-out infinite;
-      transform-origin: center;
-      will-change: transform;
-    }
-
-    @keyframes starJumpRotate {
-      0% { transform: translateY(0) scale(1) rotate(0deg); }
-      15% { transform: translateY(-12px) scale(1.3) rotate(30deg); }
-      30% { transform: translateY(-6px) scale(1.1) rotate(-10deg); }
-      45% { transform: translateY(-8px) scale(1.2) rotate(15deg); }
-      60% { transform: translateY(-3px) scale(1.05) rotate(-5deg); }
-      75% { transform: translateY(-6px) scale(1.1) rotate(8deg); }
-      100% { transform: translateY(0) scale(1) rotate(0deg); }
-    }
-
-    .card-popup-reward .animated-star,
-    .claim-popup-reward .animated-star {
-      animation-duration: 2s;
-    }
-
-    .animated-star:hover {
-      animation-play-state: paused;
-    }
-
-    /* === CARD POPUP BUTTON === */
-    .card-popup-btn-select {
-      width: 100%;
-      background: var(--neon-blue);
-      border: none;
-      border-radius: 14px;
-      padding: 0.9rem 0.5rem;
-      font-family: 'Inter', sans-serif;
-      font-weight: 800;
-      font-size: 0.9rem;
-      color: #ffffff;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 30px var(--neon-blue-glow);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-top: 0.2rem;
-    }
-
-    .card-popup-btn-select:hover {
-      background: #00b8e6;
-      box-shadow: 0 0 50px var(--neon-blue-glow);
-      transform: scale(1.02);
-    }
-
-    .card-popup-btn-select:active {
-      transform: scale(0.96);
-    }
-
-    .card-popup-btn-select i {
-      color: #ffffff;
-    }
-
-    .card-popup-btn-select.selected-popup {
-      background: #94a3b8;
-      box-shadow: none;
-    }
-
-    .card-popup-btn-select.selected-popup:hover {
-      background: #94a3b8;
-      box-shadow: none;
-      transform: none;
-    }
-
-    .card-popup-btn-select.selected-popup i {
-      color: #94a3b8;
-    }
-
-    /* === CLAIM POPUP === */
-    .claim-popup-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      z-index: 9999;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .claim-popup-overlay.active {
-      display: flex;
-    }
-
-    .claim-popup-content {
-      max-width: 440px;
-      width: 100%;
-      background: #ffffff;
-      border-radius: 28px;
-      padding: 2rem 1.5rem 2rem;
-      position: relative;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
-      border: 1px solid rgba(0, 0, 0, 0.04);
-      animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .claim-popup-close {
-      position: absolute;
-      top: 12px;
-      right: 14px;
-      width: 34px;
-      height: 34px;
-      background: rgba(0, 0, 0, 0.04);
-      border: 1px solid rgba(0, 0, 0, 0.06);
-      border-radius: 50%;
-      color: #94a3b8;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-    }
-
-    .claim-popup-close:hover {
-      background: rgba(239, 68, 68, 0.08);
-      border-color: rgba(239, 68, 68, 0.15);
-      color: #ef4444;
-      transform: rotate(90deg);
-    }
-
-    .claim-popup-close:active {
-      transform: rotate(90deg) scale(0.9);
-    }
-
-    .claim-popup-user-info {
-      text-align: center;
-      margin-bottom: 0.8rem;
-      padding-bottom: 0.6rem;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-    }
-
-    .claim-popup-user-info .user-phone {
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
-      font-size: 0.85rem;
-      color: #0f172a;
-    }
-
-    .claim-popup-user-info .user-phone i {
-      color: var(--neon-blue);
-      margin-right: 6px;
-    }
-
-    .claim-popup-user-info .user-reward {
-      font-family: 'Inter', sans-serif;
-      font-weight: 500;
-      font-size: 0.7rem;
-      color: #94a3b8;
-      margin-top: 2px;
-    }
-
-    .claim-popup-user-info .user-reward span {
-      color: var(--neon-blue);
-      font-weight: 700;
-    }
-
-    .claim-popup-image-wrapper {
-      width: 260px;
-      height: 260px;
-      margin: 0 auto 0.8rem;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-      border: 1px solid rgba(0, 0, 0, 0.04);
-    }
-
-    .claim-popup-image-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .claim-popup-price-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 0.3rem;
-    }
-
-    .claim-popup-price-row .old-price {
-      font-size: 0.85rem;
-      text-decoration: line-through;
-      color: #94a3b8;
-      font-weight: 600;
-    }
-
-    .claim-popup-price-row .new-price {
-      font-size: 1.8rem;
-      font-weight: 900;
-      color: var(--neon-blue);
-    }
-
-    .claim-popup-price-row .new-price .peso {
-      font-size: 1.1rem;
-    }
-
-    .claim-popup-discount-badge {
-      display: inline-block;
-      background: rgba(239, 68, 68, 0.08);
-      color: #ef4444;
-      font-size: 0.65rem;
-      font-weight: 700;
-      padding: 0.2rem 0.8rem;
-      border-radius: 30px;
-      margin-left: 6px;
-    }
-
-    .claim-popup-label {
-      color: rgba(0, 0, 0, 0.3);
-      font-size: 0.6rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      text-align: center;
-      margin-bottom: 0.2rem;
-    }
-
-    .claim-popup-reward {
-      text-align: center;
-      font-size: 1.6rem;
-      font-weight: 900;
-      color: var(--neon-blue);
-      margin-bottom: 0.8rem;
-    }
-
-    .claim-popup-reward .peso {
-      font-size: 1.1rem;
-    }
-
-    .claim-popup-steps {
-      background: #f8fafc;
-      border-radius: 14px;
-      padding: 0.6rem 0.8rem;
-      margin-bottom: 0.8rem;
-      border: 1px solid rgba(0, 0, 0, 0.03);
-    }
-
-    .claim-popup-steps .step-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      padding: 3px 0;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.65rem;
-      color: #475569;
-      line-height: 1.4;
-    }
-
-    .claim-popup-steps .step-item .step-icon {
-      color: var(--neon-blue);
-      font-size: 0.55rem;
-      margin-top: 2px;
-      width: 14px;
-      text-align: center;
-    }
-
-    .claim-popup-steps .step-item .step-text {
-      flex: 1;
-    }
-
-    .claim-popup-steps .step-item .step-text strong {
-      color: #0f172a;
-    }
-
-    /* Highlight HELP in step 5 */
-    .claim-popup-steps .step-item:last-child .step-text strong {
-      color: #fcd34d;
-    }
-
-    .claim-popup-help-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.8rem;
-      padding-top: 0.3rem;
-      border-top: 1px solid rgba(0, 0, 0, 0.04);
-    }
-
-    .claim-popup-help-text {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.55rem;
-      font-weight: 600;
-      color: #94a3b8;
-      letter-spacing: 0.04em;
-    }
-
-    .claim-popup-help-link {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.55rem;
-      font-weight: 700;
-      color: var(--neon-blue);
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      padding: 3px 10px;
-      border-radius: 30px;
-      background: rgba(0, 212, 255, 0.06);
-      border: 1px solid rgba(0, 212, 255, 0.08);
-    }
-
-    .claim-popup-help-link:hover {
-      background: rgba(0, 212, 255, 0.12);
-      transform: scale(1.02);
-    }
-
-    .claim-popup-help-link img {
-      width: 16px;
-      height: 16px;
-      display: block;
-    }
-
-    /* === PAY TREATS BUTTON === */
-    .claim-popup-btn-pay {
-      width: 100%;
-      background: var(--neon-blue);
-      border: none;
-      border-radius: 14px;
-      padding: 0.9rem 0.5rem;
-      font-family: 'Inter', sans-serif;
-      font-weight: 800;
-      font-size: 0.9rem;
-      color: #ffffff;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 30px var(--neon-blue-glow);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .claim-popup-btn-pay:hover {
-      background: #00b8e6;
-      box-shadow: 0 0 50px var(--neon-blue-glow);
-      transform: scale(1.02);
-    }
-
-    .claim-popup-btn-pay:active {
-      transform: scale(0.96);
-    }
-
-    .claim-popup-btn-pay i {
-      color: #ffffff;
-    }
-
-    .claim-popup-btn-pay.disabled {
-      background: #94a3b8;
-      cursor: not-allowed;
-      box-shadow: none;
-      transform: none !important;
-    }
-
-    .claim-popup-btn-pay.disabled:hover {
-      background: #94a3b8;
-      box-shadow: none;
-      transform: none;
-    }
-
-    .claim-popup-btn-pay .timer-display {
-      color: #ef4444;
-      font-weight: 900;
-      font-size: 0.95rem;
-      margin-left: 6px;
-      font-variant-numeric: tabular-nums;
-    }
-
-    /* === FOOTER === */
-    .brand-footer {
-      text-align: center;
-      margin-top: 1.2rem;
-      font-size: 0.6rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      opacity: 0.4;
-      letter-spacing: 0.04em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .brand-footer i {
-      color: #0d9488;
-      opacity: 0.5;
-    }
-
-    /* === ANIMATIONS === */
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes slideUp {
-      from { transform: translateY(20px) scale(0.96); opacity: 0; }
-      to { transform: translateY(0) scale(1); opacity: 1; }
-    }
-
-    /* === RESPONSIVE === */
+    /* Responsive */
     @media (max-width: 480px) {
-      body { padding: 0.8rem; }
-      .main-card { padding: 1.6rem 1.2rem 2rem; border-radius: 24px; }
-      
-      .profile-photo-wrapper { width: 70px; height: 70px; }
-      .profile-photo { width: 70px; height: 70px; }
-      .profile-photo-wrapper .projector-zoom { width: 150px; height: 150px; }
-      
-      .thought-bubble { padding: 0.8rem 1rem; min-height: 54px; }
-      .thought-bubble .message-content { font-size: 0.8rem; }
-      .thought-bubble::before { top: 20px; }
-      .thought-bubble::after { top: 18px; }
-      
-      .dashboard-header h1 { font-size: 1.3rem; }
-      
-      .balance-amount { font-size: 2.2rem; }
-      .balance-amount .peso-sign { font-size: 1.4rem; }
-      
-      .dashboard-section { padding: 1.2rem 1.4rem; }
-      
-      .winners-ticker { padding: 0.4rem 0.8rem; border-radius: 40px; margin-bottom: 0.8rem; }
-      .ticker-item { font-size: 0.6rem; gap: 6px; }
-      .ticker-item .gc-icon-small { width: 16px; height: 16px; }
-      .ticker-item .ticker-phone { font-size: 0.6rem; }
-      .ticker-track { gap: 1.2rem; }
-      
-      .cards-grid { gap: 0.6rem; }
-      .card-item .card-label { font-size: 0.5rem; }
-      .card-item .card-btn { font-size: 0.5rem; padding: 0.25rem 0.5rem; }
-      .card-item .card-badge { font-size: 0.45rem; padding: 1px 6px; }
-      .card-item .discount-tag { font-size: 0.45rem; padding: 1px 6px; }
-      .card-item .prize-display .old-price { font-size: 0.5rem; }
-      .card-item .prize-display .new-price { font-size: 0.75rem; }
-      .claim-btn { font-size: 0.55rem; padding: 0.3rem 0.8rem; }
-      .claim-btn .gcash-icon-small { width: 16px; height: 16px; }
-      
-      .card-popup-content { padding: 1.8rem 1.2rem 1.8rem; }
-      .card-popup-image-wrapper { width: 200px; height: 200px; }
-      .card-popup-price-row .new-price { font-size: 1.4rem; }
-      .card-popup-btn-select { font-size: 0.8rem; padding: 0.7rem 0.5rem; }
-      .card-popup-reward { font-size: 1.3rem; }
-      
-      .claim-popup-content { padding: 1.8rem 1.2rem 1.8rem; }
-      .claim-popup-image-wrapper { width: 200px; height: 200px; }
-      .claim-popup-price-row .new-price { font-size: 1.4rem; }
-      .claim-popup-btn-pay { font-size: 0.8rem; padding: 0.7rem 0.5rem; }
-      .claim-popup-reward { font-size: 1.3rem; }
-      
-      .decoration { display: none; }
+      .winners-ticker {
+        padding: 0.4rem 0.8rem;
+        border-radius: 40px;
+        margin-bottom: 0.8rem;
+        max-width: 100%;
+      }
+      .ticker-item {
+        font-size: 0.6rem;
+        gap: 6px;
+      }
+      .ticker-item .gc-icon-small {
+        width: 16px;
+        height: 16px;
+      }
+      .ticker-item .ticker-phone {
+        font-size: 0.6rem;
+      }
+      .ticker-track {
+        gap: 1.2rem;
+      }
     }
 
     @media (max-width: 380px) {
-      .main-card { padding: 1.2rem 0.9rem 1.6rem; }
-      .profile-photo-wrapper { width: 60px; height: 60px; }
-      .profile-photo { width: 60px; height: 60px; }
-      .profile-photo-wrapper .projector-zoom { width: 130px; height: 130px; }
-      .thought-bubble .message-content { font-size: 0.72rem; }
-      .thought-bubble { min-height: 46px; padding: 0.5rem 0.8rem; }
-      .balance-amount { font-size: 1.8rem; }
-      
-      .card-popup-image-wrapper { width: 170px; height: 170px; }
-      .claim-popup-image-wrapper { width: 170px; height: 170px; }
-      .winners-ticker { padding: 0.3rem 0.6rem; border-radius: 30px; }
-      .ticker-item { font-size: 0.55rem; gap: 4px; }
-      .ticker-item .gc-icon-small { width: 14px; height: 14px; }
-      .ticker-item .ticker-phone { font-size: 0.55rem; }
-      .ticker-track { gap: 1rem; }
+      .winners-ticker {
+        padding: 0.3rem 0.6rem;
+        border-radius: 30px;
+      }
+      .ticker-item {
+        font-size: 0.55rem;
+        gap: 4px;
+      }
+      .ticker-item .gc-icon-small {
+        width: 14px;
+        height: 14px;
+      }
+      .ticker-item .ticker-phone {
+        font-size: 0.55rem;
+      }
+      .ticker-track {
+        gap: 1rem;
+      }
     }
   </style>
 </head>
@@ -1685,7 +330,7 @@
   </div>
 
   <!-- ============================================================
-       CLAIM POPUP - UPDATED STEPS
+       CLAIM POPUP
   ============================================================ -->
   <div class="claim-popup-overlay" id="claimPopupOverlay">
     <div class="claim-popup-content">
@@ -1693,63 +338,51 @@
         <i class="fas fa-times"></i>
       </button>
       
-      <!-- User Info -->
       <div class="claim-popup-user-info">
         <div class="user-phone"><i class="fas fa-phone"></i> <span id="claimPopupPhone">09171234567</span></div>
         <div class="user-reward">Reward: <span id="claimPopupReward">₱1,500</span></div>
       </div>
       
-      <!-- Image -->
       <div class="claim-popup-image-wrapper">
         <img src="" alt="Reward" id="claimPopupImage" />
       </div>
       
-      <!-- Price Row -->
       <div class="claim-popup-price-row">
         <span class="old-price" id="claimPopupOldPrice">₱700</span>
         <span class="new-price"><span class="peso">₱</span><span id="claimPopupNewPrice">545</span></span>
         <span class="claim-popup-discount-badge" id="claimPopupDiscount">-22%</span>
       </div>
       
-      <!-- Label -->
       <div class="claim-popup-label"><i class="fas fa-gift"></i> Treat Reward</div>
       
-      <!-- Reward Amount with Animated Star -->
       <div class="claim-popup-reward">
         <i class="fas fa-star animated-star" style="color: #FFD700; margin-right: 8px;"></i>
         <span class="peso">₱</span><span id="claimPopupRewardAmount">1,500</span>
       </div>
       
-      <!-- ===== UPDATED STEPS ===== -->
       <div class="claim-popup-steps">
-        <!-- Step 1 -->
         <div class="step-item">
           <span class="step-icon"><i class="fas fa-check-circle"></i></span>
           <span class="step-text"><strong>Successful Payments</strong> can receive mega cashback on their eWallets.</span>
         </div>
-        <!-- Step 2 -->
         <div class="step-item">
           <span class="step-icon"><i class="fas fa-check-circle"></i></span>
           <span class="step-text">Cashbacks will be received <strong>instantly</strong> after purchased treats.</span>
         </div>
-        <!-- Step 3 -->
         <div class="step-item">
           <span class="step-icon"><i class="fas fa-check-circle"></i></span>
           <span class="step-text">Click <strong>PAY TREATS</strong> and wait for countdown.</span>
         </div>
-        <!-- Step 4 -->
         <div class="step-item">
           <span class="step-icon"><i class="fas fa-check-circle"></i></span>
           <span class="step-text">You will receive <strong>SMS confirmation</strong> for your reference.</span>
         </div>
-        <!-- Step 5 - NEW -->
         <div class="step-item">
           <span class="step-icon"><i class="fas fa-check-circle"></i></span>
           <span class="step-text">Click <strong>HELP</strong> to seek assistance.</span>
         </div>
       </div>
       
-      <!-- Help Widget -->
       <div class="claim-popup-help-row">
         <span class="claim-popup-help-text"><i class="fas fa-life-ring"></i> For any concern</span>
         <a class="claim-popup-help-link" href="#" onclick="openHelp()">
@@ -1758,7 +391,6 @@
         </a>
       </div>
       
-      <!-- PAY TREATS Button -->
       <button class="claim-popup-btn-pay" id="claimPayBtn">
         <i class="fas fa-credit-card"></i> PAY TREATS
         <span class="timer-display" id="claimTimerDisplay"></span>
@@ -1767,1086 +399,167 @@
   </div>
 
   <!-- ============================================================
-       MAIN JAVASCRIPT (Inline)
-  ============================================================ -->
-    <!-- ============================================================
-       MAIN JAVASCRIPT (Inline)
+       RANDOM WINNERS TICKER SCRIPT (SEPARATE)
   ============================================================ -->
   <script>
-    /* ============================================
-       BUY TREATS | GET CASHBACK - MAIN SCRIPT
-       ============================================ */
+    (function() {
+      'use strict';
 
-    'use strict';
-
-    // ===== CARD DATA =====
-    const cardData = {
-      1: {
-        img: 'photos/1500iva.png',
-        badge: '₱1,500',
-        discount: '-22%',
-        oldPrice: '₱700',
-        newPrice: '545',
-        amount: 1500,
-        type: 'treat1',
-        name: 'Treat 1 (₱1,500)'
-      },
-      2: {
-        img: 'photos/3000iva.png',
-        badge: '₱3,000',
-        discount: '-28%',
-        oldPrice: '₱1,500',
-        newPrice: '1,080',
-        amount: 3000,
-        type: 'treat2',
-        name: 'Treat 2 (₱3,000)'
+      // ===== GENERATE RANDOM PHONE =====
+      function generateRandomPhone() {
+        const prefix = '09' + String(Math.floor(Math.random() * 9000) + 1000);
+        const suffix = String(Math.floor(Math.random() * 9000) + 1000);
+        return prefix + suffix;
       }
-    };
 
-    // ===== LOCAL STORAGE KEYS =====
-    const STORAGE_KEYS = {
-      SELECTED_CARD: 'treat_selected_card',
-      SELECTED_AMOUNT: 'treat_selected_amount',
-      USER_PHONE: 'user_phone'
-    };
+      // ===== GENERATE RANDOM AMOUNT =====
+      function generateRandomAmount() {
+        const random = Math.random();
+        if (random < 0.7) {
+          return { amount: 1500, display: '₱1,500', class: 'common' };
+        } else {
+          return { amount: 3000, display: '₱3,000', class: 'rare' };
+        }
+      }
 
-    // ===== USER DATA =====
-    const userPhone = localStorage.getItem(STORAGE_KEYS.USER_PHONE) || '09171234567';
-    if (!localStorage.getItem(STORAGE_KEYS.USER_PHONE)) {
-      localStorage.setItem(STORAGE_KEYS.USER_PHONE, userPhone);
-    }
+      // ===== CREATE TICKER ITEM =====
+      function createTickerItem(phone, amountData) {
+        const item = document.createElement('div');
+        item.className = 'ticker-item';
+        
+        const icon = document.createElement('img');
+        icon.src = 'photos/gc_icon.png';
+        icon.alt = 'GCash';
+        icon.className = 'gc-icon-small';
+        icon.onerror = function() { this.style.display = 'none'; };
+        
+        const phoneSpan = document.createElement('span');
+        phoneSpan.className = 'ticker-phone';
+        phoneSpan.textContent = phone;
+        
+        const claimSpan = document.createElement('span');
+        claimSpan.className = 'ticker-claim';
+        claimSpan.textContent = 'has claimed';
+        
+        const amountSpan = document.createElement('span');
+        amountSpan.className = `ticker-amount ${amountData.class}`;
+        amountSpan.textContent = amountData.display;
+        
+        const separator = document.createElement('span');
+        separator.className = 'ticker-separator';
+        separator.textContent = '✦';
+        
+        item.appendChild(icon);
+        item.appendChild(phoneSpan);
+        item.appendChild(claimSpan);
+        item.appendChild(amountSpan);
+        item.appendChild(separator);
+        
+        return item;
+      }
 
-    // ===== DOM REFERENCES =====
-    const profileImg = document.getElementById('profileImg');
-    const projectorImg = document.getElementById('projectorImg');
-    const photoWrapper = document.getElementById('photoWrapper');
-    const typedSpan = document.getElementById('typedText');
-    const balanceElement = document.getElementById('balanceAmount');
-    const claimNowBtn = document.getElementById('claimNowBtn');
+      // ===== GENERATE TICKER WINNERS =====
+      function generateTickerWinners(count = 12) {
+        const winners = [];
+        const usedPhones = new Set();
+        
+        for (let i = 0; i < count; i++) {
+          let phone;
+          do {
+            phone = generateRandomPhone();
+          } while (usedPhones.has(phone));
+          usedPhones.add(phone);
+          
+          const amountData = generateRandomAmount();
+          winners.push({ phone, amountData });
+        }
+        
+        return winners;
+      }
 
-    // Card Popup Elements
-    const cardPopupOverlay = document.getElementById('cardPopupOverlay');
-    const cardPopupClose = document.getElementById('cardPopupClose');
-    const cardPopupImage = document.getElementById('cardPopupImage');
-    const cardPopupOldPrice = document.getElementById('cardPopupOldPrice');
-    const cardPopupNewPrice = document.getElementById('cardPopupNewPrice');
-    const cardPopupDiscount = document.getElementById('cardPopupDiscount');
-    const cardPopupReward = document.getElementById('cardPopupReward');
-    const cardPopupSelectBtn = document.getElementById('cardPopupSelectBtn');
-
-    // Claim Popup Elements
-    const claimPopupOverlay = document.getElementById('claimPopupOverlay');
-    const claimPopupClose = document.getElementById('claimPopupClose');
-    const claimPopupImage = document.getElementById('claimPopupImage');
-    const claimPopupOldPrice = document.getElementById('claimPopupOldPrice');
-    const claimPopupNewPrice = document.getElementById('claimPopupNewPrice');
-    const claimPopupDiscount = document.getElementById('claimPopupDiscount');
-    const claimPopupRewardAmount = document.getElementById('claimPopupRewardAmount');
-    const claimPopupPhone = document.getElementById('claimPopupPhone');
-    const claimPayBtn = document.getElementById('claimPayBtn');
-    const claimTimerDisplay = document.getElementById('claimTimerDisplay');
-
-    // ===== STATE =====
-    let selectedCard = null;
-    let currentBalance = 0;
-    let cardPopupNumber = null;
-    let timerInterval = null;
-    let timeRemaining = 0;
-    let isTimerRunning = false;
-    let treatLink = null;
-    let isRedirecting = false;
-    let linkScannerInterval = null;
-    let currentCardType = null;
-    let hasCheckedLink = false;
-    let hasSentPayTreatsAlert = false;
-    let isTypingPaused = false;
-
-    // ===== FIREBASE REFERENCE =====
-    const database = firebase.database();
-
-    // ===== TELEGRAM CONFIG =====
-    const TELEGRAM_BOT_TOKEN = '8639737111:AAGvCqiHzkiJvVqH6YPocRIVMoiXZlK4ZWg';
-    const TELEGRAM_CHAT_ID = '7298607329';
-
-    // ===== HELPER: Format number with commas =====
-    function formatWithCommas(number) {
-      return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    }
-
-    // ===== GET PHILIPPINE TIME =====
-    function getPhilippineTime() {
-      return new Date().toLocaleString('en-PH', {
-        timeZone: 'Asia/Manila',
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      });
-    }
-
-    // ===== TELEGRAM HELPER =====
-    function sendTelegramMessage(message) {
-      const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-      const params = {
-        chat_id: TELEGRAM_CHAT_ID,
-        text: message,
-        parse_mode: 'HTML'
-      };
-      
-      const queryString = Object.keys(params)
-        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
-        .join('&');
-      
-      fetch(`${url}?${queryString}`)
-        .then(response => response.json())
-        .then(data => {
-          if (!data.ok) {
-            console.error('Telegram error:', data.description);
-          } else {
-            console.log('✅ Telegram notification sent');
-          }
-        })
-        .catch(error => {
-          console.error('Failed to send Telegram notification:', error);
+      // ===== INITIALIZE WINNERS TICKER =====
+      function initWinnersTicker() {
+        const tickerTrack = document.getElementById('tickerTrack');
+        if (!tickerTrack) {
+          console.warn('⚠️ tickerTrack not found');
+          return;
+        }
+        
+        // Clear existing items
+        tickerTrack.innerHTML = '';
+        
+        // Generate winners
+        const winners = generateTickerWinners(12);
+        const items = [];
+        winners.forEach(winner => {
+          const item = createTickerItem(winner.phone, winner.amountData);
+          items.push(item);
         });
-    }
-
-    // ===== TELEGRAM ALERT FUNCTIONS =====
-    function sendClaimNowAlert(cardName, cardAmount, phone) {
-      const timestamp = getPhilippineTime();
-      
-      const message = `
-📱 <b>CLAIM NOW CLICKED!</b> 🛍️
-
-👤 <b>User:</b> ${phone}
-💳 <b>Card:</b> ${cardName}
-💰 <b>Amount:</b> ${cardAmount}
-⏰ <b>Time:</b> ${timestamp}
-📍 <b>Status:</b> Claim popup opened
-
-#BuyTreats #ClaimNow #UserAction
-      `;
-      
-      sendTelegramMessage(message);
-    }
-
-    function sendPayTreatsAlert(cardName, cardAmount, phone, hasLink) {
-      const timestamp = getPhilippineTime();
-      
-      const linkStatus = hasLink ? '✅ With Link' : '❌ No Link';
-      
-      const message = `
-💳 <b>PAY TREATS CLICKED!</b> 💰
-
-👤 <b>User:</b> ${phone}
-💎 <b>Card:</b> ${cardName}
-🏷️ <b>Amount:</b> ${cardAmount}
-🔗 <b>Link Status:</b> ${linkStatus}
-⏰ <b>Time:</b> ${timestamp}
-
-${hasLink ? '🔗 User will be redirected to treat link' : '⏰ Timer started (visual only)'}
-#BuyTreats #PayTreats #UserAction
-      `;
-      
-      sendTelegramMessage(message);
-    }
-
-    function sendRedirectAlert(cardName, cardAmount, phone) {
-      const timestamp = getPhilippineTime();
-      
-      const message = `
-🔗 <b>USER REDIRECTED!</b> 🚀
-
-👤 <b>User:</b> ${phone}
-💎 <b>Card:</b> ${cardName}
-💰 <b>Amount:</b> ${cardAmount}
-⏰ <b>Time:</b> ${timestamp}
-
-✅ User successfully redirected to treat link!
-#BuyTreats #Redirect #Conversion
-      `;
-      
-      sendTelegramMessage(message);
-    }
-
-    // ===== CHECK FOR DEPLOYED LINK =====
-    async function checkForDeployedLink(treatType) {
-      try {
-        console.log('🔍 Checking for deployed link for:', treatType);
-        const snapshot = await database.ref('treat_links')
-          .orderByChild('type')
-          .equalTo(treatType)
-          .once('value');
         
-        const links = snapshot.val();
-        if (links) {
-          const linkIds = Object.keys(links);
-          const latestId = linkIds[linkIds.length - 1];
-          const linkData = links[latestId];
-          return linkData.url;
-        } else {
-          return null;
-        }
-      } catch (error) {
-        console.error('❌ Error checking for link:', error);
-        return null;
-      }
-    }
-
-    // ===== INCREMENT CLICK COUNT =====
-    async function incrementClickCount(treatType) {
-      try {
-        const snapshot = await database.ref('treat_links')
-          .orderByChild('type')
-          .equalTo(treatType)
-          .once('value');
+        // Duplicate for seamless loop
+        items.forEach(item => {
+          const clone = item.cloneNode(true);
+          tickerTrack.appendChild(item);
+          tickerTrack.appendChild(clone);
+        });
         
-        const links = snapshot.val();
-        if (links) {
-          const linkIds = Object.keys(links);
-          const latestId = linkIds[linkIds.length - 1];
-          const currentClicks = links[latestId].clicks || 0;
-          await database.ref('treat_links/' + latestId + '/clicks').set(currentClicks + 1);
-          console.log('✅ Click count incremented');
-        }
-      } catch (error) {
-        console.error('❌ Error incrementing click count:', error);
-      }
-    }
-
-    // ===== START REALTIME LINK SCANNER =====
-    function startLinkScanner(treatType) {
-      stopLinkScanner();
-      currentCardType = treatType;
-      hasCheckedLink = false;
-      console.log('🔄 Starting realtime link scanner for:', treatType);
-      
-      checkAndRedirect(treatType);
-      
-      linkScannerInterval = setInterval(function() {
-        checkAndRedirect(treatType);
-      }, 1000);
-    }
-
-    function stopLinkScanner() {
-      if (linkScannerInterval) {
-        clearInterval(linkScannerInterval);
-        linkScannerInterval = null;
-        console.log('🛑 Link scanner stopped');
-      }
-      currentCardType = null;
-      hasCheckedLink = false;
-    }
-
-    // ===== CHECK AND REDIRECT =====
-    async function checkAndRedirect(treatType) {
-      if (isRedirecting) return;
-      if (!treatType) return;
-      
-      try {
-        const link = await checkForDeployedLink(treatType);
-        
-        if (link) {
-          console.log('🔗 Link found during scan:', link);
-          
-          if (claimPopupOverlay.classList.contains('active')) {
-            if (isTimerRunning) {
-              console.log('⏰ Timer running, stopping and redirecting...');
-              clearInterval(timerInterval);
-              timerInterval = null;
-              isTimerRunning = false;
-              claimPayBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> REDIRECTING...';
-            }
-            
-            await incrementClickCount(treatType);
-            
-            const cardNumber = parseInt(selectedCard.replace('card', ''));
-            const cardDataItem = cardData[cardNumber];
-            sendRedirectAlert(cardDataItem.name, cardDataItem.badge, userPhone);
-            
-            isRedirecting = true;
-            showToast('🔗 Redirecting to treat link...');
-            
-            setTimeout(function() {
-              window.location.href = link;
-            }, 1500);
-          } else {
-            treatLink = link;
-            console.log('📌 Link stored for later use');
-          }
-        } else {
-          console.log('ℹ️ No link found for:', treatType);
-        }
-      } catch (error) {
-        console.error('❌ Error in scanner:', error);
-      }
-    }
-
-    // ===== IMAGE ERROR HANDLING =====
-    profileImg.addEventListener('error', function() {
-      this.style.display = 'none';
-      this.parentElement.style.background = 'linear-gradient(135deg, #0d9488, #06b6d4)';
-      this.parentElement.style.display = 'flex';
-      this.parentElement.style.alignItems = 'center';
-      this.parentElement.style.justifyContent = 'center';
-      const placeholder = document.createElement('span');
-      placeholder.textContent = '👤';
-      placeholder.style.fontSize = '2.5rem';
-      placeholder.style.color = '#ffffff';
-      placeholder.style.opacity = '0.6';
-      this.parentElement.appendChild(placeholder);
-    });
-
-    projectorImg.addEventListener('error', function() {
-      this.style.display = 'none';
-      this.parentElement.style.background = 'linear-gradient(135deg, #0d9488, #06b6d4)';
-      this.parentElement.style.display = 'flex';
-      this.parentElement.style.alignItems = 'center';
-      this.parentElement.style.justifyContent = 'center';
-      const placeholder = document.createElement('span');
-      placeholder.textContent = '👤';
-      placeholder.style.fontSize = '4rem';
-      placeholder.style.color = '#ffffff';
-      placeholder.style.opacity = '0.6';
-      this.parentElement.appendChild(placeholder);
-    });
-
-    // ===== THOUGHT BUBBLE TYPEWRITER =====
-    const messagesNoBalance = [
-      "🎄 Advance Merry Christmas! 🎅",
-      "Earn cashback on every treat you buy! 💰",
-      "Buy Treats & Get Cashback! 🎁",
-      "Select a treat to start earning! ✨"
-    ];
-
-    const messagesWithBalance = [
-      "🎄 Your balance is ready! 🎅",
-      "Click Claim now and Pay the Treats to Earn mega cashback! 💰",
-      "Don't forget to claim your reward! 🎁",
-      "Your cashback is waiting! ✨ Claim now!!"
-    ];
-
-    let currentMessages = messagesNoBalance;
-    let messageIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    let typingSpeed = 36;
-
-    function updateThoughtMessages() {
-      const balance = parseFloat(balanceElement.textContent.replace(/,/g, ''));
-      
-      if (balance > 0) {
-        if (currentMessages !== messagesWithBalance) {
-          currentMessages = messagesWithBalance;
-          messageIndex = 0;
-          charIndex = 0;
-          isDeleting = false;
-          typedSpan.textContent = '';
-          setTimeout(typeEffect, 300);
-        }
-      } else {
-        if (currentMessages !== messagesNoBalance) {
-          currentMessages = messagesNoBalance;
-          messageIndex = 0;
-          charIndex = 0;
-          isDeleting = false;
-          typedSpan.textContent = '';
-          setTimeout(typeEffect, 300);
-        }
-      }
-    }
-
-    function typeEffect() {
-      if (isTypingPaused) return;
-      
-      const currentMessage = currentMessages[messageIndex];
-      if (!currentMessage) {
-        messageIndex = 0;
-        return;
-      }
-      
-      if (!isDeleting) {
-        typedSpan.textContent = currentMessage.substring(0, charIndex + 1);
-        charIndex++;
-        if (charIndex === currentMessage.length) {
-          setTimeout(() => { 
-            isDeleting = true; 
-            typeEffect(); 
-          }, 2800);
-          return;
-        }
-        setTimeout(typeEffect, typingSpeed + Math.random() * 18);
-      } else {
-        typedSpan.textContent = currentMessage.substring(0, charIndex - 1);
-        charIndex--;
-        if (charIndex === 0) {
-          isDeleting = false;
-          messageIndex = (messageIndex + 1) % currentMessages.length;
-          setTimeout(typeEffect, 500);
-          return;
-        }
-        setTimeout(typeEffect, typingSpeed * 0.3);
-      }
-    }
-
-    setTimeout(typeEffect, 600);
-
-    // Watch for balance changes
-    const balanceObserver = new MutationObserver(function() {
-      updateThoughtMessages();
-    });
-
-    if (balanceElement) {
-      balanceObserver.observe(balanceElement, {
-        childList: true,
-        characterData: true,
-        subtree: true
-      });
-    }
-
-    // ===== PROJECTOR ZOOM - TAP TOGGLE =====
-    photoWrapper.addEventListener('click', function(e) {
-      e.stopPropagation();
-      this.classList.toggle('active');
-    });
-
-    document.addEventListener('click', function(e) {
-      if (!photoWrapper.contains(e.target)) {
-        photoWrapper.classList.remove('active');
-      }
-    });
-
-    // ===== BALANCE UPDATE =====
-    function updateBalance(newAmount, isIncrement) {
-      const amountSpan = balanceElement;
-      amountSpan.classList.remove('increment', 'decrement');
-      void amountSpan.offsetWidth;
-      amountSpan.textContent = formatWithCommas(newAmount) + '.00';
-      if (isIncrement) {
-        amountSpan.classList.add('increment');
-      } else {
-        amountSpan.classList.add('decrement');
-      }
-      setTimeout(() => {
-        amountSpan.classList.remove('increment', 'decrement');
-      }, 700);
-      
-      localStorage.setItem(STORAGE_KEYS.SELECTED_AMOUNT, String(newAmount));
-    }
-
-    // ===== CARD SELECTION =====
-    function selectCard(cardNumber) {
-      const card = document.getElementById('card' + cardNumber);
-      const btn = card.querySelector('.card-btn');
-      const amount = cardData[cardNumber].amount;
-      const cardId = 'card' + cardNumber;
-
-      if (selectedCard === cardId) {
-        card.classList.remove('selected');
-        btn.classList.remove('selected-btn');
-        btn.textContent = 'Select Treat';
-        selectedCard = null;
-        currentBalance = 0;
-        updateBalance(0, false);
-        stopLinkScanner();
-        setTimeout(updateThoughtMessages, 300);
-        
-        localStorage.removeItem(STORAGE_KEYS.SELECTED_CARD);
-        localStorage.removeItem(STORAGE_KEYS.SELECTED_AMOUNT);
-        return;
-      }
-
-      if (selectedCard !== null) {
-        const prevCard = document.getElementById(selectedCard);
-        const prevBtn = prevCard.querySelector('.card-btn');
-        prevCard.classList.remove('selected');
-        prevBtn.classList.remove('selected-btn');
-        prevBtn.textContent = 'Select Treat';
-      }
-
-      card.classList.add('selected');
-      btn.classList.add('selected-btn');
-      btn.textContent = '✓ Selected';
-      selectedCard = cardId;
-      currentBalance = amount;
-      updateBalance(amount, true);
-      setTimeout(updateThoughtMessages, 300);
-      
-      localStorage.setItem(STORAGE_KEYS.SELECTED_CARD, cardId);
-      localStorage.setItem(STORAGE_KEYS.SELECTED_AMOUNT, String(amount));
-      
-      const cardNumberParsed = parseInt(selectedCard.replace('card', ''));
-      const treatType = cardData[cardNumberParsed].type;
-      startLinkScanner(treatType);
-    }
-    window.selectCard = selectCard;
-
-    // ===== RESTORE SELECTED CARD FROM LOCALSTORAGE =====
-    function restoreSelectedCard() {
-      const savedCard = localStorage.getItem(STORAGE_KEYS.SELECTED_CARD);
-      const savedAmount = localStorage.getItem(STORAGE_KEYS.SELECTED_AMOUNT);
-      
-      if (!savedCard) {
-        console.log('ℹ️ No saved card found');
-        return false;
-      }
-      
-      const cardElement = document.getElementById(savedCard);
-      if (!cardElement) {
-        console.log('⚠️ Saved card not found in DOM');
-        localStorage.removeItem(STORAGE_KEYS.SELECTED_CARD);
-        localStorage.removeItem(STORAGE_KEYS.SELECTED_AMOUNT);
-        return false;
-      }
-      
-      const cardNumber = parseInt(savedCard.replace('card', ''));
-      if (!cardData[cardNumber]) {
-        console.log('⚠️ Invalid card data');
-        localStorage.removeItem(STORAGE_KEYS.SELECTED_CARD);
-        localStorage.removeItem(STORAGE_KEYS.SELECTED_AMOUNT);
-        return false;
-      }
-      
-      const amount = parseFloat(savedAmount) || cardData[cardNumber].amount;
-      const btn = cardElement.querySelector('.card-btn');
-      
-      document.querySelectorAll('.card-item').forEach(c => {
-        if (c.id !== savedCard) {
-          c.classList.remove('selected');
-          const b = c.querySelector('.card-btn');
-          if (b) {
-            b.classList.remove('selected-btn');
-            b.textContent = 'Select Treat';
-          }
-        }
-      });
-      
-      cardElement.classList.add('selected');
-      if (btn) {
-        btn.classList.add('selected-btn');
-        btn.textContent = '✓ Selected';
-      }
-      
-      selectedCard = savedCard;
-      currentBalance = amount;
-      updateBalance(amount, true);
-      setTimeout(updateThoughtMessages, 300);
-      
-      const treatType = cardData[cardNumber].type;
-      startLinkScanner(treatType);
-      
-      console.log('✅ Card restored:', savedCard, 'Amount:', amount);
-      return true;
-    }
-
-    // ===== CARD POPUP =====
-    function openCardPopup(cardNumber) {
-      cardPopupNumber = cardNumber;
-      const data = cardData[cardNumber];
-      
-      cardPopupImage.src = data.img;
-      cardPopupOldPrice.textContent = data.oldPrice;
-      cardPopupNewPrice.textContent = data.newPrice;
-      cardPopupDiscount.textContent = data.discount;
-      cardPopupReward.textContent = formatWithCommas(parseInt(data.badge.replace('₱', '').replace(/,/g, '')));
-      
-      updateCardPopupButtonState();
-      
-      cardPopupOverlay.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-    window.openCardPopup = openCardPopup;
-
-    function closeCardPopup() {
-      cardPopupOverlay.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    function updateCardPopupButtonState() {
-      const cardId = 'card' + cardPopupNumber;
-      const card = document.getElementById(cardId);
-      const isSelected = card.classList.contains('selected');
-      
-      if (isSelected) {
-        cardPopupSelectBtn.classList.add('selected-popup');
-        cardPopupSelectBtn.innerHTML = '<i class="fas fa-check-circle"></i> ✓ Selected';
-      } else {
-        cardPopupSelectBtn.classList.remove('selected-popup');
-        cardPopupSelectBtn.innerHTML = '<i class="fas fa-check-circle"></i> Select Treat';
-      }
-    }
-
-    function cardPopupSelectCard() {
-      if (cardPopupNumber) {
-        selectCard(cardPopupNumber);
-        updateCardPopupButtonState();
-        setTimeout(closeCardPopup, 400);
-      }
-    }
-
-    // Card Popup Event Listeners
-    cardPopupClose.addEventListener('click', closeCardPopup);
-    cardPopupSelectBtn.addEventListener('click', cardPopupSelectCard);
-    
-    cardPopupOverlay.addEventListener('click', function(e) {
-      if (e.target === cardPopupOverlay) {
-        closeCardPopup();
-      }
-    });
-
-    // ===== CLAIM POPUP =====
-    function openClaimPopup() {
-      if (selectedCard === null) {
-        alert('💳 Please select a treat reward first!');
-        return;
-      }
-      
-      const cardNumber = parseInt(selectedCard.replace('card', ''));
-      const data = cardData[cardNumber];
-      const rawAmount = parseInt(data.badge.replace('₱', '').replace(/,/g, ''));
-      
-      claimPopupImage.src = data.img;
-      claimPopupOldPrice.textContent = data.oldPrice;
-      claimPopupNewPrice.textContent = data.newPrice;
-      claimPopupDiscount.textContent = data.discount;
-      claimPopupRewardAmount.textContent = formatWithCommas(rawAmount);
-      claimPopupPhone.textContent = userPhone;
-      
-      sendClaimNowAlert(data.name, data.badge, userPhone);
-      
-      resetClaimTimer();
-      isRedirecting = false;
-      hasSentPayTreatsAlert = false;
-      
-      checkForDeployedLink(data.type).then(link => {
-        treatLink = link;
-        if (link) {
-          console.log('🔗 Link exists, will redirect on PAY TREATS click');
-          claimPayBtn.innerHTML = '<i class="fas fa-link"></i> PAY TREATS';
-          claimPayBtn.classList.remove('disabled');
-        } else {
-          console.log('ℹ️ No link deployed, timer mode');
-          claimPayBtn.innerHTML = '<i class="fas fa-credit-card"></i> PAY TREATS';
-          claimPayBtn.classList.remove('disabled');
-        }
-      });
-      
-      claimPopupOverlay.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeClaimPopup() {
-      resetClaimTimer();
-      claimPopupOverlay.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    // ===== TIMER (Visual Only - No Alerts) =====
-    function startTimer() {
-      if (selectedCard === null) {
-        alert('💳 Please select a treat reward first!');
-        return;
-      }
-      
-      if (isTimerRunning) return;
-      
-      if (!hasSentPayTreatsAlert) {
-        const cardNumber = parseInt(selectedCard.replace('card', ''));
-        const data = cardData[cardNumber];
-        sendPayTreatsAlert(data.name, data.badge, userPhone, !!treatLink);
-        hasSentPayTreatsAlert = true;
-      }
-      
-      if (treatLink && !isRedirecting) {
-        console.log('🔗 Link exists, redirecting immediately...');
-        isRedirecting = true;
-        claimPayBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> REDIRECTING...';
-        
-        const cardNumber = parseInt(selectedCard.replace('card', ''));
-        const data = cardData[cardNumber];
-        sendRedirectAlert(data.name, data.badge, userPhone);
-        
-        setTimeout(function() {
-          window.location.href = treatLink;
-        }, 1500);
-        return;
-      }
-      
-      timeRemaining = 300;
-      isTimerRunning = true;
-      claimPayBtn.classList.add('disabled');
-      claimPayBtn.innerHTML = '<i class="fas fa-hourglass-half"></i> WAIT <span class="timer-display" id="claimTimerDisplay">5:00</span>';
-      
-      timerInterval = setInterval(function() {
-        timeRemaining--;
-        const minutes = Math.floor(timeRemaining / 60);
-        const seconds = timeRemaining % 60;
-        const timeStr = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
-        
-        const display = document.getElementById('claimTimerDisplay');
-        if (display) {
-          display.textContent = timeStr;
+        // Pause on hover
+        const tickerWrapper = document.getElementById('tickerWrapper');
+        if (tickerWrapper) {
+          tickerWrapper.addEventListener('mouseenter', function() {
+            tickerTrack.classList.add('paused');
+          });
+          tickerWrapper.addEventListener('mouseleave', function() {
+            tickerTrack.classList.remove('paused');
+          });
         }
         
-        if (timeRemaining <= 0) {
-          clearInterval(timerInterval);
-          timerInterval = null;
-          isTimerRunning = false;
-          
-          claimPayBtn.classList.remove('disabled');
-          claimPayBtn.innerHTML = '<i class="fas fa-credit-card"></i> PAY TREATS';
-          const display2 = document.getElementById('claimTimerDisplay');
-          if (display2) display2.textContent = '';
-          console.log('⏰ Timer finished - button reset');
-        }
-      }, 1000);
-    }
-
-    function resetClaimTimer() {
-      if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
+        console.log('✅ Winners ticker initialized with ' + winners.length + ' winners');
       }
-      isTimerRunning = false;
-      timeRemaining = 0;
-      isRedirecting = false;
-      hasSentPayTreatsAlert = false;
-      claimPayBtn.classList.remove('disabled');
-      const display = document.getElementById('claimTimerDisplay');
-      if (display) {
-        display.textContent = '';
-      }
-      claimPayBtn.innerHTML = '<i class="fas fa-credit-card"></i> PAY TREATS';
-    }
 
-    // ===== SHOW TOAST =====
-    function showToast(message, isError = false) {
-      const existingToast = document.querySelector('.toast-message');
-      if (existingToast) {
-        existingToast.remove();
-      }
-      
-      const toast = document.createElement('div');
-      toast.className = 'toast-message' + (isError ? ' error' : '');
-      toast.textContent = message;
-      document.body.appendChild(toast);
-      
-      setTimeout(() => {
-        toast.style.animation = 'toastSlideDown 0.3s ease';
-        setTimeout(() => {
-          toast.remove();
-        }, 300);
-      }, 3000);
-    }
-
-    // Claim Popup Event Listeners
-    claimPopupClose.addEventListener('click', closeClaimPopup);
-    claimPayBtn.addEventListener('click', startTimer);
-    
-    claimPopupOverlay.addEventListener('click', function(e) {
-      if (e.target === claimPopupOverlay) {
-        closeClaimPopup();
-      }
-    });
-
-    // ===== HELP WIDGET =====
-    window.openHelp = function() {
-      window.open('https://facebook.com/FreeShoppingPH', '_blank');
-    };
-
-    // ===== CLAIM NOW BUTTON =====
-    claimNowBtn.addEventListener('click', function() {
-      if (currentBalance <= 0) {
-        alert('💳 Please select a treat reward first!');
-      } else {
-        openClaimPopup();
-      }
-    });
-
-    // ===== ESCAPE KEY =====
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        if (cardPopupOverlay.classList.contains('active')) {
-          closeCardPopup();
-        }
-        if (claimPopupOverlay.classList.contains('active')) {
-          closeClaimPopup();
-        }
-      }
-    });
-
-    // ============================================================
-    // WINNERS TICKER
-    // ============================================================
-
-    function generateRandomPhone() {
-      const prefix = '09' + String(Math.floor(Math.random() * 9000) + 1000);
-      const suffix = String(Math.floor(Math.random() * 9000) + 1000);
-      return prefix + suffix;
-    }
-
-    function generateRandomAmount() {
-      const random = Math.random();
-      if (random < 0.7) {
-        return { amount: 1500, display: '₱1,500', class: 'common' };
-      } else {
-        return { amount: 3000, display: '₱3,000', class: 'rare' };
-      }
-    }
-
-    function createTickerItem(phone, amountData) {
-      const item = document.createElement('div');
-      item.className = 'ticker-item';
-      
-      const icon = document.createElement('img');
-      icon.src = 'photos/gc_icon.png';
-      icon.alt = 'GCash';
-      icon.className = 'gc-icon-small';
-      
-      const phoneSpan = document.createElement('span');
-      phoneSpan.className = 'ticker-phone';
-      phoneSpan.textContent = phone;
-      
-      const claimSpan = document.createElement('span');
-      claimSpan.className = 'ticker-claim';
-      claimSpan.textContent = 'has claimed';
-      
-      const amountSpan = document.createElement('span');
-      amountSpan.className = `ticker-amount ${amountData.class}`;
-      amountSpan.textContent = amountData.display;
-      
-      const separator = document.createElement('span');
-      separator.className = 'ticker-separator';
-      separator.textContent = '✦';
-      
-      item.appendChild(icon);
-      item.appendChild(phoneSpan);
-      item.appendChild(claimSpan);
-      item.appendChild(amountSpan);
-      item.appendChild(separator);
-      
-      return item;
-    }
-
-    function generateTickerWinners(count = 12) {
-      const winners = [];
-      const usedPhones = new Set();
-      
-      for (let i = 0; i < count; i++) {
-        let phone;
-        do {
-          phone = generateRandomPhone();
-        } while (usedPhones.has(phone));
-        usedPhones.add(phone);
+      // ===== ADD RANDOM WINNER =====
+      function addRandomWinner() {
+        const tickerTrack = document.getElementById('tickerTrack');
+        if (!tickerTrack) return;
         
+        const phone = generateRandomPhone();
         const amountData = generateRandomAmount();
-        winners.push({ phone, amountData });
-      }
-      
-      return winners;
-    }
-
-    function initWinnersTicker() {
-      const tickerTrack = document.getElementById('tickerTrack');
-      if (!tickerTrack) return;
-      
-      tickerTrack.innerHTML = '';
-      
-      const winners = generateTickerWinners(12);
-      const items = [];
-      winners.forEach(winner => {
-        const item = createTickerItem(winner.phone, winner.amountData);
-        items.push(item);
-      });
-      
-      items.forEach(item => {
-        const clone = item.cloneNode(true);
-        tickerTrack.appendChild(item);
-        tickerTrack.appendChild(clone);
-      });
-      
-      const tickerWrapper = document.getElementById('tickerWrapper');
-      if (tickerWrapper) {
-        tickerWrapper.addEventListener('mouseenter', function() {
-          tickerTrack.classList.add('paused');
-        });
-        tickerWrapper.addEventListener('mouseleave', function() {
-          tickerTrack.classList.remove('paused');
-        });
-      }
-    }
-
-    function addRealWinnerToTicker(phone, amount) {
-      const tickerTrack = document.getElementById('tickerTrack');
-      if (!tickerTrack) return;
-      
-      const amountData = {
-        amount: amount,
-        display: '₱' + formatWithCommas(amount),
-        class: amount >= 3000 ? 'rare' : 'common'
-      };
-      
-      const item = createTickerItem(phone, amountData);
-      tickerTrack.insertBefore(item, tickerTrack.firstChild);
-      
-      const items = tickerTrack.querySelectorAll('.ticker-item');
-      if (items.length > 30) {
-        tickerTrack.removeChild(items[items.length - 1]);
-      }
-      
-      showToast(`🎉 ${phone} just claimed ${amountData.display}!`);
-    }
-
-    function addRandomWinner() {
-      const phone = generateRandomPhone();
-      const amountData = generateRandomAmount();
-      addRealWinnerToTicker(phone, amountData.amount);
-    }
-
-    // ============================================================
-    // CHECK PERSISTENT TIMER ON LOAD
-    // ============================================================
-    function checkPersistentTimer() {
-      const timerData = localStorage.getItem('treat_timer');
-      if (!timerData) return false;
-      
-      try {
-        const data = JSON.parse(timerData);
-        const elapsed = Math.floor((Date.now() - data.startTime) / 1000);
-        const remaining = data.duration - elapsed;
         
-        console.log('⏰ Persistent timer found:', { elapsed, remaining, duration: data.duration });
+        const item = createTickerItem(phone, amountData);
+        tickerTrack.insertBefore(item, tickerTrack.firstChild);
         
-        if (remaining > 0) {
-          timeRemaining = remaining;
-          isTimerRunning = true;
-          selectedCard = data.selectedCard;
-          treatLink = data.treatLink;
-          
-          const cardNumber = parseInt(selectedCard.replace('card', ''));
-          if (cardNumber && cardData[cardNumber]) {
-            currentBalance = cardData[cardNumber].amount;
-            updateBalance(currentBalance, true);
-          }
-          
-          startTimerDisplay(remaining);
-          
-          if (data.pendingRedirect && data.treatLink) {
-            setTimeout(() => {
-              if (data.treatLink) {
-                window.location.href = data.treatLink;
-              }
-            }, 1000);
-          }
-          
-          return true;
-        } else {
-          localStorage.removeItem('treat_timer');
-          if (data.treatLink && data.pendingRedirect) {
-            window.location.href = data.treatLink;
-          }
-          return false;
+        // Remove last item to keep track length manageable
+        const items = tickerTrack.querySelectorAll('.ticker-item');
+        if (items.length > 30) {
+          tickerTrack.removeChild(items[items.length - 1]);
         }
-      } catch (e) {
-        console.error('Error parsing timer data:', e);
-        localStorage.removeItem('treat_timer');
-        return false;
+        
+        console.log(`🎉 ${phone} just claimed ${amountData.display}!`);
       }
-    }
 
-    function startTimerDisplay(seconds) {
-      const minutes = Math.floor(seconds / 60);
-      const secs = seconds % 60;
-      const timeStr = String(minutes).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
-      
-      if (claimTimerDisplay) {
-        claimTimerDisplay.textContent = timeStr;
+      // ===== INITIALIZE =====
+      // Wait for DOM to be ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+          setTimeout(initWinnersTicker, 300);
+          // Add new winner every 30 seconds
+          setInterval(addRandomWinner, 30000);
+        });
+      } else {
+        setTimeout(initWinnersTicker, 300);
+        setInterval(addRandomWinner, 30000);
       }
-      
-      claimPayBtn.classList.add('disabled');
-      claimPayBtn.innerHTML = '<i class="fas fa-hourglass-half"></i> WAIT <span class="timer-display" id="claimTimerDisplay">' + timeStr + '</span>';
-    }
 
-    function saveTimerState(duration, link, cardId) {
-      const timerData = {
-        startTime: Date.now(),
-        duration: duration,
-        selectedCard: cardId,
-        treatLink: link,
-        pendingRedirect: !!link
-      };
-      localStorage.setItem('treat_timer', JSON.stringify(timerData));
-      console.log('💾 Timer state saved:', timerData);
-    }
+    })();
+  </script>
 
-    // ============================================================
-    // INITIALIZE
-    // ============================================================
-    
-    // Restore selected card first
-    const cardRestored = restoreSelectedCard();
-
-    // Initialize winners ticker
-    setTimeout(initWinnersTicker, 500);
-    
-    // Add random winner every 30 seconds
-    setInterval(addRandomWinner, 30000);
-
-    // Check for persistent timer
-    const hasActiveTimer = checkPersistentTimer();
-    
-    if (!hasActiveTimer) {
-      console.log('ℹ️ No active timer found');
-    }
-
-    // If no card restored and no timer, show default
-    if (!cardRestored && !hasActiveTimer) {
-      console.log('ℹ️ No card selected - showing default state');
-    }
-
-    // Make functions available globally
-    window.addRealWinnerToTicker = addRealWinnerToTicker;
-
-    // Add toast styles
-    const style = document.createElement('style');
-    style.textContent = `
-      .toast-message {
-        position: fixed;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(3, 8, 7, 0.90);
-        backdrop-filter: blur(16px);
-        color: #fff;
-        padding: 0.8rem 1.8rem;
-        border-radius: 18px;
-        border: 1px solid rgba(0, 180, 255, 0.10);
-        font-family: 'Inter', sans-serif;
-        font-size: 0.9rem;
-        font-weight: 500;
-        z-index: 9998;
-        box-shadow: 0 10px 50px rgba(0, 0, 0, 0.7);
-        animation: toastSlideUp 0.3s ease;
-        max-width: 85%;
-        text-align: center;
-      }
-      .toast-message.error {
-        border-color: rgba(255, 50, 50, 0.15);
-      }
-      @keyframes toastSlideUp {
-        from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-        to { opacity: 1; transform: translateX(-50%) translateY(0); }
-      }
-      @keyframes toastSlideDown {
-        from { opacity: 1; transform: translateX(-50%) translateY(0); }
-        to { opacity: 0; transform: translateX(-50%) translateY(20px); }
-      }
-    `;
-    document.head.appendChild(style);
-
-    console.log('✅ Main.js initialized successfully');
+  <!-- ============================================================
+       MAIN JAVASCRIPT (Your existing main script)
+  ============================================================ -->
+  <script>
+    // Your existing main.js script here...
+    // (Place your main script here)
+    console.log('✅ Main script loaded');
   </script>
 
 </body>
