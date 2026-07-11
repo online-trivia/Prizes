@@ -9,19 +9,19 @@
   const cardData = {
     1: {
       img: 'photos/1500iva.png',
-      badge: '₱1500',
+      badge: '₱1,500',
       discount: '-22%',
       oldPrice: '₱700',
       newPrice: '545',
-      amount: 1500.00
+      amount: 1500
     },
     2: {
       img: 'photos/3000iva.png',
-      badge: '₱3000',
+      badge: '₱3,000',
       discount: '-28%',
       oldPrice: '₱1,500',
       newPrice: '1,080',
-      amount: 3000.00
+      amount: 3000
     }
   };
 
@@ -65,6 +65,11 @@
   let timerInterval = null;
   let timeRemaining = 0;
   let isTimerRunning = false;
+
+  // ===== HELPER: Format number with commas =====
+  function formatWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
 
   // ===== IMAGE ERROR HANDLING =====
   profileImg.addEventListener('error', function() {
@@ -148,8 +153,8 @@
     const amountSpan = balanceElement;
     amountSpan.classList.remove('increment', 'decrement');
     void amountSpan.offsetWidth;
-    // Display with 2 decimal places - no commas
-    amountSpan.textContent = newAmount.toFixed(2);
+    // Display with commas and 2 decimal places
+    amountSpan.textContent = formatWithCommas(newAmount) + '.00';
     if (isIncrement) {
       amountSpan.classList.add('increment');
     } else {
@@ -203,7 +208,8 @@
     cardPopupOldPrice.textContent = data.oldPrice;
     cardPopupNewPrice.textContent = data.newPrice;
     cardPopupDiscount.textContent = data.discount;
-    cardPopupReward.textContent = data.badge.replace('₱', '');
+    // Display with commas
+    cardPopupReward.textContent = formatWithCommas(parseInt(data.badge.replace('₱', '').replace(/,/g, '')));
     
     updateCardPopupButtonState();
     
@@ -258,12 +264,14 @@
     
     const cardNumber = parseInt(selectedCard.replace('card', ''));
     const data = cardData[cardNumber];
+    const rawAmount = parseInt(data.badge.replace('₱', '').replace(/,/g, ''));
     
     claimPopupImage.src = data.img;
     claimPopupOldPrice.textContent = data.oldPrice;
     claimPopupNewPrice.textContent = data.newPrice;
     claimPopupDiscount.textContent = data.discount;
-    claimPopupRewardAmount.textContent = data.badge.replace('₱', '');
+    // Display with commas
+    claimPopupRewardAmount.textContent = formatWithCommas(rawAmount);
     claimPopupPhone.textContent = userPhone;
     
     resetClaimTimer();
