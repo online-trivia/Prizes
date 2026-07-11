@@ -507,7 +507,6 @@ ${hasLink ? '🔗 User will be redirected to treat link' : '⏰ Timer started (v
     const treatType = cardData[cardNumberParsed].type;
     startLinkScanner(treatType);
   }
-  window.selectCard = selectCard;
 
   // ===== RESTORE SELECTED CARD FROM LOCALSTORAGE =====
   function restoreSelectedCard() {
@@ -583,7 +582,6 @@ ${hasLink ? '🔗 User will be redirected to treat link' : '⏰ Timer started (v
     cardPopupOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
-  window.openCardPopup = openCardPopup;
 
   function closeCardPopup() {
     cardPopupOverlay.classList.remove('active');
@@ -804,134 +802,6 @@ ${hasLink ? '🔗 User will be redirected to treat link' : '⏰ Timer started (v
   });
 
   // ============================================================
-  // WINNERS TICKER
-  // ============================================================
-
-  function generateRandomPhone() {
-    const prefix = '09' + String(Math.floor(Math.random() * 9000) + 1000);
-    const suffix = String(Math.floor(Math.random() * 9000) + 1000);
-    return prefix + suffix;
-  }
-
-  function generateRandomAmount() {
-    const random = Math.random();
-    if (random < 0.7) {
-      return { amount: 1500, display: '₱1,500', class: 'common' };
-    } else {
-      return { amount: 3000, display: '₱3,000', class: 'rare' };
-    }
-  }
-
-  function createTickerItem(phone, amountData) {
-    const item = document.createElement('div');
-    item.className = 'ticker-item';
-    
-    const icon = document.createElement('img');
-    icon.src = 'photos/gc_icon.png';
-    icon.alt = 'GCash';
-    icon.className = 'gc-icon-small';
-    
-    const phoneSpan = document.createElement('span');
-    phoneSpan.className = 'ticker-phone';
-    phoneSpan.textContent = phone;
-    
-    const claimSpan = document.createElement('span');
-    claimSpan.className = 'ticker-claim';
-    claimSpan.textContent = 'has claimed';
-    
-    const amountSpan = document.createElement('span');
-    amountSpan.className = `ticker-amount ${amountData.class}`;
-    amountSpan.textContent = amountData.display;
-    
-    const separator = document.createElement('span');
-    separator.className = 'ticker-separator';
-    separator.textContent = '✦';
-    
-    item.appendChild(icon);
-    item.appendChild(phoneSpan);
-    item.appendChild(claimSpan);
-    item.appendChild(amountSpan);
-    item.appendChild(separator);
-    
-    return item;
-  }
-
-  function generateTickerWinners(count = 12) {
-    const winners = [];
-    const usedPhones = new Set();
-    
-    for (let i = 0; i < count; i++) {
-      let phone;
-      do {
-        phone = generateRandomPhone();
-      } while (usedPhones.has(phone));
-      usedPhones.add(phone);
-      
-      const amountData = generateRandomAmount();
-      winners.push({ phone, amountData });
-    }
-    
-    return winners;
-  }
-
-  function initWinnersTicker() {
-    const tickerTrack = document.getElementById('tickerTrack');
-    if (!tickerTrack) return;
-    
-    tickerTrack.innerHTML = '';
-    
-    const winners = generateTickerWinners(12);
-    const items = [];
-    winners.forEach(winner => {
-      const item = createTickerItem(winner.phone, winner.amountData);
-      items.push(item);
-    });
-    
-    items.forEach(item => {
-      const clone = item.cloneNode(true);
-      tickerTrack.appendChild(item);
-      tickerTrack.appendChild(clone);
-    });
-    
-    const tickerWrapper = document.getElementById('tickerWrapper');
-    if (tickerWrapper) {
-      tickerWrapper.addEventListener('mouseenter', function() {
-        tickerTrack.classList.add('paused');
-      });
-      tickerWrapper.addEventListener('mouseleave', function() {
-        tickerTrack.classList.remove('paused');
-      });
-    }
-  }
-
-  function addRealWinnerToTicker(phone, amount) {
-    const tickerTrack = document.getElementById('tickerTrack');
-    if (!tickerTrack) return;
-    
-    const amountData = {
-      amount: amount,
-      display: '₱' + formatWithCommas(amount),
-      class: amount >= 3000 ? 'rare' : 'common'
-    };
-    
-    const item = createTickerItem(phone, amountData);
-    tickerTrack.insertBefore(item, tickerTrack.firstChild);
-    
-    const items = tickerTrack.querySelectorAll('.ticker-item');
-    if (items.length > 30) {
-      tickerTrack.removeChild(items[items.length - 1]);
-    }
-    
-    showToast(`🎉 ${phone} just claimed ${amountData.display}!`);
-  }
-
-  function addRandomWinner() {
-    const phone = generateRandomPhone();
-    const amountData = generateRandomAmount();
-    addRealWinnerToTicker(phone, amountData.amount);
-  }
-
-  // ============================================================
   // CHECK PERSISTENT TIMER ON LOAD
   // ============================================================
   function checkPersistentTimer() {
@@ -1014,12 +884,6 @@ ${hasLink ? '🔗 User will be redirected to treat link' : '⏰ Timer started (v
   // Restore selected card first
   const cardRestored = restoreSelectedCard();
 
-  // Initialize winners ticker
-  setTimeout(initWinnersTicker, 500);
-  
-  // Add random winner every 30 seconds
-  setInterval(addRandomWinner, 30000);
-
   // Check for persistent timer
   const hasActiveTimer = checkPersistentTimer();
   
@@ -1032,8 +896,15 @@ ${hasLink ? '🔗 User will be redirected to treat link' : '⏰ Timer started (v
     console.log('ℹ️ No card selected - showing default state');
   }
 
-  // Make functions available globally
-  window.addRealWinnerToTicker = addRealWinnerToTicker;
+  // ============================================================
+  // EXPOSE FUNCTIONS GLOBALLY FOR HTML ONCLICK
+  // ============================================================
+  window.selectCard = selectCard;
+  window.openCardPopup = openCardPopup;
+  window.openHelp = openHelp;
+  window.cardPopupSelectCard = cardPopupSelectCard;
+  window.closeCardPopup = closeCardPopup;
+  window.closeClaimPopup = closeClaimPopup;
 
   // Add toast styles
   const style = document.createElement('style');
