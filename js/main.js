@@ -9,7 +9,7 @@
   const cardData = {
     1: {
       img: 'photos/1500iva.png',
-      badge: '₱1,500',
+      badge: '₱1500',
       discount: '-22%',
       oldPrice: '₱700',
       newPrice: '545',
@@ -17,7 +17,7 @@
     },
     2: {
       img: 'photos/3000iva.png',
-      badge: '₱3,000',
+      badge: '₱3000',
       discount: '-28%',
       oldPrice: '₱1,500',
       newPrice: '1,080',
@@ -40,23 +40,22 @@
   const cardPopupOverlay = document.getElementById('cardPopupOverlay');
   const cardPopupClose = document.getElementById('cardPopupClose');
   const cardPopupImage = document.getElementById('cardPopupImage');
-  const cardPopupBadge = document.getElementById('cardPopupBadge');
-  const cardPopupDiscount = document.getElementById('cardPopupDiscount');
   const cardPopupOldPrice = document.getElementById('cardPopupOldPrice');
   const cardPopupNewPrice = document.getElementById('cardPopupNewPrice');
+  const cardPopupDiscount = document.getElementById('cardPopupDiscount');
+  const cardPopupReward = document.getElementById('cardPopupReward');
   const cardPopupSelectBtn = document.getElementById('cardPopupSelectBtn');
 
   // Claim Popup Elements
   const claimPopupOverlay = document.getElementById('claimPopupOverlay');
   const claimPopupClose = document.getElementById('claimPopupClose');
   const claimPopupImage = document.getElementById('claimPopupImage');
-  const claimPopupBadge = document.getElementById('claimPopupBadge');
-  const claimPopupDiscount = document.getElementById('claimPopupDiscount');
   const claimPopupOldPrice = document.getElementById('claimPopupOldPrice');
   const claimPopupNewPrice = document.getElementById('claimPopupNewPrice');
+  const claimPopupDiscount = document.getElementById('claimPopupDiscount');
+  const claimPopupRewardAmount = document.getElementById('claimPopupRewardAmount');
   const claimPopupPhone = document.getElementById('claimPopupPhone');
-  const claimPopupReward = document.getElementById('claimPopupReward');
-  const claimProceedBtn = document.getElementById('claimProceedBtn');
+  const claimPayBtn = document.getElementById('claimPayBtn');
   const claimTimerDisplay = document.getElementById('claimTimerDisplay');
 
   // ===== STATE =====
@@ -149,6 +148,7 @@
     const amountSpan = balanceElement;
     amountSpan.classList.remove('increment', 'decrement');
     void amountSpan.offsetWidth;
+    // Display with 2 decimal places - no commas
     amountSpan.textContent = newAmount.toFixed(2);
     if (isIncrement) {
       amountSpan.classList.add('increment');
@@ -200,10 +200,10 @@
     const data = cardData[cardNumber];
     
     cardPopupImage.src = data.img;
-    cardPopupBadge.textContent = data.badge;
-    cardPopupDiscount.textContent = data.discount;
     cardPopupOldPrice.textContent = data.oldPrice;
     cardPopupNewPrice.textContent = data.newPrice;
+    cardPopupDiscount.textContent = data.discount;
+    cardPopupReward.textContent = data.badge.replace('₱', '');
     
     updateCardPopupButtonState();
     
@@ -260,12 +260,11 @@
     const data = cardData[cardNumber];
     
     claimPopupImage.src = data.img;
-    claimPopupBadge.textContent = data.badge;
-    claimPopupDiscount.textContent = data.discount;
     claimPopupOldPrice.textContent = data.oldPrice;
     claimPopupNewPrice.textContent = data.newPrice;
+    claimPopupDiscount.textContent = data.discount;
+    claimPopupRewardAmount.textContent = data.badge.replace('₱', '');
     claimPopupPhone.textContent = userPhone;
-    claimPopupReward.textContent = data.badge;
     
     resetClaimTimer();
     updateClaimPopupButtonState();
@@ -282,11 +281,11 @@
 
   function updateClaimPopupButtonState() {
     if (selectedCard !== null) {
-      claimProceedBtn.innerHTML = '<i class="fas fa-check-circle"></i> SELECTED <span class="timer-display" id="claimTimerDisplay"></span>';
-      claimProceedBtn.classList.add('disabled');
+      claimPayBtn.innerHTML = '<i class="fas fa-credit-card"></i> PAY TREATS <span class="timer-display" id="claimTimerDisplay"></span>';
+      claimPayBtn.classList.remove('disabled');
     } else {
-      claimProceedBtn.innerHTML = '<i class="fas fa-arrow-right"></i> PROCEED <span class="timer-display" id="claimTimerDisplay"></span>';
-      claimProceedBtn.classList.remove('disabled');
+      claimPayBtn.innerHTML = '<i class="fas fa-credit-card"></i> PAY TREATS <span class="timer-display" id="claimTimerDisplay"></span>';
+      claimPayBtn.classList.remove('disabled');
     }
   }
 
@@ -301,8 +300,8 @@
     
     timeRemaining = 300;
     isTimerRunning = true;
-    claimProceedBtn.classList.add('disabled');
-    claimProceedBtn.innerHTML = '<i class="fas fa-hourglass-half"></i> WAIT <span class="timer-display" id="claimTimerDisplay">5:00</span>';
+    claimPayBtn.classList.add('disabled');
+    claimPayBtn.innerHTML = '<i class="fas fa-hourglass-half"></i> WAIT <span class="timer-display" id="claimTimerDisplay">5:00</span>';
     
     timerInterval = setInterval(function() {
       timeRemaining--;
@@ -319,8 +318,8 @@
         clearInterval(timerInterval);
         timerInterval = null;
         isTimerRunning = false;
-        claimProceedBtn.classList.remove('disabled');
-        claimProceedBtn.innerHTML = '<i class="fas fa-check-circle"></i> PROCEED NOW <span class="timer-display" id="claimTimerDisplay"></span>';
+        claimPayBtn.classList.remove('disabled');
+        claimPayBtn.innerHTML = '<i class="fas fa-credit-card"></i> PAY NOW <span class="timer-display" id="claimTimerDisplay"></span>';
         alert('⏰ Time is up! You can now proceed.');
       }
     }, 1000);
@@ -333,7 +332,7 @@
     }
     isTimerRunning = false;
     timeRemaining = 0;
-    claimProceedBtn.classList.remove('disabled');
+    claimPayBtn.classList.remove('disabled');
     const display = document.getElementById('claimTimerDisplay');
     if (display) {
       display.textContent = '';
@@ -343,7 +342,7 @@
 
   // Claim Popup Event Listeners
   claimPopupClose.addEventListener('click', closeClaimPopup);
-  claimProceedBtn.addEventListener('click', startTimer);
+  claimPayBtn.addEventListener('click', startTimer);
   
   claimPopupOverlay.addEventListener('click', function(e) {
     if (e.target === claimPopupOverlay) {
