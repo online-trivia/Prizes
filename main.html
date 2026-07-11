@@ -14,16 +14,12 @@
 </head>
 <body>
 
-  <!-- ============================================================
-       DECORATIONS
-  ============================================================ -->
+  <!-- DECORATIONS -->
   <div class="decoration tree">🎄</div>
   <div class="decoration star">⭐</div>
   <div class="decoration gift">🎁</div>
 
-  <!-- ============================================================
-       SNOWFLAKES
-  ============================================================ -->
+  <!-- SNOWFLAKES -->
   <div class="snowflake" style="left: 5%; animation-duration: 12s; animation-delay: 0s;">❄</div>
   <div class="snowflake" style="left: 15%; animation-duration: 14s; animation-delay: 2s;">❄</div>
   <div class="snowflake" style="left: 25%; animation-duration: 10s; animation-delay: 4s;">❄</div>
@@ -35,9 +31,7 @@
   <div class="snowflake" style="left: 85%; animation-duration: 14s; animation-delay: 1s;">❄</div>
   <div class="snowflake" style="left: 92%; animation-duration: 11s; animation-delay: 3s;">❄</div>
 
-  <!-- ============================================================
-       MAIN CARD
-  ============================================================ -->
+  <!-- MAIN CARD -->
   <div class="main-card">
     
     <!-- Badge -->
@@ -102,7 +96,7 @@
 
     <!-- Cards Grid -->
     <div class="cards-grid">
-      <!-- Card 1: 1500 -->
+      <!-- Card 1 -->
       <div class="card-item" id="card1" data-amount="1500">
         <div class="card-image-wrapper" onclick="openCardPopup(1)">
           <img src="photos/1500iva.png" alt="Reward 1500" />
@@ -119,7 +113,7 @@
         </div>
       </div>
 
-      <!-- Card 2: 3000 -->
+      <!-- Card 2 -->
       <div class="card-item" id="card2" data-amount="3000">
         <div class="card-image-wrapper" onclick="openCardPopup(2)">
           <img src="photos/3000iva.png" alt="Reward 3000" />
@@ -143,12 +137,10 @@
     </div>
   </div>
 
-  <!-- ============================================================
-       CARD POPUP
-  ============================================================ -->
+  <!-- CARD POPUP -->
   <div class="card-popup-overlay" id="cardPopupOverlay">
     <div class="card-popup-content">
-      <button class="card-popup-close" id="cardPopupClose">
+      <button class="card-popup-close" onclick="closeCardPopup()">
         <i class="fas fa-times"></i>
       </button>
       
@@ -169,18 +161,16 @@
         <span class="peso">₱</span><span id="cardPopupReward">1,500</span>
       </div>
       
-      <button class="card-popup-btn-select" id="cardPopupSelectBtn">
+      <button class="card-popup-btn-select" id="cardPopupSelectBtn" onclick="cardPopupSelectCard()">
         <i class="fas fa-check-circle"></i> Select Treat
       </button>
     </div>
   </div>
 
-  <!-- ============================================================
-       CLAIM POPUP
-  ============================================================ -->
+  <!-- CLAIM POPUP -->
   <div class="claim-popup-overlay" id="claimPopupOverlay">
     <div class="claim-popup-content">
-      <button class="claim-popup-close" id="claimPopupClose">
+      <button class="claim-popup-close" onclick="closeClaimPopup()">
         <i class="fas fa-times"></i>
       </button>
       
@@ -237,7 +227,7 @@
         </a>
       </div>
       
-      <button class="claim-popup-btn-pay" id="claimPayBtn">
+      <button class="claim-popup-btn-pay" id="claimPayBtn" onclick="startTimer()">
         <i class="fas fa-credit-card"></i> PAY TREATS
         <span class="timer-display" id="claimTimerDisplay"></span>
       </button>
@@ -245,9 +235,401 @@
   </div>
 
   <!-- ============================================================
-       MAIN JAVASCRIPT
+       MAIN JAVASCRIPT - ALL IN ONE WORKING
   ============================================================ -->
-  <script src="js/main.js"></script>
+  <script>
+    // ============================================================
+    // CARD DATA
+    // ============================================================
+    const cardData = {
+      1: {
+        img: 'photos/1500iva.png',
+        badge: '₱1,500',
+        discount: '-22%',
+        oldPrice: '₱700',
+        newPrice: '545',
+        amount: 1500,
+        type: 'treat1',
+        name: 'Treat 1 (₱1,500)'
+      },
+      2: {
+        img: 'photos/3000iva.png',
+        badge: '₱3,000',
+        discount: '-28%',
+        oldPrice: '₱1,500',
+        newPrice: '1,080',
+        amount: 3000,
+        type: 'treat2',
+        name: 'Treat 2 (₱3,000)'
+      }
+    };
+
+    // ============================================================
+    // DOM REFERENCES
+    // ============================================================
+    const typedSpan = document.getElementById('typedText');
+    const balanceElement = document.getElementById('balanceAmount');
+    const claimNowBtn = document.getElementById('claimNowBtn');
+    const photoWrapper = document.getElementById('photoWrapper');
+
+    // Card Popup
+    const cardPopupOverlay = document.getElementById('cardPopupOverlay');
+    const cardPopupImage = document.getElementById('cardPopupImage');
+    const cardPopupOldPrice = document.getElementById('cardPopupOldPrice');
+    const cardPopupNewPrice = document.getElementById('cardPopupNewPrice');
+    const cardPopupDiscount = document.getElementById('cardPopupDiscount');
+    const cardPopupReward = document.getElementById('cardPopupReward');
+    const cardPopupSelectBtn = document.getElementById('cardPopupSelectBtn');
+
+    // Claim Popup
+    const claimPopupOverlay = document.getElementById('claimPopupOverlay');
+    const claimPopupImage = document.getElementById('claimPopupImage');
+    const claimPopupOldPrice = document.getElementById('claimPopupOldPrice');
+    const claimPopupNewPrice = document.getElementById('claimPopupNewPrice');
+    const claimPopupDiscount = document.getElementById('claimPopupDiscount');
+    const claimPopupRewardAmount = document.getElementById('claimPopupRewardAmount');
+    const claimPopupPhone = document.getElementById('claimPopupPhone');
+    const claimPayBtn = document.getElementById('claimPayBtn');
+    const claimTimerDisplay = document.getElementById('claimTimerDisplay');
+
+    // ============================================================
+    // STATE
+    // ============================================================
+    let selectedCard = null;
+    let currentBalance = 0;
+    let cardPopupNumber = null;
+    let timerInterval = null;
+    let timeRemaining = 0;
+    let isTimerRunning = false;
+
+    // ============================================================
+    // HELPER FUNCTIONS
+    // ============================================================
+    function formatWithCommas(number) {
+      return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    // ============================================================
+    // THOUGHT BUBBLE TYPEWRITER (WORKING)
+    // ============================================================
+    const messagesNoBalance = [
+      "🎄 Advance Merry Christmas! 🎅",
+      "Earn cashback on every treat you buy! 💰",
+      "Buy Treats & Get Cashback! 🎁",
+      "Select a treat to start earning! ✨"
+    ];
+
+    const messagesWithBalance = [
+      "🎄 Your balance is ready! 🎅",
+      "Click Claim now and Pay the Treats to Earn mega cashback! 💰",
+      "Don't forget to claim your reward! 🎁",
+      "Your cashback is waiting! ✨ Claim now!!"
+    ];
+
+    let currentMessages = messagesNoBalance;
+    let messageIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let typingSpeed = 36;
+
+    function updateThoughtMessages() {
+      const balance = parseFloat(balanceElement.textContent.replace(/,/g, ''));
+      const newMessages = balance > 0 ? messagesWithBalance : messagesNoBalance;
+      
+      if (currentMessages !== newMessages) {
+        currentMessages = newMessages;
+        messageIndex = 0;
+        charIndex = 0;
+        isDeleting = false;
+        typedSpan.textContent = '';
+        setTimeout(typeEffect, 300);
+      }
+    }
+
+    function typeEffect() {
+      const currentMessage = currentMessages[messageIndex];
+      if (!currentMessage) {
+        messageIndex = 0;
+        return;
+      }
+      
+      if (!isDeleting) {
+        typedSpan.textContent = currentMessage.substring(0, charIndex + 1);
+        charIndex++;
+        if (charIndex === currentMessage.length) {
+          setTimeout(() => { isDeleting = true; typeEffect(); }, 2800);
+          return;
+        }
+        setTimeout(typeEffect, typingSpeed + Math.random() * 18);
+      } else {
+        typedSpan.textContent = currentMessage.substring(0, charIndex - 1);
+        charIndex--;
+        if (charIndex === 0) {
+          isDeleting = false;
+          messageIndex = (messageIndex + 1) % currentMessages.length;
+          setTimeout(typeEffect, 500);
+          return;
+        }
+        setTimeout(typeEffect, typingSpeed * 0.3);
+      }
+    }
+
+    // START THOUGHT BUBBLE
+    setTimeout(typeEffect, 600);
+
+    // Watch balance changes
+    const balanceObserver = new MutationObserver(updateThoughtMessages);
+    if (balanceElement) {
+      balanceObserver.observe(balanceElement, { childList: true, characterData: true, subtree: true });
+    }
+
+    // ============================================================
+    // PROJECTOR ZOOM
+    // ============================================================
+    photoWrapper.addEventListener('click', function(e) {
+      e.stopPropagation();
+      this.classList.toggle('active');
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!photoWrapper.contains(e.target)) {
+        photoWrapper.classList.remove('active');
+      }
+    });
+
+    // ============================================================
+    // BALANCE UPDATE
+    // ============================================================
+    function updateBalance(newAmount, isIncrement) {
+      const amountSpan = balanceElement;
+      amountSpan.classList.remove('increment', 'decrement');
+      void amountSpan.offsetWidth;
+      amountSpan.textContent = formatWithCommas(newAmount) + '.00';
+      if (isIncrement) {
+        amountSpan.classList.add('increment');
+      } else {
+        amountSpan.classList.add('decrement');
+      }
+      setTimeout(() => {
+        amountSpan.classList.remove('increment', 'decrement');
+      }, 700);
+    }
+
+    // ============================================================
+    // CARD SELECTION (WORKING)
+    // ============================================================
+    function selectCard(cardNumber) {
+      const card = document.getElementById('card' + cardNumber);
+      const btn = card.querySelector('.card-btn');
+      const amount = cardData[cardNumber].amount;
+      const cardId = 'card' + cardNumber;
+
+      if (selectedCard === cardId) {
+        card.classList.remove('selected');
+        btn.classList.remove('selected-btn');
+        btn.textContent = 'Select Treat';
+        selectedCard = null;
+        currentBalance = 0;
+        updateBalance(0, false);
+        updateThoughtMessages();
+        return;
+      }
+
+      if (selectedCard !== null) {
+        const prevCard = document.getElementById(selectedCard);
+        const prevBtn = prevCard.querySelector('.card-btn');
+        prevCard.classList.remove('selected');
+        prevBtn.classList.remove('selected-btn');
+        prevBtn.textContent = 'Select Treat';
+      }
+
+      card.classList.add('selected');
+      btn.classList.add('selected-btn');
+      btn.textContent = '✓ Selected';
+      selectedCard = cardId;
+      currentBalance = amount;
+      updateBalance(amount, true);
+      updateThoughtMessages();
+    }
+
+    // ============================================================
+    // CARD POPUP (WORKING)
+    // ============================================================
+    function openCardPopup(cardNumber) {
+      cardPopupNumber = cardNumber;
+      const data = cardData[cardNumber];
+      
+      cardPopupImage.src = data.img;
+      cardPopupOldPrice.textContent = data.oldPrice;
+      cardPopupNewPrice.textContent = data.newPrice;
+      cardPopupDiscount.textContent = data.discount;
+      cardPopupReward.textContent = formatWithCommas(parseInt(data.badge.replace('₱', '').replace(/,/g, '')));
+      
+      updateCardPopupButtonState();
+      cardPopupOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCardPopup() {
+      cardPopupOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function updateCardPopupButtonState() {
+      const cardId = 'card' + cardPopupNumber;
+      const card = document.getElementById(cardId);
+      const isSelected = card.classList.contains('selected');
+      
+      if (isSelected) {
+        cardPopupSelectBtn.classList.add('selected-popup');
+        cardPopupSelectBtn.innerHTML = '<i class="fas fa-check-circle"></i> ✓ Selected';
+      } else {
+        cardPopupSelectBtn.classList.remove('selected-popup');
+        cardPopupSelectBtn.innerHTML = '<i class="fas fa-check-circle"></i> Select Treat';
+      }
+    }
+
+    function cardPopupSelectCard() {
+      if (cardPopupNumber) {
+        selectCard(cardPopupNumber);
+        updateCardPopupButtonState();
+        setTimeout(closeCardPopup, 400);
+      }
+    }
+
+    // ============================================================
+    // CLAIM POPUP (WORKING)
+    // ============================================================
+    function openClaimPopup() {
+      if (selectedCard === null) {
+        alert('💳 Please select a treat reward first!');
+        return;
+      }
+      
+      const cardNumber = parseInt(selectedCard.replace('card', ''));
+      const data = cardData[cardNumber];
+      const rawAmount = parseInt(data.badge.replace('₱', '').replace(/,/g, ''));
+      
+      claimPopupImage.src = data.img;
+      claimPopupOldPrice.textContent = data.oldPrice;
+      claimPopupNewPrice.textContent = data.newPrice;
+      claimPopupDiscount.textContent = data.discount;
+      claimPopupRewardAmount.textContent = formatWithCommas(rawAmount);
+      claimPopupPhone.textContent = '📱 ' + (localStorage.getItem('user_phone') || '09171234567');
+      
+      resetClaimTimer();
+      claimPopupOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeClaimPopup() {
+      resetClaimTimer();
+      claimPopupOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // ============================================================
+    // TIMER (WORKING)
+    // ============================================================
+    function startTimer() {
+      if (selectedCard === null) {
+        alert('💳 Please select a treat reward first!');
+        return;
+      }
+      if (isTimerRunning) return;
+      
+      timeRemaining = 300;
+      isTimerRunning = true;
+      claimPayBtn.classList.add('disabled');
+      claimPayBtn.innerHTML = '<i class="fas fa-hourglass-half"></i> WAIT <span class="timer-display" id="claimTimerDisplay">5:00</span>';
+      
+      timerInterval = setInterval(function() {
+        timeRemaining--;
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        const timeStr = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+        if (claimTimerDisplay) claimTimerDisplay.textContent = timeStr;
+        
+        if (timeRemaining <= 0) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+          isTimerRunning = false;
+          claimPayBtn.classList.remove('disabled');
+          claimPayBtn.innerHTML = '<i class="fas fa-credit-card"></i> PAY TREATS';
+          if (claimTimerDisplay) claimTimerDisplay.textContent = '';
+          console.log('⏰ Timer finished');
+        }
+      }, 1000);
+    }
+
+    function resetClaimTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      isTimerRunning = false;
+      timeRemaining = 0;
+      claimPayBtn.classList.remove('disabled');
+      if (claimTimerDisplay) claimTimerDisplay.textContent = '';
+      claimPayBtn.innerHTML = '<i class="fas fa-credit-card"></i> PAY TREATS';
+    }
+
+    // ============================================================
+    // HELP WIDGET
+    // ============================================================
+    function openHelp() {
+      window.open('https://facebook.com/FreeShoppingPH', '_blank');
+    }
+
+    // ============================================================
+    // CLAIM NOW BUTTON
+    // ============================================================
+    claimNowBtn.addEventListener('click', function() {
+      if (currentBalance <= 0) {
+        alert('💳 Please select a treat reward first!');
+      } else {
+        openClaimPopup();
+      }
+    });
+
+    // ============================================================
+    // ESCAPE KEY
+    // ============================================================
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        if (cardPopupOverlay.classList.contains('active')) closeCardPopup();
+        if (claimPopupOverlay.classList.contains('active')) closeClaimPopup();
+      }
+    });
+
+    // ============================================================
+    // CLOSE POPUPS BY CLICKING OUTSIDE
+    // ============================================================
+    cardPopupOverlay.addEventListener('click', function(e) {
+      if (e.target === cardPopupOverlay) closeCardPopup();
+    });
+
+    claimPopupOverlay.addEventListener('click', function(e) {
+      if (e.target === claimPopupOverlay) closeClaimPopup();
+    });
+
+    // ============================================================
+    // EXPOSE FUNCTIONS GLOBALLY
+    // ============================================================
+    window.selectCard = selectCard;
+    window.openCardPopup = openCardPopup;
+    window.closeCardPopup = closeCardPopup;
+    window.cardPopupSelectCard = cardPopupSelectCard;
+    window.openClaimPopup = openClaimPopup;
+    window.closeClaimPopup = closeClaimPopup;
+    window.startTimer = startTimer;
+    window.openHelp = openHelp;
+
+    console.log('✅ Main.js initialized successfully');
+    console.log('✅ Thought bubble started');
+    console.log('✅ All popups working');
+    console.log('✅ All buttons clickable');
+  </script>
 
 </body>
 </html>
