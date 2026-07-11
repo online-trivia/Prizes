@@ -483,6 +483,7 @@ body::before {
   display: flex;
   align-items: center;
   gap: 6px;
+  pointer-events: auto;
 }
 
 .claim-btn:hover {
@@ -845,45 +846,17 @@ body::before {
   display: block;
 }
 
-.card-popup-badge-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 0.4rem;
-}
-
-.card-popup-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(0, 212, 255, 0.08);
-  color: var(--neon-blue);
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 0.25rem 0.8rem;
-  border-radius: 30px;
-}
-
-.card-popup-discount {
-  background: rgba(239, 68, 68, 0.08);
-  color: #ef4444;
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 0.25rem 0.8rem;
-  border-radius: 30px;
-}
-
+/* === CARD POPUP DISPLAY FORMAT === */
 .card-popup-price-row {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.3rem;
 }
 
 .card-popup-price-row .old-price {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   text-decoration: line-through;
   color: #94a3b8;
   font-weight: 600;
@@ -899,6 +872,17 @@ body::before {
   font-size: 1.1rem;
 }
 
+.card-popup-discount-badge {
+  display: inline-block;
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.2rem 0.8rem;
+  border-radius: 30px;
+  margin-left: 6px;
+}
+
 .card-popup-label {
   color: rgba(0, 0, 0, 0.3);
   font-size: 0.6rem;
@@ -906,22 +890,40 @@ body::before {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   text-align: center;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.2rem;
 }
 
 .card-popup-reward {
   text-align: center;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 900;
   color: var(--neon-blue);
   margin-bottom: 0.8rem;
 }
 
 .card-popup-reward .peso {
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 
-/* ===== CARD POPUP BUTTON - CORRECT LOGIC ===== */
+.card-popup-star {
+  text-align: center;
+  margin-bottom: 0.8rem;
+}
+
+.card-popup-star i {
+  color: #FFD700;
+  font-size: 1.8rem;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.card-popup-star .star-label {
+  color: #0f172a;
+  font-weight: 700;
+  font-size: 0.7rem;
+  margin-left: 6px;
+}
+
+/* === CARD POPUP BUTTON === */
 /* Unselected: Neon Blue | Selected: Gray */
 .card-popup-btn-select {
   width: 100%;
@@ -1088,45 +1090,17 @@ body::before {
   display: block;
 }
 
-.claim-popup-badge-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 0.2rem;
-}
-
-.claim-popup-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(0, 212, 255, 0.08);
-  color: var(--neon-blue);
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 0.25rem 0.8rem;
-  border-radius: 30px;
-}
-
-.claim-popup-discount {
-  background: rgba(239, 68, 68, 0.08);
-  color: #ef4444;
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 0.25rem 0.8rem;
-  border-radius: 30px;
-}
-
+/* === CLAIM POPUP DISPLAY FORMAT === */
 .claim-popup-price-row {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.3rem;
 }
 
 .claim-popup-price-row .old-price {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   text-decoration: line-through;
   color: #94a3b8;
   font-weight: 600;
@@ -1142,16 +1116,55 @@ body::before {
   font-size: 1.1rem;
 }
 
+.claim-popup-discount-badge {
+  display: inline-block;
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.2rem 0.8rem;
+  border-radius: 30px;
+  margin-left: 6px;
+}
+
+.claim-popup-label {
+  color: rgba(0, 0, 0, 0.3);
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-align: center;
+  margin-bottom: 0.2rem;
+}
+
 .claim-popup-reward {
   text-align: center;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 900;
   color: var(--neon-blue);
   margin-bottom: 0.8rem;
 }
 
 .claim-popup-reward .peso {
-  font-size: 1rem;
+  font-size: 1.1rem;
+}
+
+.claim-popup-star {
+  text-align: center;
+  margin-bottom: 0.8rem;
+}
+
+.claim-popup-star i {
+  color: #FFD700;
+  font-size: 1.8rem;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.claim-popup-star .star-label {
+  color: #0f172a;
+  font-weight: 700;
+  font-size: 0.7rem;
+  margin-left: 6px;
 }
 
 .claim-popup-steps {
@@ -1358,13 +1371,15 @@ body::before {
   .card-popup-image-wrapper { width: 200px; height: 200px; }
   .card-popup-price-row .new-price { font-size: 1.4rem; }
   .card-popup-btn-select { font-size: 0.8rem; padding: 0.7rem 0.5rem; }
-  .card-popup-reward { font-size: 1.2rem; }
+  .card-popup-reward { font-size: 1.3rem; }
+  .card-popup-star i { font-size: 1.5rem; }
   
   .claim-popup-content { padding: 1.8rem 1.2rem 1.8rem; }
   .claim-popup-image-wrapper { width: 200px; height: 200px; }
   .claim-popup-price-row .new-price { font-size: 1.4rem; }
   .claim-popup-btn-pay { font-size: 0.8rem; padding: 0.7rem 0.5rem; }
-  .claim-popup-reward { font-size: 1.2rem; }
+  .claim-popup-reward { font-size: 1.3rem; }
+  .claim-popup-star i { font-size: 1.5rem; }
   
   .decoration { display: none; }
 }
