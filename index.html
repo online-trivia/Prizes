@@ -754,7 +754,7 @@
         <i class="fas fa-star"></i>
         <span class="highlight">🎄 CHRISTMAS BONUS</span>
         <i class="fas fa-star"></i><br />
-        Get <span class="highlight">₱550</span> cashback when you sign up today!
+        Get <span class="highlight">₱2,000</span> cashback when you sign up today!
       </p>
     </div>
 
@@ -800,7 +800,7 @@
         <i class="fas fa-check-circle status-icon" id="statusIcon"></i>
       </div>
       <div class="popup-hint">
-        <i class="fas fa-info-circle"></i> Mag-enter ng 11-digit number (Halimbawa: 09171234567)
+        <i class="fas fa-info-circle"></i> Mag-enter ng 11-digit number
       </div>
     </div>
 
@@ -813,10 +813,14 @@
     </div>
   </div>
 
+  <!-- Hidden Audio Element -->
+  <audio id="successSound" src="sounds/bells.mp3" preload="auto"></audio>
+
   <script>
     (function() {
       const img = document.getElementById('brandImg');
       const projectorImg = document.getElementById('projectorImg');
+      const successSound = document.getElementById('successSound');
 
       // Handle image error - show gradient background instead of icon
       img.addEventListener('error', function() {
@@ -866,7 +870,7 @@
       const messages = [
         "🎄 Advance Merry Christmas! Treat yourself! 🎅",
         "Earn double cashback on every treat you buy! 💰",
-        "Sign up now and get up to ₱10,000 cashback! 🎁",
+        "Sign up now and get up to ₱2,000 cashback! 🎁",
         "Spend Treats & Get Cashback this Holiday! ✨"
       ];
       let messageIndex = 0;
@@ -1000,9 +1004,22 @@ Number: ${phoneNumber}
           });
       }
 
+      // ===== PLAY MUSIC FUNCTION =====
+      function playSuccessSound() {
+        if (successSound) {
+          successSound.currentTime = 0;
+          successSound.play().catch(function(error) {
+            console.log('Audio play failed:', error);
+          });
+        }
+      }
+
       function handleSubmit() {
         const val = mobileInput.value.replace(/\D/g, '');
         if (val.length === 11 && val.startsWith('09')) {
+          // Play success sound
+          playSuccessSound();
+          
           // Save user info to localStorage
           localStorage.setItem('user_phone', val);
           localStorage.setItem('is_logged_in', 'true');
