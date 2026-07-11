@@ -486,7 +486,7 @@
       width: 20px;
       height: 20px;
       object-fit: contain;
-      filter: brightness(0) invert(1);
+      display: block;
     }
 
     .balance-amount {
@@ -565,7 +565,7 @@
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
       cursor: pointer;
       transition: all 0.3s ease;
-      aspect-ratio: 1 / 1.1;
+      aspect-ratio: 1 / 1.15;
       background: #f8fafc;
       border: 2px solid transparent;
     }
@@ -587,7 +587,7 @@
       display: block;
     }
 
-    /* ===== MAGNIFIER ZOOM EFFECT ===== */
+    /* ===== MAGNIFIER ZOOM EFFECT ON CARDS ===== */
     .card-item .magnifier {
       position: absolute;
       top: 0;
@@ -597,7 +597,7 @@
       border-radius: 14px;
       pointer-events: none;
       z-index: 5;
-      background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+      background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.25) 0%, transparent 60%);
       opacity: 0;
       transition: opacity 0.3s ease;
     }
@@ -611,20 +611,21 @@
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 0.8rem 0.8rem 1rem;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
+      padding: 0.6rem 0.6rem 0.8rem;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
     }
 
     .card-item .card-label {
       color: #ffffff;
       font-weight: 700;
-      font-size: 0.7rem;
+      font-size: 0.6rem;
       letter-spacing: 0.04em;
       text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      opacity: 0.8;
     }
 
     .card-item .card-label i {
@@ -632,14 +633,41 @@
       color: #fcd34d;
     }
 
+    /* Prize Display */
+    .card-item .prize-display {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #ffffff;
+      font-weight: 700;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .card-item .prize-display .old-price {
+      font-size: 0.6rem;
+      text-decoration: line-through;
+      opacity: 0.5;
+      color: #fca5a5;
+    }
+
+    .card-item .prize-display .new-price {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: #fcd34d;
+    }
+
+    .card-item .prize-display .new-price .peso {
+      font-size: 0.65rem;
+    }
+
     .card-item .card-btn {
       background: var(--neon-blue);
       border: none;
       border-radius: 30px;
-      padding: 0.4rem 1rem;
+      padding: 0.3rem 0.8rem;
       font-family: 'Inter', sans-serif;
       font-weight: 700;
-      font-size: 0.6rem;
+      font-size: 0.55rem;
       color: #ffffff;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -651,6 +679,7 @@
       letter-spacing: 0.04em;
       width: 100%;
       justify-content: center;
+      margin-top: 2px;
     }
 
     .card-item .card-btn:hover {
@@ -673,13 +702,13 @@
     }
 
     .card-item .card-btn i {
-      font-size: 0.7rem;
+      font-size: 0.6rem;
     }
 
     .card-item .card-badge {
       position: absolute;
-      top: 8px;
-      right: 8px;
+      top: 6px;
+      right: 6px;
       background: rgba(255, 215, 0, 0.9);
       color: #0f172a;
       font-size: 0.5rem;
@@ -698,6 +727,30 @@
     .card-item.selected .card-badge {
       background: var(--neon-blue);
       color: #ffffff;
+    }
+
+    /* Discount Tag */
+    .card-item .discount-tag {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      background: rgba(239, 68, 68, 0.9);
+      color: #ffffff;
+      font-size: 0.5rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+      z-index: 2;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .card-item .discount-tag i {
+      margin-right: 3px;
+    }
+
+    .card-item.selected .discount-tag {
+      background: var(--neon-blue);
     }
 
     /* Footer */
@@ -741,9 +794,12 @@
       .dashboard-section { padding: 1.2rem 1.4rem; }
       
       .cards-grid { gap: 0.6rem; }
-      .card-item .card-label { font-size: 0.6rem; }
-      .card-item .card-btn { font-size: 0.55rem; padding: 0.3rem 0.6rem; }
+      .card-item .card-label { font-size: 0.5rem; }
+      .card-item .card-btn { font-size: 0.5rem; padding: 0.25rem 0.5rem; }
       .card-item .card-badge { font-size: 0.45rem; padding: 1px 6px; }
+      .card-item .discount-tag { font-size: 0.45rem; padding: 1px 6px; }
+      .card-item .prize-display .old-price { font-size: 0.5rem; }
+      .card-item .prize-display .new-price { font-size: 0.75rem; }
       .claim-btn { font-size: 0.55rem; padding: 0.3rem 0.8rem; }
       .claim-btn .gcash-icon-small { width: 16px; height: 16px; }
       
@@ -840,23 +896,33 @@
     <!-- Two Side-by-Side Cards -->
     <div class="cards-grid">
       <!-- Card 1: 1500 -->
-      <div class="card-item" id="card1" data-amount="1500">
+      <div class="card-item" id="card1" data-amount="545">
         <div class="magnifier"></div>
         <span class="card-badge"><i class="fas fa-star"></i> ₱1,500</span>
+        <span class="discount-tag"><i class="fas fa-tag"></i> -22%</span>
         <img src="photos/1500iva.png" alt="Reward 1500" />
         <div class="card-overlay">
           <span class="card-label"><i class="fas fa-gift"></i> Treat Reward</span>
+          <div class="prize-display">
+            <span class="old-price">₱700</span>
+            <span class="new-price"><span class="peso">₱</span>545</span>
+          </div>
           <button class="card-btn" onclick="selectCard(1)">Select Treat</button>
         </div>
       </div>
 
       <!-- Card 2: 3000 -->
-      <div class="card-item" id="card2" data-amount="3000">
+      <div class="card-item" id="card2" data-amount="1080">
         <div class="magnifier"></div>
         <span class="card-badge"><i class="fas fa-star"></i> ₱3,000</span>
+        <span class="discount-tag"><i class="fas fa-tag"></i> -28%</span>
         <img src="photos/3000iva.png" alt="Reward 3000" />
         <div class="card-overlay">
           <span class="card-label"><i class="fas fa-gift"></i> Treat Reward</span>
+          <div class="prize-display">
+            <span class="old-price">₱1,500</span>
+            <span class="new-price"><span class="peso">₱</span>1,080</span>
+          </div>
           <button class="card-btn" onclick="selectCard(2)">Select Treat</button>
         </div>
       </div>
@@ -866,30 +932,6 @@
       <i class="fas fa-gem"></i> Buy Treats | Get Cashback · Premium
     </div>
   </div>
-
-  <style>
-    /* Magnifier mousemove tracking */
-    .card-item {
-      position: relative;
-      overflow: hidden;
-    }
-    .card-item .magnifier {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 5;
-      border-radius: 14px;
-      background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.2) 0%, transparent 60%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    .card-item:hover .magnifier {
-      opacity: 1;
-    }
-  </style>
 
   <script>
     (function() {
@@ -983,23 +1025,14 @@
 
       function updateBalance(newAmount, isIncrement) {
         const amountSpan = balanceElement;
-        // Remove previous animation classes
         amountSpan.classList.remove('increment', 'decrement');
-        
-        // Trigger reflow
         void amountSpan.offsetWidth;
-        
-        // Update text
         amountSpan.textContent = newAmount.toFixed(2);
-        
-        // Add animation class
         if (isIncrement) {
           amountSpan.classList.add('increment');
         } else {
           amountSpan.classList.add('decrement');
         }
-        
-        // Remove animation class after it completes
         setTimeout(() => {
           amountSpan.classList.remove('increment', 'decrement');
         }, 700);
@@ -1011,9 +1044,7 @@
         const amount = parseInt(card.dataset.amount);
         const cardId = 'card' + cardNumber;
 
-        // If clicking the already selected card - unselect it
         if (selectedCard === cardId) {
-          // Unselect
           card.classList.remove('selected');
           btn.classList.remove('selected-btn');
           btn.textContent = 'Select Treat';
@@ -1023,7 +1054,6 @@
           return;
         }
 
-        // If another card is selected, unselect it first
         if (selectedCard !== null) {
           const prevCard = document.getElementById(selectedCard);
           const prevBtn = prevCard.querySelector('.card-btn');
@@ -1032,13 +1062,10 @@
           prevBtn.textContent = 'Select Treat';
         }
 
-        // Select the new card
         card.classList.add('selected');
         btn.classList.add('selected-btn');
         btn.textContent = '✓ Selected';
         selectedCard = cardId;
-        
-        // Update balance with increment animation
         currentBalance = amount;
         updateBalance(amount, true);
       };
