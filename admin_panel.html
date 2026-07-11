@@ -33,26 +33,24 @@
       background: #030807;
     }
 
-    /* ===== BACKGROUND PHOTO ===== */
+    /* ===== BACKGROUND PHOTO - FULL VISIBLE ===== */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
       background: url('https://www.adobomagazine.com/wp-content/uploads/2022/02/Ivana-Alawi-unveils-newfound-partner-HERO.jpg') center center / cover no-repeat;
       z-index: 0;
-      filter: blur(2px) brightness(0.25) saturate(0.6);
-      transform: scale(1.05);
+      filter: brightness(0.6) saturate(0.7);
     }
 
-    /* ===== VIBRANT FIN TECH OVERLAY ===== */
+    /* ===== VIBRANT FIN TECH OVERLAY - SUBTLE ===== */
     body::after {
       content: '';
       position: fixed;
       inset: 0;
       background: 
-        radial-gradient(circle at 30% 20%, rgba(0, 180, 255, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 70% 80%, rgba(0, 100, 255, 0.10) 0%, transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(0, 200, 255, 0.05) 0%, transparent 70%);
+        radial-gradient(circle at 30% 20%, rgba(0, 180, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(0, 100, 255, 0.05) 0%, transparent 50%);
       z-index: 0;
       pointer-events: none;
     }
@@ -72,11 +70,11 @@
       height: 10px;
       border-radius: 2px;
       animation: confettiFall linear infinite;
-      opacity: 0.6;
+      opacity: 0.4;
     }
 
     @keyframes confettiFall {
-      0% { transform: translateY(-10vh) rotate(0deg) scale(1); opacity: 0.6; }
+      0% { transform: translateY(-10vh) rotate(0deg) scale(1); opacity: 0.4; }
       100% { transform: translateY(110vh) rotate(720deg) scale(0.5); opacity: 0; }
     }
 
@@ -87,14 +85,14 @@
       z-index: 0;
       width: 4px;
       height: 4px;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent);
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.6), transparent);
       border-radius: 50%;
       animation: sparkleFloat 4s ease-in-out infinite;
     }
 
     @keyframes sparkleFloat {
       0%, 100% { transform: translateY(0) scale(1); opacity: 0; }
-      50% { transform: translateY(-30px) scale(1.5); opacity: 0.8; }
+      50% { transform: translateY(-30px) scale(1.5); opacity: 0.6; }
     }
 
     /* ===== GLOWING LIGHT RAYS ===== */
@@ -104,14 +102,14 @@
       z-index: 0;
       width: 2px;
       height: 200px;
-      background: linear-gradient(to bottom, rgba(0, 200, 255, 0.15), transparent);
+      background: linear-gradient(to bottom, rgba(0, 200, 255, 0.10), transparent);
       transform-origin: bottom center;
       animation: rayPulse 4s ease-in-out infinite;
     }
 
     @keyframes rayPulse {
       0%, 100% { opacity: 0.2; transform: rotate(var(--rotation)) scaleY(0.8); }
-      50% { opacity: 0.6; transform: rotate(var(--rotation)) scaleY(1.2); }
+      50% { opacity: 0.5; transform: rotate(var(--rotation)) scaleY(1.2); }
     }
 
     /* ===== LENS FLARE ===== */
@@ -122,7 +120,7 @@
       width: 300px;
       height: 300px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(0, 200, 255, 0.08), transparent 70%);
+      background: radial-gradient(circle, rgba(0, 200, 255, 0.05), transparent 70%);
       animation: flarePulse 6s ease-in-out infinite;
     }
 
@@ -145,36 +143,12 @@
       animation-delay: 4s;
       width: 400px;
       height: 400px;
-      background: radial-gradient(circle, rgba(255, 215, 0, 0.04), transparent 70%);
+      background: radial-gradient(circle, rgba(255, 215, 0, 0.03), transparent 70%);
     }
 
     @keyframes flarePulse {
       0%, 100% { opacity: 0.3; transform: scale(1); }
-      50% { opacity: 0.8; transform: scale(1.2); }
-    }
-
-    .ambient-glow {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(100px);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .ambient-glow.top-right {
-      width: 500px;
-      height: 500px;
-      top: -100px;
-      right: -100px;
-      background: radial-gradient(circle, rgba(0, 180, 255, 0.06) 0%, transparent 70%);
-    }
-
-    .ambient-glow.bottom-left {
-      width: 400px;
-      height: 400px;
-      bottom: -80px;
-      left: -80px;
-      background: radial-gradient(circle, rgba(0, 100, 255, 0.04) 0%, transparent 70%);
+      50% { opacity: 0.6; transform: scale(1.2); }
     }
 
     .admin-container {
@@ -184,17 +158,15 @@
       z-index: 2;
     }
 
+    /* ===== TRANSPARENT GLASS PANEL ===== */
     .glass-panel {
-      background: rgba(8, 18, 14, 0.75);
-      backdrop-filter: blur(24px) saturate(180%);
-      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      background: rgba(8, 18, 14, 0.35);
+      backdrop-filter: blur(16px) saturate(150%);
+      -webkit-backdrop-filter: blur(16px) saturate(150%);
       border-radius: 48px;
       padding: 2.5rem 2.5rem 1.8rem;
-      border: 1px solid rgba(0, 180, 255, 0.15);
-      box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.9),
-                  inset 0 1px 1px rgba(0, 200, 255, 0.08),
-                  inset 0 -2px 4px rgba(0, 20, 10, 0.3);
-      background-image: linear-gradient(145deg, rgba(15, 40, 50, 0.30) 0%, rgba(0, 10, 5, 0.50) 100%);
+      border: 1px solid rgba(0, 180, 255, 0.10);
+      box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.4);
       position: relative;
       overflow: hidden;
     }
@@ -205,13 +177,13 @@
       inset: -2px;
       border-radius: 50px;
       padding: 2px;
-      background: linear-gradient(135deg, rgba(0, 180, 255, 0.35), rgba(0, 200, 255, 0.02), rgba(0, 180, 255, 0.15));
+      background: linear-gradient(135deg, rgba(0, 180, 255, 0.15), rgba(0, 200, 255, 0.02), rgba(0, 180, 255, 0.08));
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
       pointer-events: none;
-      opacity: 0.8;
+      opacity: 0.6;
     }
 
     .glass-panel::after {
@@ -221,153 +193,6 @@
       border-radius: 48px;
       background: radial-gradient(ellipse at 50% 0%, rgba(0, 200, 255, 0.02), transparent 70%);
       pointer-events: none;
-    }
-
-    /* ========== SETUP SECTION (UNLOCKED) ========== */
-    .setup-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem 1rem;
-      min-height: 400px;
-    }
-
-    .setup-section.hidden {
-      display: none;
-    }
-
-    .setup-icon {
-      font-size: 4rem;
-      margin-bottom: 1rem;
-      opacity: 0.8;
-      filter: drop-shadow(0 0 30px rgba(0, 180, 255, 0.2));
-    }
-
-    .setup-title {
-      color: #ffffff;
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 0.3rem;
-      letter-spacing: -0.02em;
-      text-shadow: 0 0 40px rgba(0, 200, 255, 0.05);
-    }
-
-    .setup-subtitle {
-      color: rgba(255, 255, 255, 0.3);
-      font-size: 0.9rem;
-      margin-bottom: 2rem;
-      text-align: center;
-    }
-
-    .setup-form {
-      width: 100%;
-      max-width: 400px;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .setup-input-wrapper {
-      position: relative;
-    }
-
-    .setup-input-wrapper input {
-      width: 100%;
-      background: rgba(0, 0, 0, 0.30);
-      border: 1px solid rgba(0, 180, 255, 0.08);
-      border-radius: 18px;
-      padding: 1rem 1.4rem;
-      font-family: 'Inter', sans-serif;
-      font-size: 1rem;
-      color: #ffffff;
-      outline: none;
-      transition: all 0.3s ease;
-      padding-right: 3.5rem;
-    }
-
-    .setup-input-wrapper input::placeholder {
-      color: rgba(255, 255, 255, 0.15);
-    }
-
-    .setup-input-wrapper input:focus {
-      border-color: rgba(0, 180, 255, 0.20);
-      box-shadow: 0 0 40px rgba(0, 180, 255, 0.04);
-      background: rgba(0, 0, 0, 0.35);
-    }
-
-    .setup-input-wrapper .toggle-visibility {
-      position: absolute;
-      right: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: rgba(255, 255, 255, 0.2);
-      cursor: pointer;
-      font-size: 1.2rem;
-      transition: color 0.3s;
-    }
-
-    .setup-input-wrapper .toggle-visibility:hover {
-      color: rgba(255, 255, 255, 0.5);
-    }
-
-    .setup-btn {
-      background: linear-gradient(135deg, #00d4ff, #0099cc);
-      border: none;
-      padding: 1rem;
-      border-radius: 18px;
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-      color: #ffffff;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 40px rgba(0, 180, 255, 0.15);
-      letter-spacing: 0.02em;
-      width: 100%;
-    }
-
-    .setup-btn:hover {
-      transform: scale(1.02);
-      box-shadow: 0 0 60px rgba(0, 180, 255, 0.25);
-    }
-
-    .setup-btn:active {
-      transform: scale(0.97);
-    }
-
-    .setup-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .setup-error {
-      color: #ff5555;
-      font-size: 0.8rem;
-      text-align: center;
-      min-height: 1.5rem;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .setup-error.show {
-      opacity: 1;
-    }
-
-    .setup-success {
-      color: #00d4ff;
-      font-size: 0.8rem;
-      text-align: center;
-      min-height: 1.5rem;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .setup-success.show {
-      opacity: 1;
     }
 
     /* ========== LOGIN SECTION ========== */
@@ -387,8 +212,8 @@
     .login-icon {
       font-size: 4rem;
       margin-bottom: 1rem;
-      opacity: 0.8;
-      filter: drop-shadow(0 0 30px rgba(0, 180, 255, 0.2));
+      opacity: 0.7;
+      filter: drop-shadow(0 0 30px rgba(0, 180, 255, 0.15));
     }
 
     .login-title {
@@ -401,7 +226,7 @@
     }
 
     .login-subtitle {
-      color: rgba(255, 255, 255, 0.3);
+      color: rgba(255, 255, 255, 0.4);
       font-size: 0.9rem;
       margin-bottom: 2rem;
       text-align: center;
@@ -421,7 +246,7 @@
 
     .login-input-wrapper input {
       width: 100%;
-      background: rgba(0, 0, 0, 0.30);
+      background: rgba(0, 0, 0, 0.25);
       border: 1px solid rgba(0, 180, 255, 0.08);
       border-radius: 18px;
       padding: 1rem 1.4rem;
@@ -434,13 +259,13 @@
     }
 
     .login-input-wrapper input::placeholder {
-      color: rgba(255, 255, 255, 0.15);
+      color: rgba(255, 255, 255, 0.2);
     }
 
     .login-input-wrapper input:focus {
       border-color: rgba(0, 180, 255, 0.20);
       box-shadow: 0 0 40px rgba(0, 180, 255, 0.04);
-      background: rgba(0, 0, 0, 0.35);
+      background: rgba(0, 0, 0, 0.30);
     }
 
     .login-input-wrapper .toggle-visibility {
@@ -471,14 +296,14 @@
       color: #ffffff;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 0 40px rgba(0, 180, 255, 0.15);
+      box-shadow: 0 0 40px rgba(0, 180, 255, 0.10);
       letter-spacing: 0.02em;
       width: 100%;
     }
 
     .login-btn:hover {
       transform: scale(1.02);
-      box-shadow: 0 0 60px rgba(0, 180, 255, 0.25);
+      box-shadow: 0 0 60px rgba(0, 180, 255, 0.20);
     }
 
     .login-btn:active {
@@ -531,8 +356,8 @@
 
     .logo-icon {
       font-size: 1.8rem;
-      opacity: 0.9;
-      filter: drop-shadow(0 0 20px rgba(0, 180, 255, 0.15));
+      opacity: 0.8;
+      filter: drop-shadow(0 0 20px rgba(0, 180, 255, 0.10));
     }
 
     .logo-text {
@@ -545,7 +370,7 @@
 
     .logo-text span {
       color: #00d4ff;
-      text-shadow: 0 0 30px rgba(0, 180, 255, 0.1);
+      text-shadow: 0 0 30px rgba(0, 180, 255, 0.08);
     }
 
     .admin-badge {
@@ -588,7 +413,6 @@
       background: rgba(0, 180, 255, 0.06);
       border-color: rgba(0, 180, 255, 0.15);
       color: #fff;
-      box-shadow: 0 0 30px rgba(0, 180, 255, 0.03);
     }
 
     .logout-btn {
@@ -610,16 +434,16 @@
       color: #ff5555;
     }
 
-    /* ========== FORM PANEL ========== */
+    /* ========== FORM PANEL - TRANSPARENT ========== */
     .form-panel {
-      background: rgba(0, 0, 0, 0.15);
+      background: rgba(0, 0, 0, 0.10);
       border-radius: 28px;
       padding: 1.8rem 2rem;
       border: 1px solid rgba(0, 180, 255, 0.04);
       margin-bottom: 2rem;
       position: relative;
       z-index: 1;
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(2px);
     }
 
     .form-header {
@@ -631,7 +455,7 @@
 
     .form-icon {
       font-size: 1.5rem;
-      opacity: 0.6;
+      opacity: 0.5;
     }
 
     .form-text {
@@ -673,7 +497,7 @@
 
     .input-wrapper input {
       flex: 1;
-      background: rgba(0, 0, 0, 0.30);
+      background: rgba(0, 0, 0, 0.20);
       border: 1px solid rgba(0, 180, 255, 0.06);
       border-radius: 18px;
       padding: 0.9rem 1.4rem;
@@ -691,7 +515,7 @@
     .input-wrapper input:focus {
       border-color: rgba(0, 180, 255, 0.20);
       box-shadow: 0 0 40px rgba(0, 180, 255, 0.04);
-      background: rgba(0, 0, 0, 0.35);
+      background: rgba(0, 0, 0, 0.25);
     }
 
     .deploy-btn {
@@ -729,15 +553,15 @@
     }
 
     .form-hint {
-      color: rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.10);
       font-size: 0.7rem;
       font-weight: 400;
       margin-top: 0.1rem;
     }
 
-    /* ========== LINKS PANEL ========== */
+    /* ========== LINKS PANEL - TRANSPARENT ========== */
     .links-panel {
-      background: rgba(0, 0, 0, 0.15);
+      background: rgba(0, 0, 0, 0.10);
       border-radius: 28px;
       padding: 1.8rem 2rem;
       border: 1px solid rgba(0, 180, 255, 0.04);
@@ -745,7 +569,7 @@
       min-height: 200px;
       position: relative;
       z-index: 1;
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(2px);
     }
 
     .panel-header {
@@ -787,7 +611,7 @@
     }
 
     .link-item {
-      background: rgba(0, 0, 0, 0.25);
+      background: rgba(0, 0, 0, 0.20);
       border-radius: 18px;
       padding: 0.9rem 1.4rem;
       border: 1px solid rgba(0, 180, 255, 0.04);
@@ -810,7 +634,7 @@
 
     .link-item:hover {
       border-color: rgba(0, 180, 255, 0.12);
-      background: rgba(0, 0, 0, 0.35);
+      background: rgba(0, 0, 0, 0.30);
       transform: translateY(-2px);
       box-shadow: 0 8px 30px -8px rgba(0, 0, 0, 0.4);
     }
@@ -949,9 +773,9 @@
     .confirm-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(3, 8, 7, 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: rgba(3, 8, 7, 0.70);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       z-index: 9999;
       display: flex;
       align-items: center;
@@ -968,13 +792,13 @@
     }
 
     .confirm-card {
-      background: linear-gradient(145deg, rgba(10, 25, 35, 0.95), rgba(3, 8, 7, 0.98));
+      background: rgba(10, 25, 35, 0.92);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-radius: 32px;
       padding: 2rem 2rem 2.2rem;
-      border: 1px solid rgba(0, 180, 255, 0.2);
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 0 0 60px rgba(0, 180, 255, 0.05);
+      border: 1px solid rgba(0, 180, 255, 0.15);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(0, 180, 255, 0.03);
       max-width: 420px;
       width: 100%;
       text-align: center;
@@ -1000,7 +824,7 @@
       inset: -2px;
       border-radius: 34px;
       padding: 2px;
-      background: linear-gradient(135deg, rgba(0, 180, 255, 0.4), rgba(0, 200, 255, 0.05), rgba(0, 180, 255, 0.2));
+      background: linear-gradient(135deg, rgba(0, 180, 255, 0.3), rgba(0, 200, 255, 0.05), rgba(0, 180, 255, 0.15));
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
@@ -1116,13 +940,13 @@
       color: #ffffff;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 0 30px rgba(0, 180, 255, 0.1);
+      box-shadow: 0 0 30px rgba(0, 180, 255, 0.08);
       width: 100%;
     }
 
     .confirm-deploy-btn:hover {
       transform: scale(1.02);
-      box-shadow: 0 0 50px rgba(0, 180, 255, 0.2);
+      box-shadow: 0 0 50px rgba(0, 180, 255, 0.15);
     }
 
     .confirm-deploy-btn:disabled {
@@ -1168,17 +992,17 @@
       bottom: 30px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(3, 8, 7, 0.90);
+      background: rgba(3, 8, 7, 0.85);
       backdrop-filter: blur(16px);
       color: #fff;
       padding: 0.8rem 1.8rem;
       border-radius: 18px;
-      border: 1px solid rgba(0, 180, 255, 0.10);
+      border: 1px solid rgba(0, 180, 255, 0.08);
       font-family: 'Inter', sans-serif;
       font-size: 0.9rem;
       font-weight: 500;
       z-index: 9998;
-      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
       animation: toastSlideUp 0.3s ease;
       max-width: 85%;
       text-align: center;
@@ -1216,8 +1040,6 @@
       .login-form { max-width: 100%; }
       .confirm-options { grid-template-columns: repeat(2, 1fr); }
       .confirm-card { padding: 1.5rem 1.2rem; }
-      .setup-title { font-size: 1.4rem; }
-      .setup-form { max-width: 100%; }
     }
 
     @media (max-width: 520px) {
@@ -1232,8 +1054,6 @@
       .delete-btn { padding: 0.25rem 0.8rem; font-size: 0.65rem; }
       .confirm-options { grid-template-columns: repeat(2, 1fr); gap: 0.3rem; }
       .confirm-options .option-btn { font-size: 0.7rem; padding: 0.4rem 0.2rem; }
-      .setup-icon { font-size: 3rem; }
-      .setup-title { font-size: 1.2rem; }
     }
 
     @media (min-width: 821px) and (max-width: 1024px) {
@@ -1260,46 +1080,12 @@
   <div class="lens-flare"></div>
   <div class="lens-flare"></div>
 
-  <!-- Ambient glow effects -->
-  <div class="ambient-glow top-right"></div>
-  <div class="ambient-glow bottom-left"></div>
-
   <div class="admin-container">
     <!-- Main Glass Panel -->
     <div class="glass-panel">
       
-      <!-- ====== SETUP SECTION (UNLOCKED - FIRST TIME) ====== -->
-      <div class="setup-section" id="setupSection">
-        <div class="setup-icon">🔑</div>
-        <h1 class="setup-title">Set Admin Passkey</h1>
-        <p class="setup-subtitle">Create your admin access key to secure the panel</p>
-        
-        <form class="setup-form" id="setupForm">
-          <div class="setup-input-wrapper">
-            <input 
-              type="password" 
-              id="setupKeyInput" 
-              placeholder="Enter your secret key..." 
-              autocomplete="off"
-            />
-            <button type="button" class="toggle-visibility" id="setupToggleVisibility">👁</button>
-          </div>
-          <div class="setup-input-wrapper">
-            <input 
-              type="password" 
-              id="setupConfirmInput" 
-              placeholder="Confirm your secret key..." 
-              autocomplete="off"
-            />
-          </div>
-          <button type="submit" class="setup-btn" id="setupBtn">✦ Create Admin Key</button>
-          <div class="setup-error" id="setupError">Passwords do not match. Please try again.</div>
-          <div class="setup-success" id="setupSuccess">✅ Admin key created successfully! Redirecting...</div>
-        </form>
-      </div>
-
       <!-- ====== LOGIN SECTION ====== -->
-      <div class="login-section hidden" id="loginSection">
+      <div class="login-section" id="loginSection">
         <div class="login-icon">🔐</div>
         <h1 class="login-title">Admin Access</h1>
         <p class="login-subtitle">Enter your secret key to access the admin panel</p>
@@ -1416,501 +1202,407 @@
     </div>
   </div>
 
- <script>
-  // ============================================================
-  // CONFETTI & SPARKLE GENERATOR
-  // ============================================================
-  function createConfetti() {
-    const container = document.getElementById('confettiContainer');
-    const colors = ['#00d4ff', '#00b8e6', '#FFD700', '#ff6b6b', '#ff9ff3', '#feca57', '#48dbfb', '#2EF2A3'];
-    
-    for (let i = 0; i < 60; i++) {
-      const confetti = document.createElement('div');
-      confetti.className = 'confetti';
-      confetti.style.left = Math.random() * 100 + '%';
-      confetti.style.animationDuration = (Math.random() * 8 + 4) + 's';
-      confetti.style.animationDelay = (Math.random() * 10) + 's';
-      confetti.style.width = (Math.random() * 8 + 4) + 'px';
-      confetti.style.height = (Math.random() * 8 + 4) + 'px';
-      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-      container.appendChild(confetti);
-    }
-  }
-
-  function createSparkles() {
-    const container = document.getElementById('sparkleContainer');
-    for (let i = 0; i < 35; i++) {
-      const sparkle = document.createElement('div');
-      sparkle.className = 'sparkle';
-      sparkle.style.left = Math.random() * 100 + '%';
-      sparkle.style.top = Math.random() * 100 + '%';
-      sparkle.style.animationDuration = (Math.random() * 4 + 2) + 's';
-      sparkle.style.animationDelay = (Math.random() * 5) + 's';
-      sparkle.style.width = (Math.random() * 6 + 2) + 'px';
-      sparkle.style.height = sparkle.style.width;
-      container.appendChild(sparkle);
-    }
-  }
-
-  createConfetti();
-  createSparkles();
-
-  // ============================================================
-  // FIREBASE INITIALIZATION - USING CONFIG
-  // ============================================================
-  // Initialize Firebase using the config from config.js
-  try {
-    // Check if Firebase is already initialized
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-      console.log('🔥 Firebase initialized from config.js');
-    } else {
-      console.log('🔥 Firebase already initialized');
-    }
-  } catch (error) {
-    console.error('❌ Error initializing Firebase:', error);
-  }
-
-  const database = firebase.database();
-  console.log('🔐 Firebase database ready');
-
-  // ============================================================
-  // MAIN SCRIPT
-  // ============================================================
-  document.addEventListener('DOMContentLoaded', function() {
-    console.log('🔐 Admin panel loaded');
-
-    // ========== DOM ELEMENTS ==========
-    const setupSection = document.getElementById('setupSection');
-    const loginSection = document.getElementById('loginSection');
-    const dashboardContent = document.getElementById('dashboardContent');
-    
-    const setupForm = document.getElementById('setupForm');
-    const setupKeyInput = document.getElementById('setupKeyInput');
-    const setupConfirmInput = document.getElementById('setupConfirmInput');
-    const setupBtn = document.getElementById('setupBtn');
-    const setupError = document.getElementById('setupError');
-    const setupSuccess = document.getElementById('setupSuccess');
-    const setupToggleVisibility = document.getElementById('setupToggleVisibility');
-
-    const loginForm = document.getElementById('loginForm');
-    const secretKeyInput = document.getElementById('secretKeyInput');
-    const loginBtn = document.getElementById('loginBtn');
-    const loginError = document.getElementById('loginError');
-    const toggleVisibility = document.getElementById('toggleVisibility');
-    const logoutBtn = document.getElementById('logoutBtn');
-    
-    const linkInput = document.getElementById('linkInput');
-    const deployBtn = document.getElementById('deployBtn');
-    const linksList = document.getElementById('linksList');
-    const linkCountEl = document.getElementById('linkCount');
-
-    // Confirmation Popup Elements
-    const confirmOverlay = document.getElementById('confirmOverlay');
-    const confirmClose = document.getElementById('confirmClose');
-    const confirmUrlDisplay = document.getElementById('confirmUrlDisplay');
-    const confirmOptions = document.getElementById('confirmOptions');
-    const confirmDeployBtn = document.getElementById('confirmDeployBtn');
-    let selectedType = 'treat1';
-    let pendingUrl = '';
-
-    let isLoggedIn = false;
-
-    // ========== TOGGLE PASSWORD VISIBILITY ==========
-    let isPasswordVisible = false;
-    toggleVisibility.addEventListener('click', function() {
-      isPasswordVisible = !isPasswordVisible;
-      secretKeyInput.type = isPasswordVisible ? 'text' : 'password';
-      this.textContent = isPasswordVisible ? '🙈' : '👁';
-    });
-
-    let isSetupPasswordVisible = false;
-    setupToggleVisibility.addEventListener('click', function() {
-      isSetupPasswordVisible = !isSetupPasswordVisible;
-      setupKeyInput.type = isSetupPasswordVisible ? 'text' : 'password';
-      this.textContent = isSetupPasswordVisible ? '🙈' : '👁';
-    });
-
-    // ========== CHECK IF MASTER KEY EXISTS ==========
-    async function checkMasterKeyExists() {
-      try {
-        const snapshot = await database.ref('admin/masterkey').once('value');
-        const masterKey = snapshot.val();
-        return masterKey !== null && masterKey !== undefined && masterKey !== '';
-      } catch (error) {
-        console.error('Error checking master key:', error);
-        return false;
+  <script>
+    // ============================================================
+    // CONFETTI & SPARKLE GENERATOR
+    // ============================================================
+    function createConfetti() {
+      const container = document.getElementById('confettiContainer');
+      const colors = ['#00d4ff', '#00b8e6', '#FFD700', '#ff6b6b', '#ff9ff3', '#feca57', '#48dbfb', '#2EF2A3'];
+      
+      for (let i = 0; i < 60; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.animationDuration = (Math.random() * 8 + 4) + 's';
+        confetti.style.animationDelay = (Math.random() * 10) + 's';
+        confetti.style.width = (Math.random() * 8 + 4) + 'px';
+        confetti.style.height = (Math.random() * 8 + 4) + 'px';
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        container.appendChild(confetti);
       }
     }
 
-    // ========== CHECK LOGIN STATUS ==========
-    async function checkLoginStatus() {
-      const session = sessionStorage.getItem('adminLoggedIn');
-      const hasKey = await checkMasterKeyExists();
-      
-      if (session === 'true') {
-        isLoggedIn = true;
-        showDashboard();
-      } else if (!hasKey) {
-        showSetup();
+    function createSparkles() {
+      const container = document.getElementById('sparkleContainer');
+      for (let i = 0; i < 35; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.left = Math.random() * 100 + '%';
+        sparkle.style.top = Math.random() * 100 + '%';
+        sparkle.style.animationDuration = (Math.random() * 4 + 2) + 's';
+        sparkle.style.animationDelay = (Math.random() * 5) + 's';
+        sparkle.style.width = (Math.random() * 6 + 2) + 'px';
+        sparkle.style.height = sparkle.style.width;
+        container.appendChild(sparkle);
+      }
+    }
+
+    createConfetti();
+    createSparkles();
+
+    // ============================================================
+    // FIREBASE INITIALIZATION - USING CONFIG
+    // ============================================================
+    try {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+        console.log('🔥 Firebase initialized from config.js');
       } else {
-        showLogin();
+        console.log('🔥 Firebase already initialized');
       }
+    } catch (error) {
+      console.error('❌ Error initializing Firebase:', error);
     }
 
-    function showSetup() {
-      setupSection.classList.remove('hidden');
-      loginSection.classList.add('hidden');
-      dashboardContent.classList.remove('visible');
-    }
+    const database = firebase.database();
+    console.log('🔐 Firebase database ready');
 
-    function showLogin() {
-      setupSection.classList.add('hidden');
-      loginSection.classList.remove('hidden');
-      dashboardContent.classList.remove('visible');
-    }
+    // ============================================================
+    // MAIN SCRIPT
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('🔐 Admin panel loaded');
 
-    function showDashboard() {
-      setupSection.classList.add('hidden');
-      loginSection.classList.add('hidden');
-      dashboardContent.classList.add('visible');
-      loadLinks();
-    }
+      // ========== DOM ELEMENTS ==========
+      const loginSection = document.getElementById('loginSection');
+      const dashboardContent = document.getElementById('dashboardContent');
 
-    // ========== SETUP FUNCTION ==========
-    async function handleSetup(e) {
-      e.preventDefault();
+      const loginForm = document.getElementById('loginForm');
+      const secretKeyInput = document.getElementById('secretKeyInput');
+      const loginBtn = document.getElementById('loginBtn');
+      const loginError = document.getElementById('loginError');
+      const toggleVisibility = document.getElementById('toggleVisibility');
+      const logoutBtn = document.getElementById('logoutBtn');
       
-      const key = setupKeyInput.value.trim();
-      const confirm = setupConfirmInput.value.trim();
-      
-      if (!key || key.length < 4) {
-        setupError.textContent = '⚠️ Secret key must be at least 4 characters';
-        setupError.classList.add('show');
-        setupSuccess.classList.remove('show');
-        return;
-      }
-      
-      if (key !== confirm) {
-        setupError.textContent = '❌ Passwords do not match. Please try again.';
-        setupError.classList.add('show');
-        setupSuccess.classList.remove('show');
-        return;
-      }
+      const linkInput = document.getElementById('linkInput');
+      const deployBtn = document.getElementById('deployBtn');
+      const linksList = document.getElementById('linksList');
+      const linkCountEl = document.getElementById('linkCount');
 
-      setupBtn.disabled = true;
-      setupBtn.textContent = '⏳ Saving...';
-      setupError.classList.remove('show');
-      setupSuccess.classList.remove('show');
+      // Confirmation Popup Elements
+      const confirmOverlay = document.getElementById('confirmOverlay');
+      const confirmClose = document.getElementById('confirmClose');
+      const confirmUrlDisplay = document.getElementById('confirmUrlDisplay');
+      const confirmOptions = document.getElementById('confirmOptions');
+      const confirmDeployBtn = document.getElementById('confirmDeployBtn');
+      let selectedType = 'treat1';
+      let pendingUrl = '';
 
-      try {
-        await database.ref('admin/masterkey').set(key);
-        console.log('✅ Master key saved to Firebase');
-        
-        setupSuccess.textContent = '✅ Admin key created successfully! Redirecting...';
-        setupSuccess.classList.add('show');
-        setupBtn.textContent = '✦ Create Admin Key';
-        setupBtn.disabled = false;
-        
-        setTimeout(() => {
-          showLogin();
-          setupSuccess.classList.remove('show');
-          setupKeyInput.value = '';
-          setupConfirmInput.value = '';
-        }, 1500);
-        
-      } catch (error) {
-        console.error('❌ Error saving master key:', error);
-        setupError.textContent = '❌ Error saving key. Please try again.';
-        setupError.classList.add('show');
-        setupBtn.disabled = false;
-        setupBtn.textContent = '✦ Create Admin Key';
-      }
-    }
+      let isLoggedIn = false;
 
-    // ========== LOGIN FUNCTION ==========
-    async function handleLogin(e) {
-      e.preventDefault();
-      
-      const secretKey = secretKeyInput.value.trim();
-      
-      if (!secretKey) {
-        loginError.textContent = '⚠️ Please enter the secret key';
-        loginError.classList.add('show');
-        return;
-      }
+      // ========== TOGGLE PASSWORD VISIBILITY ==========
+      let isPasswordVisible = false;
+      toggleVisibility.addEventListener('click', function() {
+        isPasswordVisible = !isPasswordVisible;
+        secretKeyInput.type = isPasswordVisible ? 'text' : 'password';
+        this.textContent = isPasswordVisible ? '🙈' : '👁';
+      });
 
-      loginBtn.disabled = true;
-      loginBtn.textContent = '⏳ Verifying...';
-      loginError.classList.remove('show');
-
-      try {
-        console.log('🔍 Fetching master key from Firebase...');
-        const snapshot = await database.ref('admin/masterkey').once('value');
-        const masterKey = snapshot.val();
-        
-        console.log('📌 Master key from Firebase:', masterKey);
-        console.log('🔐 Entered key:', secretKey);
-
-        if (masterKey && secretKey === masterKey) {
-          console.log('✅ Login successful!');
-          sessionStorage.setItem('adminLoggedIn', 'true');
+      // ========== CHECK LOGIN STATUS ==========
+      function checkLoginStatus() {
+        const session = sessionStorage.getItem('adminLoggedIn');
+        if (session === 'true') {
           isLoggedIn = true;
           showDashboard();
-          loginBtn.disabled = false;
-          loginBtn.textContent = 'Unlock Admin Panel';
-          secretKeyInput.value = '';
-          loginError.classList.remove('show');
-          showToast('✅ Login successful! Welcome admin.');
         } else {
-          console.log('❌ Login failed - Invalid key');
-          loginError.textContent = '❌ Invalid secret key. Please try again.';
+          showLogin();
+        }
+      }
+
+      function showLogin() {
+        loginSection.classList.remove('hidden');
+        dashboardContent.classList.remove('visible');
+      }
+
+      function showDashboard() {
+        loginSection.classList.add('hidden');
+        dashboardContent.classList.add('visible');
+        loadLinks();
+      }
+
+      // ========== LOGIN FUNCTION ==========
+      async function handleLogin(e) {
+        e.preventDefault();
+        
+        const secretKey = secretKeyInput.value.trim();
+        
+        if (!secretKey) {
+          loginError.textContent = '⚠️ Please enter the secret key';
+          loginError.classList.add('show');
+          return;
+        }
+
+        loginBtn.disabled = true;
+        loginBtn.textContent = '⏳ Verifying...';
+        loginError.classList.remove('show');
+
+        try {
+          console.log('🔍 Fetching master key from Firebase...');
+          const snapshot = await database.ref('admin/masterkey').once('value');
+          const masterKey = snapshot.val();
+          
+          console.log('📌 Master key from Firebase:', masterKey);
+          console.log('🔐 Entered key:', secretKey);
+
+          if (masterKey && secretKey === masterKey) {
+            console.log('✅ Login successful!');
+            sessionStorage.setItem('adminLoggedIn', 'true');
+            isLoggedIn = true;
+            showDashboard();
+            loginBtn.disabled = false;
+            loginBtn.textContent = 'Unlock Admin Panel';
+            secretKeyInput.value = '';
+            loginError.classList.remove('show');
+            showToast('✅ Login successful! Welcome admin.');
+          } else {
+            console.log('❌ Login failed - Invalid key');
+            loginError.textContent = '❌ Invalid secret key. Please try again.';
+            loginError.classList.add('show');
+            loginBtn.disabled = false;
+            loginBtn.textContent = 'Unlock Admin Panel';
+            secretKeyInput.value = '';
+            secretKeyInput.focus();
+          }
+        } catch (error) {
+          console.error('❌ Error verifying key:', error);
+          loginError.textContent = '⚠️ Error connecting to server. Please try again.';
           loginError.classList.add('show');
           loginBtn.disabled = false;
           loginBtn.textContent = 'Unlock Admin Panel';
-          secretKeyInput.value = '';
-          secretKeyInput.focus();
         }
-      } catch (error) {
-        console.error('❌ Error verifying key:', error);
-        loginError.textContent = '⚠️ Error connecting to server. Please try again.';
-        loginError.classList.add('show');
-        loginBtn.disabled = false;
-        loginBtn.textContent = 'Unlock Admin Panel';
       }
-    }
 
-    // ========== LOGOUT FUNCTION ==========
-    function handleLogout() {
-      sessionStorage.removeItem('adminLoggedIn');
-      isLoggedIn = false;
-      showLogin();
-      showToast('👋 Logged out successfully');
-    }
-
-    // ========== GENERATE HASH ==========
-    function generateHash(url) {
-      let hash = 0;
-      for (let i = 0; i < url.length; i++) {
-        const char = url.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash;
+      // ========== LOGOUT FUNCTION ==========
+      function handleLogout() {
+        sessionStorage.removeItem('adminLoggedIn');
+        isLoggedIn = false;
+        showLogin();
+        showToast('👋 Logged out successfully');
       }
-      const hashStr = Math.abs(hash).toString(36).substring(0, 8);
-      return `#${hashStr}`;
-    }
 
-    // ========== SHOW TOAST ==========
-    function showToast(message, isError = false) {
-      const existingToast = document.querySelector('.toast-message');
-      if (existingToast) {
-        existingToast.remove();
+      // ========== GENERATE HASH ==========
+      function generateHash(url) {
+        let hash = 0;
+        for (let i = 0; i < url.length; i++) {
+          const char = url.charCodeAt(i);
+          hash = ((hash << 5) - hash) + char;
+          hash = hash & hash;
+        }
+        const hashStr = Math.abs(hash).toString(36).substring(0, 8);
+        return `#${hashStr}`;
       }
-      
-      const toast = document.createElement('div');
-      toast.className = 'toast-message' + (isError ? ' error' : '');
-      toast.textContent = message;
-      document.body.appendChild(toast);
-      
-      setTimeout(() => {
-        toast.style.animation = 'toastSlideDown 0.3s ease';
+
+      // ========== SHOW TOAST ==========
+      function showToast(message, isError = false) {
+        const existingToast = document.querySelector('.toast-message');
+        if (existingToast) {
+          existingToast.remove();
+        }
+        
+        const toast = document.createElement('div');
+        toast.className = 'toast-message' + (isError ? ' error' : '');
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
         setTimeout(() => {
-          toast.remove();
-        }, 300);
-      }, 3000);
-    }
+          toast.style.animation = 'toastSlideDown 0.3s ease';
+          setTimeout(() => {
+            toast.remove();
+          }, 300);
+        }, 3000);
+      }
 
-    // ========== DEPLOY CONFIRMATION POPUP ==========
-    function showConfirmPopup(url) {
-      pendingUrl = url;
-      confirmUrlDisplay.textContent = url;
-      
-      selectedType = 'treat1';
-      const optionBtns = confirmOptions.querySelectorAll('.option-btn');
-      optionBtns.forEach(btn => {
-        btn.classList.remove('active');
-        if (btn.dataset.type === 'treat1') {
-          btn.classList.add('active');
+      // ========== DEPLOY CONFIRMATION POPUP ==========
+      function showConfirmPopup(url) {
+        pendingUrl = url;
+        confirmUrlDisplay.textContent = url;
+        
+        selectedType = 'treat1';
+        const optionBtns = confirmOptions.querySelectorAll('.option-btn');
+        optionBtns.forEach(btn => {
+          btn.classList.remove('active');
+          if (btn.dataset.type === 'treat1') {
+            btn.classList.add('active');
+          }
+        });
+        
+        confirmOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeConfirmPopup() {
+        confirmOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      // ========== DEPLOY LINK ==========
+      function deployLinkWithType(url, type) {
+        const hash = generateHash(url);
+        const linkId = database.ref('treat_links').push().key;
+        
+        const linkData = {
+          url: url,
+          hash: hash,
+          type: type,
+          clicks: 0,
+          createdAt: firebase.database.ServerValue.TIMESTAMP
+        };
+        
+        database.ref('treat_links/' + linkId).set(linkData)
+          .then(() => {
+            const typeNames = {
+              'treat1': 'Treat 1 (₱1,500)',
+              'treat2': 'Treat 2 (₱3,000)'
+            };
+            showToast(`✅ Link deployed successfully for ${typeNames[type] || type}!`);
+            linkInput.value = '';
+            closeConfirmPopup();
+          })
+          .catch((error) => {
+            showToast('❌ Error deploying link: ' + error.message, true);
+            closeConfirmPopup();
+          });
+      }
+
+      // ========== DEPLOY BUTTON CLICK ==========
+      deployBtn.addEventListener('click', function() {
+        const url = linkInput.value.trim();
+        
+        if (!url) {
+          showToast('⚠️ Please enter a valid URL', true);
+          return;
+        }
+        
+        try {
+          new URL(url);
+        } catch {
+          showToast('⚠️ Please enter a valid URL format (include https://)', true);
+          return;
+        }
+        
+        showConfirmPopup(url);
+      });
+
+      linkInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          deployBtn.click();
         }
       });
-      
-      confirmOverlay.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
 
-    function closeConfirmPopup() {
-      confirmOverlay.classList.remove('active');
-      document.body.style.overflow = '';
-    }
+      // ========== CONFIRM POPUP EVENTS ==========
+      confirmClose.addEventListener('click', closeConfirmPopup);
 
-    // ========== DEPLOY LINK ==========
-    function deployLinkWithType(url, type) {
-      const hash = generateHash(url);
-      const linkId = database.ref('treat_links').push().key;
-      
-      const linkData = {
-        url: url,
-        hash: hash,
-        type: type,
-        clicks: 0,
-        createdAt: firebase.database.ServerValue.TIMESTAMP
-      };
-      
-      database.ref('treat_links/' + linkId).set(linkData)
-        .then(() => {
+      confirmOverlay.addEventListener('click', function(e) {
+        if (e.target === this) {
+          closeConfirmPopup();
+        }
+      });
+
+      const optionBtns = confirmOptions.querySelectorAll('.option-btn');
+      optionBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          optionBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          selectedType = this.dataset.type;
+        });
+      });
+
+      confirmDeployBtn.addEventListener('click', function() {
+        if (!pendingUrl) {
+          showToast('⚠️ No URL to deploy', true);
+          return;
+        }
+        deployLinkWithType(pendingUrl, selectedType);
+      });
+
+      // ========== DELETE LINK ==========
+      function deleteLink(linkId) {
+        if (!confirm('Are you sure you want to delete this link?')) return;
+        
+        database.ref('treat_links/' + linkId).remove()
+          .then(() => {
+            showToast('🗑️ Link deleted successfully');
+          })
+          .catch((error) => {
+            showToast('❌ Error deleting link: ' + error.message, true);
+          });
+      }
+
+      // ========== LOAD LINKS ==========
+      function loadLinks() {
+        database.ref('treat_links').orderByChild('createdAt').on('value', (snapshot) => {
+          const links = snapshot.val();
+          const linksListEl = document.getElementById('linksList');
+          let totalLinks = 0;
+          
+          if (!links) {
+            linksListEl.innerHTML = `
+              <div class="empty-state">
+                <span class="empty-icon">🔗</span>
+                <p>No links deployed yet</p>
+                <span class="empty-sub">Add a link using the form above</span>
+              </div>
+            `;
+            linkCountEl.textContent = '0 links';
+            return;
+          }
+          
+          let html = '';
+          const linkIds = Object.keys(links);
+          const reversedIds = linkIds.reverse();
+          
           const typeNames = {
             'treat1': 'Treat 1 (₱1,500)',
             'treat2': 'Treat 2 (₱3,000)'
           };
-          showToast(`✅ Link deployed successfully for ${typeNames[type] || type}!`);
-          linkInput.value = '';
-          closeConfirmPopup();
-        })
-        .catch((error) => {
-          showToast('❌ Error deploying link: ' + error.message, true);
-          closeConfirmPopup();
-        });
-    }
-
-    // ========== DEPLOY BUTTON CLICK ==========
-    deployBtn.addEventListener('click', function() {
-      const url = linkInput.value.trim();
-      
-      if (!url) {
-        showToast('⚠️ Please enter a valid URL', true);
-        return;
-      }
-      
-      try {
-        new URL(url);
-      } catch {
-        showToast('⚠️ Please enter a valid URL format (include https://)', true);
-        return;
-      }
-      
-      showConfirmPopup(url);
-    });
-
-    linkInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        deployBtn.click();
-      }
-    });
-
-    // ========== CONFIRM POPUP EVENTS ==========
-    confirmClose.addEventListener('click', closeConfirmPopup);
-
-    confirmOverlay.addEventListener('click', function(e) {
-      if (e.target === this) {
-        closeConfirmPopup();
-      }
-    });
-
-    const optionBtns = confirmOptions.querySelectorAll('.option-btn');
-    optionBtns.forEach(btn => {
-      btn.addEventListener('click', function() {
-        optionBtns.forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        selectedType = this.dataset.type;
-      });
-    });
-
-    confirmDeployBtn.addEventListener('click', function() {
-      if (!pendingUrl) {
-        showToast('⚠️ No URL to deploy', true);
-        return;
-      }
-      deployLinkWithType(pendingUrl, selectedType);
-    });
-
-    // ========== DELETE LINK ==========
-    function deleteLink(linkId) {
-      if (!confirm('Are you sure you want to delete this link?')) return;
-      
-      database.ref('treat_links/' + linkId).remove()
-        .then(() => {
-          showToast('🗑️ Link deleted successfully');
-        })
-        .catch((error) => {
-          showToast('❌ Error deleting link: ' + error.message, true);
-        });
-    }
-
-    // ========== LOAD LINKS ==========
-    function loadLinks() {
-      database.ref('treat_links').orderByChild('createdAt').on('value', (snapshot) => {
-        const links = snapshot.val();
-        const linksListEl = document.getElementById('linksList');
-        let totalLinks = 0;
-        
-        if (!links) {
-          linksListEl.innerHTML = `
-            <div class="empty-state">
-              <span class="empty-icon">🔗</span>
-              <p>No links deployed yet</p>
-              <span class="empty-sub">Add a link using the form above</span>
-            </div>
-          `;
-          linkCountEl.textContent = '0 links';
-          return;
-        }
-        
-        let html = '';
-        const linkIds = Object.keys(links);
-        const reversedIds = linkIds.reverse();
-        
-        const typeNames = {
-          'treat1': 'Treat 1 (₱1,500)',
-          'treat2': 'Treat 2 (₱3,000)'
-        };
-        
-        reversedIds.forEach((id, index) => {
-          const link = links[id];
-          totalLinks++;
           
-          const displayHash = link.hash || generateHash(link.url);
-          const typeName = typeNames[link.type] || link.type || 'Unknown';
-          
-          html += `
-            <div class="link-item" data-id="${id}">
-              <div class="link-info">
-                <span class="link-hash">${displayHash}</span>
-                <span class="link-type">${typeName}</span>
-                <div class="link-clicks">
-                  <span class="click-icon">👆</span>
-                  <span class="click-count">${link.clicks || 0}</span>
-                  <span class="click-label">clicks</span>
+          reversedIds.forEach((id, index) => {
+            const link = links[id];
+            totalLinks++;
+            
+            const displayHash = link.hash || generateHash(link.url);
+            const typeName = typeNames[link.type] || link.type || 'Unknown';
+            
+            html += `
+              <div class="link-item" data-id="${id}">
+                <div class="link-info">
+                  <span class="link-hash">${displayHash}</span>
+                  <span class="link-type">${typeName}</span>
+                  <div class="link-clicks">
+                    <span class="click-icon">👆</span>
+                    <span class="click-count">${link.clicks || 0}</span>
+                    <span class="click-label">clicks</span>
+                  </div>
+                </div>
+                <div class="link-actions">
+                  <button class="delete-btn" onclick="deleteLink('${id}')">
+                    <span class="delete-icon">🗑</span>
+                    Delete
+                  </button>
                 </div>
               </div>
-              <div class="link-actions">
-                <button class="delete-btn" onclick="deleteLink('${id}')">
-                  <span class="delete-icon">🗑</span>
-                  Delete
-                </button>
-              </div>
-            </div>
-          `;
+            `;
+          });
+          
+          linksListEl.innerHTML = html;
+          linkCountEl.textContent = `${totalLinks} links`;
         });
-        
-        linksListEl.innerHTML = html;
-        linkCountEl.textContent = `${totalLinks} links`;
-      });
-    }
+      }
 
-    // ========== EVENT LISTENERS ==========
-    setupForm.addEventListener('submit', handleSetup);
-    loginForm.addEventListener('submit', handleLogin);
-    logoutBtn.addEventListener('click', handleLogout);
+      // ========== EVENT LISTENERS ==========
+      loginForm.addEventListener('submit', handleLogin);
+      logoutBtn.addEventListener('click', handleLogout);
 
-    // ========== INITIALIZE ==========
-    checkLoginStatus();
+      // ========== INITIALIZE ==========
+      checkLoginStatus();
 
-    // Make deleteLink available globally
-    window.deleteLink = deleteLink;
-    
-    console.log('✅ Admin panel initialized successfully');
-  });
-</script>
+      // Make deleteLink available globally
+      window.deleteLink = deleteLink;
+      
+      console.log('✅ Admin panel initialized successfully');
+    });
+  </script>
 </body>
 </html>
