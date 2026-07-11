@@ -478,12 +478,14 @@ body::before {
   font-weight: 700;
   font-size: 0.65rem;
   color: #ffffff;
-  cursor: pointer;
+  cursor: pointer !important;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   gap: 6px;
-  pointer-events: auto;
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 10;
 }
 
 .claim-btn:hover {
@@ -500,6 +502,7 @@ body::before {
   height: 20px;
   object-fit: contain;
   display: block;
+  pointer-events: none;
 }
 
 .balance-amount {
