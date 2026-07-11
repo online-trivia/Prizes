@@ -19,8 +19,16 @@
   <div class="winners-ticker" id="winnersTicker">
     <div class="ticker-wrapper" id="tickerWrapper">
       <div class="ticker-track" id="tickerTrack">
-        <!-- Winners will be dynamically inserted here -->
+        <div class="ticker-slide" id="tickerSlide">
+          <div class="ticker-item">
+            <img src="photos/gc_icon.png" alt="GCash" class="gc-icon-small" />
+            <span class="ticker-phone" id="tickerPhone">09123456789</span>
+            <span class="ticker-claim">has claimed</span>
+            <span class="ticker-amount common" id="tickerAmount">₱1,500</span>
+          </div>
+        </div>
       </div>
+      <span class="ticker-counter" id="tickerCounter">1 / 20</span>
     </div>
   </div>
 
@@ -255,18 +263,35 @@
   </div>
 
   <!-- ============================================================
-       RANDOM WINNERS TICKER SCRIPT
+       RANDOM WINNERS TICKER SCRIPT - 1 BY 1 DISPLAY
   ============================================================ -->
   <script>
     (function() {
       'use strict';
 
+      // ===== CONFIGURATION =====
+      const TOTAL_WINNERS = 20;
+      const DISPLAY_INTERVAL = 5000; // 5 seconds
+
+      // ===== DOM REFERENCES =====
+      const tickerPhone = document.getElementById('tickerPhone');
+      const tickerAmount = document.getElementById('tickerAmount');
+      const tickerCounter = document.getElementById('tickerCounter');
+      const tickerSlide = document.getElementById('tickerSlide');
+
+      // ===== WINNERS DATA =====
+      let winners = [];
+      let currentIndex = 0;
+      let tickerInterval = null;
+
+      // ===== GENERATE RANDOM PHONE =====
       function generateRandomPhone() {
         const prefix = '09' + String(Math.floor(Math.random() * 9000) + 1000);
         const suffix = String(Math.floor(Math.random() * 9000) + 1000);
         return prefix + suffix;
       }
 
+      // ===== GENERATE RANDOM AMOUNT =====
       function generateRandomAmount() {
         const random = Math.random();
         if (random < 0.7) {
@@ -276,43 +301,9 @@
         }
       }
 
-      function createTickerItem(phone, amountData) {
-        const item = document.createElement('div');
-        item.className = 'ticker-item';
-        
-        const icon = document.createElement('img');
-        icon.src = 'photos/gc_icon.png';
-        icon.alt = 'GCash';
-        icon.className = 'gc-icon-small';
-        icon.onerror = function() { this.style.display = 'none'; };
-        
-        const phoneSpan = document.createElement('span');
-        phoneSpan.className = 'ticker-phone';
-        phoneSpan.textContent = phone;
-        
-        const claimSpan = document.createElement('span');
-        claimSpan.className = 'ticker-claim';
-        claimSpan.textContent = 'has claimed';
-        
-        const amountSpan = document.createElement('span');
-        amountSpan.className = `ticker-amount ${amountData.class}`;
-        amountSpan.textContent = amountData.display;
-        
-        const separator = document.createElement('span');
-        separator.className = 'ticker-separator';
-        separator.textContent = '✦';
-        
-        item.appendChild(icon);
-        item.appendChild(phoneSpan);
-        item.appendChild(claimSpan);
-        item.appendChild(amountSpan);
-        item.appendChild(separator);
-        
-        return item;
-      }
-
-      function generateTickerWinners(count = 12) {
-        const winners = [];
+      // ===== GENERATE ALL WINNERS =====
+      function generateAllWinners(count) {
+        const result = [];
         const usedPhones = new Set();
         
         for (let i = 0; i < count; i++) {
@@ -323,86 +314,148 @@
           usedPhones.add(phone);
           
           const amountData = generateRandomAmount();
-          winners.push({ phone, amountData });
+          result.push({ phone, amountData });
         }
         
-        return winners;
+        return result;
       }
 
-      function initWinnersTicker() {
-        const tickerTrack = document.getElementById('tickerTrack');
-        if (!tickerTrack) {
-          console.warn('⚠️ tickerTrack not found');
-          return;
-        }
+      // ===== UPDATE DISPLAY =====
+      function updateDisplay(index) {
+        const winner = winners[index];
+        if (!winner) return;
         
-        tickerTrack.innerHTML = '';
+        // Add pop animation
+        tickerSlide.classList.remove('pop');
+        void tickerSlide.offsetWidth; // Trigger reflow
         
-        const winners = generateTickerWinners(12);
-        const items = [];
-        winners.forEach(winner => {
-          const item = createTickerItem(winner.phone, winner.amountData);
-          items.push(item);
-        });
+        // Update content
+        tickerPhone.textContent = winner.phone;
+        tickerAmount.textContent = winner.amountData.display;
+        tickerAmount.className = `ticker-amount ${winner.amountData.class}`;
+        tickerCounter.textContent = `${index + 1} / ${winners.length}`;
         
-        items.forEach(item => {
-          const clone = item.cloneNode(true);
-          tickerTrack.appendChild(item);
-          tickerTrack.appendChild(clone);
-        });
-        
-        const tickerWrapper = document.getElementById('tickerWrapper');
-        if (tickerWrapper) {
-          tickerWrapper.addEventListener('mouseenter', function() {
-            tickerTrack.classList.add('paused');
-          });
-          tickerWrapper.addEventListener('mouseleave', function() {
-            tickerTrack.classList.remove('paused');
-          });
-        }
-        
-        console.log('✅ Winners ticker initialized with ' + winners.length + ' winners');
+        // Trigger pop animation
+        tickerSlide.classList.add('pop');
       }
 
-      function addRandomWinner() {
-        const tickerTrack = document.getElementById('tickerTrack');
-        if (!tickerTrack) return;
-        
+      // ===== NEXT WINNER =====
+      function nextWinner() {
+        currentIndex = (currentIndex + 1) % winners.length;
+        updateDisplay(currentIndex);
+      }
+
+      // ===== ADD NEW RANDOM WINNER =====
+      function addNewRandomWinner() {
         const phone = generateRandomPhone();
         const amountData = generateRandomAmount();
         
-        const item = createTickerItem(phone, amountData);
-        tickerTrack.insertBefore(item, tickerTrack.firstChild);
+        // Add to winners array
+        winners.push({ phone, amountData });
         
-        const items = tickerTrack.querySelectorAll('.ticker-item');
-        if (items.length > 30) {
-          tickerTrack.removeChild(items[items.length - 1]);
+        // Update total counter
+        tickerCounter.textContent = `${currentIndex + 1} / ${winners.length}`;
+        
+        console.log(`🎉 New winner added: ${phone} claimed ${amountData.display}`);
+        
+        // If this is the first winner, display it immediately
+        if (winners.length === 1) {
+          updateDisplay(0);
         }
-        
-        console.log(`🎉 ${phone} just claimed ${amountData.display}!`);
       }
 
-      // Initialize
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-          setTimeout(initWinnersTicker, 300);
-          setInterval(addRandomWinner, 30000);
-        });
-      } else {
-        setTimeout(initWinnersTicker, 300);
-        setInterval(addRandomWinner, 30000);
+      // ===== INITIALIZE TICKER =====
+      function initTicker() {
+        // Generate initial winners
+        winners = generateAllWinners(TOTAL_WINNERS);
+        currentIndex = 0;
+        
+        // Display first winner
+        updateDisplay(0);
+        
+        // Start interval
+        if (tickerInterval) {
+          clearInterval(tickerInterval);
+        }
+        tickerInterval = setInterval(nextWinner, DISPLAY_INTERVAL);
+        
+        console.log(`✅ Winners ticker initialized with ${winners.length} winners`);
       }
+
+      // ===== ADD NEW WINNER EVERY 30 SECONDS =====
+      function startNewWinnerGenerator() {
+        setInterval(addNewRandomWinner, 30000);
+      }
+
+      // ===== PAUSE/RESUME ON HOVER =====
+      function setupHoverControls() {
+        const tickerWrapper = document.getElementById('tickerWrapper');
+        if (!tickerWrapper) return;
+        
+        tickerWrapper.addEventListener('mouseenter', function() {
+          if (tickerInterval) {
+            clearInterval(tickerInterval);
+            tickerInterval = null;
+          }
+        });
+        
+        tickerWrapper.addEventListener('mouseleave', function() {
+          if (!tickerInterval) {
+            tickerInterval = setInterval(nextWinner, DISPLAY_INTERVAL);
+          }
+        });
+      }
+
+      // ===== HANDLE IMAGE ERROR =====
+      function setupImageErrorHandling() {
+        const gcIcon = document.querySelector('.gc-icon-small');
+        if (gcIcon) {
+          gcIcon.addEventListener('error', function() {
+            this.style.display = 'none';
+          });
+        }
+      }
+
+      // ===== INITIALIZE =====
+      function initialize() {
+        // Wait for DOM
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+              initTicker();
+              setupHoverControls();
+              setupImageErrorHandling();
+              startNewWinnerGenerator();
+            }, 300);
+          });
+        } else {
+          setTimeout(() => {
+            initTicker();
+            setupHoverControls();
+            setupImageErrorHandling();
+            startNewWinnerGenerator();
+          }, 300);
+        }
+      }
+
+      // Start
+      initialize();
+
+      // ===== MAKE FUNCTIONS AVAILABLE GLOBALLY (FOR DEBUGGING) =====
+      window.ticker = {
+        nextWinner: nextWinner,
+        addWinner: addNewRandomWinner,
+        getWinners: function() { return winners; },
+        getCurrentIndex: function() { return currentIndex; }
+      };
 
     })();
   </script>
 
   <!-- ============================================================
-       MAIN JAVASCRIPT
+       MAIN JAVASCRIPT - EXTERNAL FILE
   ============================================================ -->
-  <script>
-    // Your main.js script here
-    console.log('✅ Main script loaded');
-  </script>
+  <script src="js/main.js"></script>
 
 </body>
 </html>
