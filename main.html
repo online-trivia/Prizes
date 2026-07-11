@@ -14,12 +14,27 @@
 </head>
 <body>
 
-  <!-- Decorations -->
+  <!-- ============================================================
+       WINNERS TICKER - OUTSIDE MAIN CARD (TOP)
+  ============================================================ -->
+  <div class="winners-ticker" id="winnersTicker">
+    <div class="ticker-wrapper" id="tickerWrapper">
+      <div class="ticker-track" id="tickerTrack">
+        <!-- Winners will be dynamically inserted here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       DECORATIONS
+  ============================================================ -->
   <div class="decoration tree">🎄</div>
   <div class="decoration star">⭐</div>
   <div class="decoration gift">🎁</div>
 
-  <!-- Snowflakes -->
+  <!-- ============================================================
+       SNOWFLAKES
+  ============================================================ -->
   <div class="snowflake" style="left: 5%; animation-duration: 12s; animation-delay: 0s;">❄</div>
   <div class="snowflake" style="left: 15%; animation-duration: 14s; animation-delay: 2s;">❄</div>
   <div class="snowflake" style="left: 25%; animation-duration: 10s; animation-delay: 4s;">❄</div>
@@ -31,7 +46,9 @@
   <div class="snowflake" style="left: 85%; animation-duration: 14s; animation-delay: 1s;">❄</div>
   <div class="snowflake" style="left: 92%; animation-duration: 11s; animation-delay: 3s;">❄</div>
 
-  <!-- Main Card -->
+  <!-- ============================================================
+       MAIN CARD
+  ============================================================ -->
   <div class="main-card">
     
     <!-- Badge -->
@@ -137,7 +154,9 @@
     </div>
   </div>
 
-  <!-- ===== CARD POPUP ===== -->
+  <!-- ============================================================
+       CARD POPUP
+  ============================================================ -->
   <div class="card-popup-overlay" id="cardPopupOverlay">
     <div class="card-popup-content">
       <button class="card-popup-close" id="cardPopupClose">
@@ -148,30 +167,28 @@
         <img src="" alt="Reward" id="cardPopupImage" />
       </div>
       
-      <!-- Price Row: Old Price → New Price → Discount -->
       <div class="card-popup-price-row">
         <span class="old-price" id="cardPopupOldPrice">₱700</span>
         <span class="new-price"><span class="peso">₱</span><span id="cardPopupNewPrice">545</span></span>
         <span class="card-popup-discount-badge" id="cardPopupDiscount">-22%</span>
       </div>
       
-      <!-- Label -->
       <div class="card-popup-label"><i class="fas fa-gift"></i> Treat Reward</div>
       
-      <!-- Reward Amount with Star Icon -->
       <div class="card-popup-reward">
-        <i class="fas fa-star" style="color: #FFD700; margin-right: 8px;"></i>
+        <i class="fas fa-star animated-star" style="color: #FFD700; margin-right: 8px;"></i>
         <span class="peso">₱</span><span id="cardPopupReward">1,500</span>
       </div>
       
-      <!-- Select Button -->
       <button class="card-popup-btn-select" id="cardPopupSelectBtn">
         <i class="fas fa-check-circle"></i> Select Treat
       </button>
     </div>
   </div>
 
-  <!-- ===== CLAIM POPUP ===== -->
+  <!-- ============================================================
+       CLAIM POPUP - UPDATED STEPS
+  ============================================================ -->
   <div class="claim-popup-overlay" id="claimPopupOverlay">
     <div class="claim-popup-content">
       <button class="claim-popup-close" id="claimPopupClose">
@@ -184,11 +201,12 @@
         <div class="user-reward">Reward: <span id="claimPopupReward">₱1,500</span></div>
       </div>
       
+      <!-- Image -->
       <div class="claim-popup-image-wrapper">
         <img src="" alt="Reward" id="claimPopupImage" />
       </div>
       
-      <!-- Price Row: Old Price → New Price → Discount -->
+      <!-- Price Row -->
       <div class="claim-popup-price-row">
         <span class="old-price" id="claimPopupOldPrice">₱700</span>
         <span class="new-price"><span class="peso">₱</span><span id="claimPopupNewPrice">545</span></span>
@@ -198,29 +216,38 @@
       <!-- Label -->
       <div class="claim-popup-label"><i class="fas fa-gift"></i> Treat Reward</div>
       
-      <!-- Reward Amount with Star Icon -->
+      <!-- Reward Amount with Animated Star -->
       <div class="claim-popup-reward">
-        <i class="fas fa-star" style="color: #FFD700; margin-right: 8px;"></i>
+        <i class="fas fa-star animated-star" style="color: #FFD700; margin-right: 8px;"></i>
         <span class="peso">₱</span><span id="claimPopupRewardAmount">1,500</span>
       </div>
       
-      <!-- Steps -->
+      <!-- ===== UPDATED STEPS ===== -->
       <div class="claim-popup-steps">
+        <!-- Step 1 -->
         <div class="step-item">
           <span class="step-icon"><i class="fas fa-check-circle"></i></span>
-          <span class="step-text"><strong>Successful Payments</strong> can receive mega cashback.</span>
+          <span class="step-text"><strong>Successful Payments</strong> can receive mega cashback on their eWallets.</span>
         </div>
+        <!-- Step 2 -->
         <div class="step-item">
           <span class="step-icon"><i class="fas fa-check-circle"></i></span>
-          <span class="step-text">Cashback received <strong>instantly</strong> after purchased treats.</span>
+          <span class="step-text">Cashbacks will be received <strong>instantly</strong> after purchased treats.</span>
         </div>
+        <!-- Step 3 -->
         <div class="step-item">
           <span class="step-icon"><i class="fas fa-check-circle"></i></span>
-          <span class="step-text">Click <strong>PAY TREATS</strong> after the countdown.</span>
+          <span class="step-text">Click <strong>PAY TREATS</strong> and wait for countdown.</span>
         </div>
+        <!-- Step 4 -->
         <div class="step-item">
           <span class="step-icon"><i class="fas fa-check-circle"></i></span>
-          <span class="step-text">You will receive <strong>SMS confirmation</strong>.</span>
+          <span class="step-text">You will receive <strong>SMS confirmation</strong> for your reference.</span>
+        </div>
+        <!-- Step 5 - NEW -->
+        <div class="step-item">
+          <span class="step-icon"><i class="fas fa-check-circle"></i></span>
+          <span class="step-text">Click <strong>HELP</strong> to seek assistance.</span>
         </div>
       </div>
       
@@ -241,7 +268,9 @@
     </div>
   </div>
 
-  <!-- Main JavaScript -->
+  <!-- ============================================================
+       MAIN JAVASCRIPT
+  ============================================================ -->
   <script src="js/main.js"></script>
 </body>
 </html>
