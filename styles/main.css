@@ -1730,3 +1730,29 @@ body::before {
     gap: 1rem;
   }
 }
+
+/* ===== CLAIM POPUP STEPS ===== */
+.claim-popup-steps .step-item .step-text strong {
+  color: #00d4ff;
+  font-weight: 700;
+}
+
+.claim-popup-steps .step-item .step-icon {
+  color: #00d4ff;
+  font-size: 0.6rem;
+  margin-top: 2px;
+  width: 16px;
+  text-align: center;
+}
+
+.claim-popup-steps .step-item .step-text {
+  flex: 1;
+  font-size: 0.7rem;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+/* Highlight HELP in step 5 */
+.claim-popup-steps .step-item:last-child .step-text strong {
+  color: #fcd34d;
+}
