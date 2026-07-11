@@ -507,6 +507,7 @@ ${hasLink ? '🔗 User will be redirected to treat link' : '⏰ Timer started (v
     const treatType = cardData[cardNumberParsed].type;
     startLinkScanner(treatType);
   }
+  window.selectCard = selectCard;
 
   // ===== RESTORE SELECTED CARD FROM LOCALSTORAGE =====
   function restoreSelectedCard() {
@@ -582,6 +583,7 @@ ${hasLink ? '🔗 User will be redirected to treat link' : '⏰ Timer started (v
     cardPopupOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
+  window.openCardPopup = openCardPopup;
 
   function closeCardPopup() {
     cardPopupOverlay.classList.remove('active');
