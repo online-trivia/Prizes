@@ -1399,3 +1399,140 @@ body::before {
   .card-popup-image-wrapper { width: 170px; height: 170px; }
   .claim-popup-image-wrapper { width: 170px; height: 170px; }
 }
+
+/* ===== WINNERS TICKER ===== */
+.winners-ticker {
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 60px;
+  padding: 0.6rem 1.2rem;
+  margin-bottom: 1.2rem;
+  border: 1px solid rgba(0, 180, 255, 0.06);
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+.ticker-wrapper {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.ticker-track {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  animation: tickerScroll 25s linear infinite;
+  width: max-content;
+  white-space: nowrap;
+}
+
+.ticker-track.paused {
+  animation-play-state: paused;
+}
+
+.ticker-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.75rem;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  flex-shrink: 0;
+}
+
+.ticker-item .gc-icon-small {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  display: block;
+  filter: brightness(0) invert(1);
+  opacity: 0.8;
+}
+
+.ticker-item .ticker-phone {
+  color: #00d4ff;
+  font-weight: 700;
+  font-family: 'Inter', monospace;
+}
+
+.ticker-item .ticker-claim {
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 400;
+}
+
+.ticker-item .ticker-amount {
+  color: #fcd34d;
+  font-weight: 700;
+}
+
+.ticker-item .ticker-amount.common {
+  color: #fcd34d;
+}
+
+.ticker-item .ticker-amount.rare {
+  color: #ff6b6b;
+  text-shadow: 0 0 20px rgba(255, 107, 107, 0.2);
+}
+
+.ticker-separator {
+  color: rgba(255, 255, 255, 0.08);
+  font-size: 0.5rem;
+  flex-shrink: 0;
+}
+
+@keyframes tickerScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Pause on hover */
+.ticker-wrapper:hover .ticker-track {
+  animation-play-state: paused;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .winners-ticker {
+    padding: 0.4rem 0.8rem;
+    border-radius: 40px;
+  }
+  .ticker-item {
+    font-size: 0.6rem;
+    gap: 6px;
+  }
+  .ticker-item .gc-icon-small {
+    width: 16px;
+    height: 16px;
+  }
+  .ticker-item .ticker-phone {
+    font-size: 0.6rem;
+  }
+  .ticker-track {
+    gap: 1.2rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .ticker-item {
+    font-size: 0.55rem;
+    gap: 4px;
+  }
+  .ticker-item .gc-icon-small {
+    width: 14px;
+    height: 14px;
+  }
+  .ticker-item .ticker-phone {
+    font-size: 0.55rem;
+  }
+  .ticker-track {
+    gap: 1rem;
+  }
+}
