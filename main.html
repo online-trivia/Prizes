@@ -752,8 +752,8 @@
       background: var(--neon-blue);
     }
 
-    /* ===== FUTURISTIC FINANCE POPUP ===== */
-    .popup-overlay {
+    /* ===== CARD POPUP (Futuristic Finance) ===== */
+    .card-popup-overlay {
       display: none;
       position: fixed;
       top: 0;
@@ -770,21 +770,16 @@
       animation: fadeIn 0.3s ease;
     }
 
-    .popup-overlay.active {
+    .card-popup-overlay.active {
       display: flex;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .popup-content {
-      max-width: 420px;
+    .card-popup-content {
+      max-width: 380px;
       width: 100%;
       background: linear-gradient(145deg, #0a1a3a, #0d2b5e);
-      border-radius: 32px;
-      padding: 2rem 1.8rem 2.2rem;
+      border-radius: 28px;
+      padding: 1.8rem 1.5rem 2rem;
       position: relative;
       box-shadow: 
         0 30px 80px rgba(0, 0, 0, 0.5),
@@ -795,7 +790,7 @@
       overflow: hidden;
     }
 
-    .popup-content::before {
+    .card-popup-content::before {
       content: '';
       position: absolute;
       top: -50%;
@@ -809,37 +804,23 @@
       z-index: 0;
     }
 
-    /* Holographic connection lines */
-    .popup-content::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        linear-gradient(90deg, transparent 0%, rgba(0, 212, 255, 0.02) 20%, transparent 40%, rgba(0, 212, 255, 0.02) 60%, transparent 80%, rgba(0, 212, 255, 0.02) 100%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .popup-content > * {
+    .card-popup-content > * {
       position: relative;
       z-index: 1;
     }
 
-    .popup-close {
+    .card-popup-close {
       position: absolute;
-      top: 14px;
-      right: 16px;
-      width: 36px;
-      height: 36px;
+      top: 12px;
+      right: 14px;
+      width: 32px;
+      height: 32px;
       background: rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(4px);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 50%;
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.85rem;
       cursor: pointer;
       transition: all 0.3s ease;
       display: flex;
@@ -848,156 +829,458 @@
       z-index: 10;
     }
 
-    .popup-close:hover {
+    .card-popup-close:hover {
       background: rgba(239, 68, 68, 0.2);
       border-color: rgba(239, 68, 68, 0.3);
       color: #ffffff;
       transform: rotate(90deg);
     }
 
-    .popup-close:active {
-      transform: rotate(90deg) scale(0.9);
-    }
-
-    .popup-image-wrapper {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      border-radius: 20px;
+    .card-popup-image-wrapper {
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 1rem;
+      border-radius: 16px;
       overflow: hidden;
-      margin-bottom: 1.2rem;
-      box-shadow: 
-        0 8px 30px rgba(0, 0, 0, 0.3),
-        0 0 40px rgba(0, 212, 255, 0.05);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
       border: 1px solid rgba(0, 212, 255, 0.08);
     }
 
-    .popup-image-wrapper img {
+    .card-popup-image-wrapper img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
     }
 
-    .popup-badge-row {
+    .card-popup-badge-row {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
-      margin-bottom: 0.6rem;
+      gap: 12px;
+      margin-bottom: 0.4rem;
     }
 
-    .popup-badge {
+    .card-popup-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       background: rgba(255, 215, 0, 0.1);
       color: #ffd700;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       font-weight: 700;
-      padding: 0.3rem 0.8rem;
+      padding: 0.2rem 0.8rem;
       border-radius: 30px;
       border: 1px solid rgba(255, 215, 0, 0.1);
     }
 
-    .popup-badge i {
-      font-size: 0.7rem;
-    }
-
-    .popup-discount {
+    .card-popup-discount {
       background: rgba(239, 68, 68, 0.2);
       color: #fca5a5;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       font-weight: 700;
-      padding: 0.3rem 0.8rem;
+      padding: 0.2rem 0.8rem;
       border-radius: 30px;
       border: 1px solid rgba(239, 68, 68, 0.1);
     }
 
-    .popup-price-row {
+    .card-popup-price-row {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 12px;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.8rem;
     }
 
-    .popup-price-row .old-price {
-      font-size: 0.85rem;
+    .card-popup-price-row .old-price {
+      font-size: 0.75rem;
       text-decoration: line-through;
       color: rgba(255, 255, 255, 0.35);
       font-weight: 600;
     }
 
-    .popup-price-row .new-price {
-      font-size: 2rem;
+    .card-popup-price-row .new-price {
+      font-size: 1.6rem;
       font-weight: 900;
       color: #ffd700;
     }
 
-    .popup-price-row .new-price .peso {
-      font-size: 1.2rem;
+    .card-popup-price-row .new-price .peso {
+      font-size: 1rem;
     }
 
-    .popup-label {
-      color: rgba(255, 255, 255, 0.4);
-      font-size: 0.6rem;
+    .card-popup-label {
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 0.55rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.08em;
+      text-align: center;
       margin-bottom: 0.8rem;
     }
 
-    .popup-btn-select {
+    .card-popup-btn-select {
       width: 100%;
       background: linear-gradient(145deg, #00d4ff, #0099cc);
       border: none;
-      border-radius: 16px;
-      padding: 1rem 0.5rem;
+      border-radius: 14px;
+      padding: 0.8rem 0.5rem;
       font-family: 'Inter', sans-serif;
       font-weight: 800;
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: #ffffff;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.15);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 8px;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      margin-top: 0.5rem;
+      margin-top: 0.3rem;
     }
 
-    .popup-btn-select:hover {
+    .card-popup-btn-select:hover {
       background: linear-gradient(145deg, #00e5ff, #00aadd);
-      box-shadow: 0 0 50px rgba(0, 212, 255, 0.3);
+      box-shadow: 0 0 50px rgba(0, 212, 255, 0.25);
       transform: scale(1.02);
     }
 
-    .popup-btn-select:active {
+    .card-popup-btn-select:active {
       transform: scale(0.96);
     }
 
-    .popup-btn-select i {
+    .card-popup-btn-select i {
       color: #fcd34d;
     }
 
-    .popup-btn-select.selected-popup {
+    .card-popup-btn-select.selected-popup {
       background: linear-gradient(145deg, #4a5568, #2d3748);
       box-shadow: none;
     }
 
-    .popup-btn-select.selected-popup:hover {
+    .card-popup-btn-select.selected-popup:hover {
       background: linear-gradient(145deg, #4a5568, #2d3748);
       transform: none;
       box-shadow: none;
     }
 
-    .popup-btn-select.selected-popup i {
+    .card-popup-btn-select.selected-popup i {
       color: #a0aec0;
     }
 
+    /* ===== CLAIM NOW POPUP (Light Theme) ===== */
+    .claim-popup-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .claim-popup-overlay.active {
+      display: flex;
+    }
+
+    .claim-popup-content {
+      max-width: 380px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 1.8rem 1.5rem 2rem;
+      position: relative;
+      box-shadow: 
+        0 30px 60px rgba(0, 0, 0, 0.08),
+        0 0 40px rgba(0, 0, 0, 0.02);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .claim-popup-close {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      width: 32px;
+      height: 32px;
+      background: rgba(0, 0, 0, 0.03);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: 50%;
+      color: #94a3b8;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .claim-popup-close:hover {
+      background: rgba(239, 68, 68, 0.08);
+      border-color: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+      transform: rotate(90deg);
+    }
+
+    .claim-popup-user-info {
+      text-align: center;
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    .claim-popup-user-info .user-phone {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #0f172a;
+    }
+
+    .claim-popup-user-info .user-phone i {
+      color: #0d9488;
+      margin-right: 6px;
+    }
+
+    .claim-popup-user-info .user-reward {
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 0.7rem;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    .claim-popup-user-info .user-reward span {
+      color: #0d9488;
+      font-weight: 700;
+    }
+
+    .claim-popup-image-wrapper {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 1rem;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    .claim-popup-image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .claim-popup-badge-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 0.2rem;
+    }
+
+    .claim-popup-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(13, 148, 136, 0.08);
+      color: #0d9488;
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 0.2rem 0.8rem;
+      border-radius: 30px;
+    }
+
+    .claim-popup-discount {
+      background: rgba(239, 68, 68, 0.08);
+      color: #ef4444;
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 0.2rem 0.8rem;
+      border-radius: 30px;
+    }
+
+    .claim-popup-price-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 0.8rem;
+    }
+
+    .claim-popup-price-row .old-price {
+      font-size: 0.7rem;
+      text-decoration: line-through;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .claim-popup-price-row .new-price {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #0d9488;
+    }
+
+    .claim-popup-price-row .new-price .peso {
+      font-size: 1rem;
+    }
+
+    /* Steps */
+    .claim-popup-steps {
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 0.6rem 0.8rem;
+      margin-bottom: 0.8rem;
+      border: 1px solid rgba(0, 0, 0, 0.03);
+    }
+
+    .claim-popup-steps .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 3px 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      color: #475569;
+      line-height: 1.4;
+    }
+
+    .claim-popup-steps .step-item .step-icon {
+      color: #0d9488;
+      font-size: 0.55rem;
+      margin-top: 2px;
+      width: 14px;
+      text-align: center;
+    }
+
+    .claim-popup-steps .step-item .step-text {
+      flex: 1;
+    }
+
+    .claim-popup-steps .step-item .step-text strong {
+      color: #0f172a;
+    }
+
+    /* Help Widget - Light */
+    .claim-popup-help-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.8rem;
+      padding-top: 0.3rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    .claim-popup-help-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.55rem;
+      font-weight: 600;
+      color: #94a3b8;
+      letter-spacing: 0.04em;
+    }
+
+    .claim-popup-help-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.55rem;
+      font-weight: 700;
+      color: #0d9488;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 3px 10px;
+      border-radius: 30px;
+      background: rgba(13, 148, 136, 0.06);
+      border: 1px solid rgba(13, 148, 136, 0.08);
+    }
+
+    .claim-popup-help-link:hover {
+      background: rgba(13, 148, 136, 0.12);
+      transform: scale(1.02);
+    }
+
+    .claim-popup-help-link img {
+      width: 16px;
+      height: 16px;
+      display: block;
+    }
+
+    /* PROCEED Button - Light Theme */
+    .claim-popup-btn-proceed {
+      width: 100%;
+      background: linear-gradient(145deg, #00d4ff, #0099cc);
+      border: none;
+      border-radius: 14px;
+      padding: 0.8rem 0.5rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: #ffffff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .claim-popup-btn-proceed:hover {
+      background: linear-gradient(145deg, #00e5ff, #00aadd);
+      box-shadow: 0 0 50px rgba(0, 212, 255, 0.2);
+      transform: scale(1.02);
+    }
+
+    .claim-popup-btn-proceed:active {
+      transform: scale(0.96);
+    }
+
+    .claim-popup-btn-proceed i {
+      color: #ffffff;
+    }
+
+    .claim-popup-btn-proceed.disabled {
+      background: #cbd5e1;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none !important;
+    }
+
+    .claim-popup-btn-proceed.disabled:hover {
+      background: #cbd5e1;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .claim-popup-btn-proceed .timer-display {
+      color: #ef4444;
+      font-weight: 900;
+      font-size: 0.95rem;
+      margin-left: 6px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
     @keyframes slideUp {
-      from { transform: translateY(30px) scale(0.96); opacity: 0; }
+      from { transform: translateY(20px) scale(0.96); opacity: 0; }
       to { transform: translateY(0) scale(1); opacity: 1; }
     }
 
@@ -1051,9 +1334,15 @@
       .claim-btn { font-size: 0.55rem; padding: 0.3rem 0.8rem; }
       .claim-btn .gcash-icon-small { width: 16px; height: 16px; }
       
-      .popup-content { padding: 1.5rem 1.2rem 1.8rem; }
-      .popup-price-row .new-price { font-size: 1.6rem; }
-      .popup-btn-select { font-size: 0.85rem; padding: 0.8rem 0.5rem; }
+      .card-popup-content { padding: 1.5rem 1.2rem 1.8rem; }
+      .card-popup-image-wrapper { width: 110px; height: 110px; }
+      .card-popup-price-row .new-price { font-size: 1.3rem; }
+      .card-popup-btn-select { font-size: 0.8rem; padding: 0.7rem 0.5rem; }
+      
+      .claim-popup-content { padding: 1.5rem 1.2rem 1.8rem; }
+      .claim-popup-image-wrapper { width: 100px; height: 100px; }
+      .claim-popup-price-row .new-price { font-size: 1.3rem; }
+      .claim-popup-btn-proceed { font-size: 0.8rem; padding: 0.7rem 0.5rem; }
       
       .decoration { display: none; }
     }
@@ -1066,8 +1355,9 @@
       .thought-bubble .message-content { font-size: 0.72rem; }
       .thought-bubble { min-height: 46px; padding: 0.5rem 0.8rem; }
       .balance-amount { font-size: 1.8rem; }
-      .popup-content { padding: 1.2rem 1rem 1.5rem; }
-      .popup-price-row .new-price { font-size: 1.3rem; }
+      
+      .card-popup-image-wrapper { width: 90px; height: 90px; }
+      .claim-popup-image-wrapper { width: 80px; height: 80px; }
     }
   </style>
 </head>
@@ -1151,7 +1441,7 @@
     <div class="cards-grid">
       <!-- Card 1: 1500 -->
       <div class="card-item" id="card1" data-amount="1500.00">
-        <div class="card-image-wrapper" onclick="openPopup(1)">
+        <div class="card-image-wrapper" onclick="openCardPopup(1)">
           <img src="photos/1500iva.png" alt="Reward 1500" />
         </div>
         <span class="card-badge"><i class="fas fa-star"></i> ₱1,500</span>
@@ -1168,7 +1458,7 @@
 
       <!-- Card 2: 3000 -->
       <div class="card-item" id="card2" data-amount="3000.00">
-        <div class="card-image-wrapper" onclick="openPopup(2)">
+        <div class="card-image-wrapper" onclick="openCardPopup(2)">
           <img src="photos/3000iva.png" alt="Reward 3000" />
         </div>
         <span class="card-badge"><i class="fas fa-star"></i> ₱3,000</span>
@@ -1189,46 +1479,71 @@
     </div>
   </div>
 
-  <!-- ===== CLAIM NOW POPUP ===== -->
-  <div class="popup-overlay" id="claimPopupOverlay" onclick="if(event.target===this) closeClaimPopup()">
-    <div class="popup-content">
-      <button class="popup-close" onclick="closeClaimPopup()">
+  <!-- ===== CARD POPUP ===== -->
+  <div class="card-popup-overlay" id="cardPopupOverlay" onclick="if(event.target===this) closeCardPopup()">
+    <div class="card-popup-content">
+      <button class="card-popup-close" onclick="closeCardPopup()">
         <i class="fas fa-times"></i>
       </button>
       
-      <!-- User Info -->
-      <div class="popup-user-info">
-        <div class="popup-user-avatar">👤</div>
-        <div class="popup-user-details">
-          <div class="user-name" id="popupUserName">Ivana</div>
-          <div class="user-phone" id="popupUserPhone">📱 09171234567</div>
-          <div class="user-card" id="popupUserCard"><i class="fas fa-gift"></i> <span id="popupCardBadge">₱1,500</span> Reward</div>
-        </div>
+      <div class="card-popup-image-wrapper">
+        <img src="" alt="Reward" id="cardPopupImage" />
       </div>
       
-      <div class="popup-image-wrapper">
-        <img src="photos/1500iva.png" alt="Reward" id="claimPopupImage" />
+      <div class="card-popup-badge-row">
+        <span class="card-popup-badge"><i class="fas fa-star"></i> <span id="cardPopupBadge">₱1,500</span></span>
+        <span class="card-popup-discount" id="cardPopupDiscount">-22%</span>
       </div>
       
-      <div class="popup-badge-row">
-        <span class="popup-badge"><i class="fas fa-star"></i> <span id="claimPopupBadge">₱1,500</span></span>
-        <span class="popup-discount" id="claimPopupDiscount">-22%</span>
+      <div class="card-popup-price-row">
+        <span class="old-price" id="cardPopupOldPrice">₱700</span>
+        <span class="new-price"><span class="peso">₱</span><span id="cardPopupNewPrice">545</span></span>
       </div>
       
-      <div class="popup-price-row">
+      <div class="card-popup-label"><i class="fas fa-gift"></i> Treat Reward</div>
+      
+      <button class="card-popup-btn-select" id="cardPopupSelectBtn" onclick="cardPopupSelectCard()">
+        <i class="fas fa-check-circle"></i> Select Treat
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== CLAIM NOW POPUP (Light Theme) ===== -->
+  <div class="claim-popup-overlay" id="claimPopupOverlay" onclick="if(event.target===this) closeClaimPopup()">
+    <div class="claim-popup-content">
+      <button class="claim-popup-close" onclick="closeClaimPopup()">
+        <i class="fas fa-times"></i>
+      </button>
+      
+      <!-- User Info - Centered -->
+      <div class="claim-popup-user-info">
+        <div class="user-phone"><i class="fas fa-phone"></i> <span id="claimPopupPhone">09171234567</span></div>
+        <div class="user-reward">Reward: <span id="claimPopupReward">₱1,500</span></div>
+      </div>
+      
+      <div class="claim-popup-image-wrapper">
+        <img src="" alt="Reward" id="claimPopupImage" />
+      </div>
+      
+      <div class="claim-popup-badge-row">
+        <span class="claim-popup-badge"><i class="fas fa-star"></i> <span id="claimPopupBadge">₱1,500</span></span>
+        <span class="claim-popup-discount" id="claimPopupDiscount">-22%</span>
+      </div>
+      
+      <div class="claim-popup-price-row">
         <span class="old-price" id="claimPopupOldPrice">₱700</span>
         <span class="new-price"><span class="peso">₱</span><span id="claimPopupNewPrice">545</span></span>
       </div>
       
-      <!-- Steps / Messages -->
-      <div class="popup-steps">
+      <!-- Steps -->
+      <div class="claim-popup-steps">
         <div class="step-item">
           <span class="step-icon"><i class="fas fa-check-circle"></i></span>
           <span class="step-text"><strong>Successful Payments</strong> can receive mega cashback.</span>
         </div>
         <div class="step-item">
           <span class="step-icon"><i class="fas fa-check-circle"></i></span>
-          <span class="step-text">Cashback will be received <strong>instantly</strong> after purchased treats.</span>
+          <span class="step-text">Cashback received <strong>instantly</strong> after purchased treats.</span>
         </div>
         <div class="step-item">
           <span class="step-icon"><i class="fas fa-check-circle"></i></span>
@@ -1241,223 +1556,21 @@
       </div>
       
       <!-- Help Widget -->
-      <div class="popup-help-row">
-        <span class="popup-help-text"><i class="fas fa-life-ring"></i> For any concern</span>
-        <a class="popup-help-link" href="#" onclick="openHelp()">
+      <div class="claim-popup-help-row">
+        <span class="claim-popup-help-text"><i class="fas fa-life-ring"></i> For any concern</span>
+        <a class="claim-popup-help-link" href="#" onclick="openHelp()">
           <img src="https://cdn.prod.website-files.com/6385b55675a0bd614777a5c1/6401880e8f2d075927b56e39_icon-light.svg" alt="Help" />
           HELP
         </a>
       </div>
       
       <!-- PROCEED Button -->
-      <button class="popup-btn-proceed" id="popupProceedBtn" onclick="startTimer()">
+      <button class="claim-popup-btn-proceed" id="claimProceedBtn" onclick="startTimer()">
         <i class="fas fa-arrow-right"></i> PROCEED
-        <span class="timer-display" id="timerDisplay"></span>
+        <span class="timer-display" id="claimTimerDisplay"></span>
       </button>
     </div>
   </div>
-
-  <style>
-    /* Popup User Info Styles */
-    .popup-user-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 1.2rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .popup-user-avatar {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #00d4ff, #0099cc);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ffffff;
-      font-weight: 800;
-      font-size: 1.1rem;
-      box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
-    }
-
-    .popup-user-details {
-      flex: 1;
-    }
-
-    .popup-user-details .user-name {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 0.95rem;
-      color: #ffffff;
-    }
-
-    .popup-user-details .user-phone {
-      font-family: 'Inter', sans-serif;
-      font-weight: 500;
-      font-size: 0.7rem;
-      color: rgba(255, 255, 255, 0.5);
-      letter-spacing: 0.04em;
-    }
-
-    .popup-user-details .user-card {
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
-      font-size: 0.65rem;
-      color: #00d4ff;
-      background: rgba(0, 212, 255, 0.1);
-      padding: 2px 10px;
-      border-radius: 30px;
-      display: inline-block;
-      margin-top: 2px;
-      border: 1px solid rgba(0, 212, 255, 0.1);
-    }
-
-    .popup-user-details .user-card i {
-      margin-right: 4px;
-    }
-
-    /* Steps */
-    .popup-steps {
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 16px;
-      padding: 0.8rem 1rem;
-      margin-bottom: 1rem;
-      border: 1px solid rgba(255, 255, 255, 0.04);
-    }
-
-    .popup-steps .step-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 4px 0;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.7rem;
-      color: rgba(255, 255, 255, 0.6);
-      line-height: 1.4;
-    }
-
-    .popup-steps .step-item .step-icon {
-      color: #00d4ff;
-      font-size: 0.6rem;
-      margin-top: 2px;
-      width: 16px;
-      text-align: center;
-    }
-
-    .popup-steps .step-item .step-text {
-      flex: 1;
-    }
-
-    .popup-steps .step-item .step-text strong {
-      color: #ffffff;
-    }
-
-    /* Help Widget */
-    .popup-help-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-      padding-top: 0.4rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.04);
-    }
-
-    .popup-help-text {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.6rem;
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.35);
-      letter-spacing: 0.04em;
-    }
-
-    .popup-help-link {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.6rem;
-      font-weight: 700;
-      color: #00d4ff;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      padding: 4px 12px;
-      border-radius: 30px;
-      background: rgba(0, 212, 255, 0.06);
-      border: 1px solid rgba(0, 212, 255, 0.08);
-    }
-
-    .popup-help-link:hover {
-      background: rgba(0, 212, 255, 0.12);
-      transform: scale(1.02);
-    }
-
-    .popup-help-link img {
-      width: 18px;
-      height: 18px;
-      display: block;
-    }
-
-    /* PROCEED Button */
-    .popup-btn-proceed {
-      width: 100%;
-      background: linear-gradient(145deg, #00d4ff, #0099cc);
-      border: none;
-      border-radius: 16px;
-      padding: 1rem 0.5rem;
-      font-family: 'Inter', sans-serif;
-      font-weight: 800;
-      font-size: 1rem;
-      color: #ffffff;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 30px rgba(0, 212, 255, 0.15);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-top: 0.2rem;
-    }
-
-    .popup-btn-proceed:hover {
-      background: linear-gradient(145deg, #00e5ff, #00aadd);
-      box-shadow: 0 0 50px rgba(0, 212, 255, 0.25);
-      transform: scale(1.02);
-    }
-
-    .popup-btn-proceed:active {
-      transform: scale(0.96);
-    }
-
-    .popup-btn-proceed i {
-      color: #ffffff;
-    }
-
-    .popup-btn-proceed.disabled {
-      background: #4a5568;
-      cursor: not-allowed;
-      box-shadow: none;
-      transform: none !important;
-    }
-
-    .popup-btn-proceed.disabled:hover {
-      background: #4a5568;
-      box-shadow: none;
-      transform: none;
-    }
-
-    .popup-btn-proceed .timer-display {
-      color: #ef4444;
-      font-weight: 900;
-      font-size: 1.1rem;
-      margin-left: 6px;
-      font-variant-numeric: tabular-nums;
-    }
-  </style>
 
   <script>
     (function() {
@@ -1566,10 +1679,62 @@
 
       // ===== USER DATA =====
       const userPhone = localStorage.getItem('user_phone') || '09171234567';
-      const userName = 'Ivana';
+
+      // ===== CARD POPUP LOGIC =====
+      let cardPopupNumber = null;
+      const cardPopupOverlay = document.getElementById('cardPopupOverlay');
+      const cardPopupImage = document.getElementById('cardPopupImage');
+      const cardPopupBadge = document.getElementById('cardPopupBadge');
+      const cardPopupDiscount = document.getElementById('cardPopupDiscount');
+      const cardPopupOldPrice = document.getElementById('cardPopupOldPrice');
+      const cardPopupNewPrice = document.getElementById('cardPopupNewPrice');
+      const cardPopupSelectBtn = document.getElementById('cardPopupSelectBtn');
+
+      window.openCardPopup = function(cardNumber) {
+        cardPopupNumber = cardNumber;
+        const data = cardData[cardNumber];
+        
+        cardPopupImage.src = data.img;
+        cardPopupBadge.textContent = data.badge;
+        cardPopupDiscount.textContent = data.discount;
+        cardPopupOldPrice.textContent = data.oldPrice;
+        cardPopupNewPrice.textContent = data.newPrice;
+        
+        updateCardPopupButtonState();
+        
+        cardPopupOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      };
+
+      window.closeCardPopup = function() {
+        cardPopupOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      };
+
+      function updateCardPopupButtonState() {
+        const cardId = 'card' + cardPopupNumber;
+        const card = document.getElementById(cardId);
+        const isSelected = card.classList.contains('selected');
+        
+        if (isSelected) {
+          cardPopupSelectBtn.classList.add('selected-popup');
+          cardPopupSelectBtn.innerHTML = '<i class="fas fa-check-circle"></i> ✓ Selected';
+        } else {
+          cardPopupSelectBtn.classList.remove('selected-popup');
+          cardPopupSelectBtn.innerHTML = '<i class="fas fa-check-circle"></i> Select Treat';
+        }
+      }
+
+      window.cardPopupSelectCard = function() {
+        if (cardPopupNumber) {
+          selectCard(cardPopupNumber);
+          updateCardPopupButtonState();
+          // Close popup after selecting
+          setTimeout(closeCardPopup, 400);
+        }
+      };
 
       // ===== CLAIM POPUP LOGIC =====
-      let claimPopupCardNumber = null;
       let timerInterval = null;
       let timeRemaining = 0;
       let isTimerRunning = false;
@@ -1580,18 +1745,12 @@
       const claimPopupDiscount = document.getElementById('claimPopupDiscount');
       const claimPopupOldPrice = document.getElementById('claimPopupOldPrice');
       const claimPopupNewPrice = document.getElementById('claimPopupNewPrice');
-      const claimPopupCardBadge = document.getElementById('popupCardBadge');
-      const claimPopupUserName = document.getElementById('popupUserName');
-      const claimPopupUserPhone = document.getElementById('popupUserPhone');
-      const popupProceedBtn = document.getElementById('popupProceedBtn');
-      const timerDisplay = document.getElementById('timerDisplay');
-
-      // Set user info
-      claimPopupUserName.textContent = userName;
-      claimPopupUserPhone.textContent = '📱 ' + userPhone;
+      const claimPopupPhone = document.getElementById('claimPopupPhone');
+      const claimPopupReward = document.getElementById('claimPopupReward');
+      const claimProceedBtn = document.getElementById('claimProceedBtn');
+      const claimTimerDisplay = document.getElementById('claimTimerDisplay');
 
       function openClaimPopup() {
-        // Get the currently selected card
         if (selectedCard === null) {
           alert('💳 Please select a treat reward first!');
           return;
@@ -1600,18 +1759,15 @@
         const cardNumber = parseInt(selectedCard.replace('card', ''));
         const data = cardData[cardNumber];
         
-        claimPopupCardNumber = cardNumber;
         claimPopupImage.src = data.img;
         claimPopupBadge.textContent = data.badge;
         claimPopupDiscount.textContent = data.discount;
         claimPopupOldPrice.textContent = data.oldPrice;
         claimPopupNewPrice.textContent = data.newPrice;
-        claimPopupCardBadge.textContent = data.badge;
+        claimPopupPhone.textContent = userPhone;
+        claimPopupReward.textContent = data.badge;
         
-        // Reset timer state
-        resetTimer();
-        
-        // Update button state
+        resetClaimTimer();
         updateClaimPopupButtonState();
         
         claimPopupOverlay.classList.add('active');
@@ -1619,22 +1775,18 @@
       }
 
       function closeClaimPopup() {
-        resetTimer();
+        resetClaimTimer();
         claimPopupOverlay.classList.remove('active');
         document.body.style.overflow = '';
       }
 
       function updateClaimPopupButtonState() {
         if (selectedCard !== null) {
-          popupProceedBtn.innerHTML = '<i class="fas fa-check-circle"></i> SELECTED <span class="timer-display" id="timerDisplay"></span>';
-          popupProceedBtn.classList.add('disabled');
+          claimProceedBtn.innerHTML = '<i class="fas fa-check-circle"></i> SELECTED <span class="timer-display" id="claimTimerDisplay"></span>';
+          claimProceedBtn.classList.add('disabled');
         } else {
-          popupProceedBtn.innerHTML = '<i class="fas fa-arrow-right"></i> PROCEED <span class="timer-display" id="timerDisplay"></span>';
-          popupProceedBtn.classList.remove('disabled');
-        }
-        const newTimerDisplay = popupProceedBtn.querySelector('.timer-display');
-        if (newTimerDisplay) {
-          timerDisplay.textContent = newTimerDisplay.textContent;
+          claimProceedBtn.innerHTML = '<i class="fas fa-arrow-right"></i> PROCEED <span class="timer-display" id="claimTimerDisplay"></span>';
+          claimProceedBtn.classList.remove('disabled');
         }
       }
 
@@ -1647,11 +1799,10 @@
         
         if (isTimerRunning) return;
         
-        // Start timer
         timeRemaining = 300;
         isTimerRunning = true;
-        popupProceedBtn.classList.add('disabled');
-        popupProceedBtn.innerHTML = '<i class="fas fa-hourglass-half"></i> WAIT <span class="timer-display" id="timerDisplay">5:00</span>';
+        claimProceedBtn.classList.add('disabled');
+        claimProceedBtn.innerHTML = '<i class="fas fa-hourglass-half"></i> WAIT <span class="timer-display" id="claimTimerDisplay">5:00</span>';
         
         timerInterval = setInterval(function() {
           timeRemaining--;
@@ -1659,7 +1810,7 @@
           const seconds = timeRemaining % 60;
           const timeStr = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
           
-          const display = document.getElementById('timerDisplay');
+          const display = document.getElementById('claimTimerDisplay');
           if (display) {
             display.textContent = timeStr;
           }
@@ -1668,22 +1819,22 @@
             clearInterval(timerInterval);
             timerInterval = null;
             isTimerRunning = false;
-            popupProceedBtn.classList.remove('disabled');
-            popupProceedBtn.innerHTML = '<i class="fas fa-check-circle"></i> PROCEED NOW <span class="timer-display" id="timerDisplay"></span>';
+            claimProceedBtn.classList.remove('disabled');
+            claimProceedBtn.innerHTML = '<i class="fas fa-check-circle"></i> PROCEED NOW <span class="timer-display" id="claimTimerDisplay"></span>';
             alert('⏰ Time is up! You can now proceed.');
           }
         }, 1000);
       }
 
-      function resetTimer() {
+      function resetClaimTimer() {
         if (timerInterval) {
           clearInterval(timerInterval);
           timerInterval = null;
         }
         isTimerRunning = false;
         timeRemaining = 0;
-        popupProceedBtn.classList.remove('disabled');
-        const display = document.getElementById('timerDisplay');
+        claimProceedBtn.classList.remove('disabled');
+        const display = document.getElementById('claimTimerDisplay');
         if (display) {
           display.textContent = '';
         }
@@ -1742,28 +1893,6 @@
         updateBalance(amount, true);
       };
 
-      // ===== POPUP CARD SELECTION =====
-      window.popupSelectCard = function() {
-        if (popupCardNumber) {
-          selectCard(popupCardNumber);
-          updatePopupButtonState();
-        }
-      };
-
-      function updatePopupButtonState() {
-        const cardId = 'card' + popupCardNumber;
-        const card = document.getElementById(cardId);
-        const isSelected = card.classList.contains('selected');
-        
-        if (isSelected) {
-          popupSelectBtn.classList.add('selected-popup');
-          popupSelectBtn.innerHTML = '<i class="fas fa-check-circle"></i> ✓ Selected';
-        } else {
-          popupSelectBtn.classList.remove('selected-popup');
-          popupSelectBtn.innerHTML = '<i class="fas fa-check-circle"></i> Select Treat';
-        }
-      }
-
       // ===== HELP WIDGET =====
       window.openHelp = function() {
         window.open('https://facebook.com/FreeShoppingPH', '_blank');
@@ -1778,10 +1907,15 @@
         }
       });
 
-      // Close popup with Escape key
+      // Close popups with Escape key
       document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && claimPopupOverlay.classList.contains('active')) {
-          closeClaimPopup();
+        if (e.key === 'Escape') {
+          if (cardPopupOverlay.classList.contains('active')) {
+            closeCardPopup();
+          }
+          if (claimPopupOverlay.classList.contains('active')) {
+            closeClaimPopup();
+          }
         }
       });
 
