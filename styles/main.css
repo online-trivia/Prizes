@@ -921,6 +921,8 @@ body::before {
   font-size: 1rem;
 }
 
+/* ===== CARD POPUP BUTTON - CORRECT LOGIC ===== */
+/* Unselected: Neon Blue | Selected: Gray */
 .card-popup-btn-select {
   width: 100%;
   background: var(--neon-blue);
@@ -957,19 +959,20 @@ body::before {
   color: #ffffff;
 }
 
+/* SELECTED STATE - GRAY */
 .card-popup-btn-select.selected-popup {
-  background: var(--neon-blue);
-  box-shadow: 0 0 30px var(--neon-blue-glow);
+  background: #94a3b8;
+  box-shadow: none;
 }
 
 .card-popup-btn-select.selected-popup:hover {
-  background: #00b8e6;
-  box-shadow: 0 0 50px var(--neon-blue-glow);
-  transform: scale(1.02);
+  background: #94a3b8;
+  box-shadow: none;
+  transform: none;
 }
 
 .card-popup-btn-select.selected-popup i {
-  color: #ffffff;
+  color: #94a3b8;
 }
 
 /* === CLAIM POPUP === */
@@ -1267,6 +1270,7 @@ body::before {
   color: #ffffff;
 }
 
+/* TIMER/DISABLED STATE - GRAY */
 .claim-popup-btn-pay.disabled {
   background: #94a3b8;
   cursor: not-allowed;
