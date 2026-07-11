@@ -587,23 +587,62 @@
       display: block;
     }
 
-    /* ===== MAGNIFIER ZOOM EFFECT ON CARDS ===== */
-    .card-item .magnifier {
+    /* ===== PROJECTOR ZOOM ON CARDS (Same as Profile Photo) ===== */
+    .card-item .card-projector-zoom {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: 14px;
-      pointer-events: none;
-      z-index: 5;
-      background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.25) 0%, transparent 60%);
+      top: 50%;
+      left: 50%;
+      width: 120%;
+      height: 120%;
+      border-radius: 16px;
+      border: 2px solid rgba(255, 215, 0, 0.4);
+      box-shadow: 
+        0 0 30px rgba(255, 215, 0, 0.15),
+        0 0 60px rgba(0, 212, 255, 0.1),
+        inset 0 0 30px rgba(255, 215, 0, 0.05);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(2px);
+      transform: translate(-50%, -50%) scale(0);
       opacity: 0;
-      transition: opacity 0.3s ease;
+      pointer-events: none;
+      z-index: 10;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .card-item:hover .magnifier {
+    .card-item .card-projector-zoom img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 14px;
+      display: block;
+    }
+
+    .card-item .card-projector-zoom::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(from 0deg, transparent 0%, rgba(255, 215, 0, 0.05) 10%, transparent 20%, rgba(0, 212, 255, 0.05) 30%, transparent 40%, rgba(255, 215, 0, 0.05) 50%, transparent 60%, rgba(0, 212, 255, 0.05) 70%, transparent 80%, rgba(255, 215, 0, 0.05) 90%, transparent 100%);
+      animation: projector-spin 8s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+      border-radius: 16px;
+    }
+
+    .card-item:hover .card-projector-zoom {
+      transform: translate(-50%, -50%) scale(1);
       opacity: 1;
+    }
+
+    .card-item:hover img {
+      transform: scale(1.08);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     .card-item .card-overlay {
@@ -617,6 +656,7 @@
       flex-direction: column;
       align-items: center;
       gap: 3px;
+      z-index: 15;
     }
 
     .card-item .card-label {
@@ -633,7 +673,6 @@
       color: #fcd34d;
     }
 
-    /* Prize Display - With Centerline Strikethrough */
     .card-item .prize-display {
       display: flex;
       align-items: center;
@@ -730,7 +769,7 @@
       padding: 2px 8px;
       border-radius: 20px;
       letter-spacing: 0.04em;
-      z-index: 2;
+      z-index: 20;
       box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
 
@@ -743,7 +782,6 @@
       color: #ffffff;
     }
 
-    /* Discount Tag */
     .card-item .discount-tag {
       position: absolute;
       top: 6px;
@@ -755,7 +793,7 @@
       padding: 2px 8px;
       border-radius: 20px;
       letter-spacing: 0.04em;
-      z-index: 2;
+      z-index: 20;
       box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
 
@@ -907,11 +945,13 @@
       </div>
     </div>
 
-    <!-- Two Side-by-Side Cards -->
+    <!-- Two Side-by-Side Cards with Projector Zoom -->
     <div class="cards-grid">
       <!-- Card 1: 1500 -->
-      <div class="card-item" id="card1" data-amount="545">
-        <div class="magnifier"></div>
+      <div class="card-item" id="card1" data-amount="1500.00">
+        <div class="card-projector-zoom">
+          <img src="photos/1500iva.png" alt="Zoom" />
+        </div>
         <span class="card-badge"><i class="fas fa-star"></i> ₱1,500</span>
         <span class="discount-tag"><i class="fas fa-tag"></i> -22%</span>
         <img src="photos/1500iva.png" alt="Reward 1500" />
@@ -926,8 +966,10 @@
       </div>
 
       <!-- Card 2: 3000 -->
-      <div class="card-item" id="card2" data-amount="1080">
-        <div class="magnifier"></div>
+      <div class="card-item" id="card2" data-amount="3000.00">
+        <div class="card-projector-zoom">
+          <img src="photos/3000iva.png" alt="Zoom" />
+        </div>
         <span class="card-badge"><i class="fas fa-star"></i> ₱3,000</span>
         <span class="discount-tag"><i class="fas fa-tag"></i> -28%</span>
         <img src="photos/3000iva.png" alt="Reward 3000" />
@@ -1055,7 +1097,7 @@
       window.selectCard = function(cardNumber) {
         const card = document.getElementById('card' + cardNumber);
         const btn = card.querySelector('.card-btn');
-        const amount = parseInt(card.dataset.amount);
+        const amount = parseFloat(card.dataset.amount);
         const cardId = 'card' + cardNumber;
 
         if (selectedCard === cardId) {
@@ -1083,19 +1125,6 @@
         currentBalance = amount;
         updateBalance(amount, true);
       };
-
-      // ---- MAGNIFIER ZOOM EFFECT (mouse tracking) ----
-      document.querySelectorAll('.card-item').forEach(card => {
-        const magnifier = card.querySelector('.magnifier');
-        
-        card.addEventListener('mousemove', function(e) {
-          const rect = this.getBoundingClientRect();
-          const x = ((e.clientX - rect.left) / rect.width) * 100;
-          const y = ((e.clientY - rect.top) / rect.height) * 100;
-          magnifier.style.setProperty('--mx', x + '%');
-          magnifier.style.setProperty('--my', y + '%');
-        });
-      });
 
       // ---- CLAIM NOW BUTTON ----
       document.getElementById('claimNowBtn').addEventListener('click', function() {
