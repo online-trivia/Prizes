@@ -101,7 +101,7 @@
         <div class="card-image-wrapper" onclick="openCardPopup(1)">
           <img src="photos/1500iva.png" alt="Reward 1500" />
         </div>
-        <span class="card-badge"><i class="fas fa-star"></i> ₱1,500</span>
+        <span class="card-badge"><i class="fas fa-star"></i> ₱1500</span>
         <span class="discount-tag"><i class="fas fa-tag"></i> -22%</span>
         <div class="card-overlay">
           <span class="card-label"><i class="fas fa-gift"></i> Treat Reward</span>
@@ -118,7 +118,7 @@
         <div class="card-image-wrapper" onclick="openCardPopup(2)">
           <img src="photos/3000iva.png" alt="Reward 3000" />
         </div>
-        <span class="card-badge"><i class="fas fa-star"></i> ₱3,000</span>
+        <span class="card-badge"><i class="fas fa-star"></i> ₱3000</span>
         <span class="discount-tag"><i class="fas fa-tag"></i> -28%</span>
         <div class="card-overlay">
           <span class="card-label"><i class="fas fa-gift"></i> Treat Reward</span>
@@ -137,7 +137,7 @@
     </div>
   </div>
 
-  <!-- Card Popup -->
+  <!-- ===== CARD POPUP ===== -->
   <div class="card-popup-overlay" id="cardPopupOverlay">
     <div class="card-popup-content">
       <button class="card-popup-close" id="cardPopupClose">
@@ -148,53 +148,69 @@
         <img src="" alt="Reward" id="cardPopupImage" />
       </div>
       
-      <div class="card-popup-badge-row">
-        <span class="card-popup-badge"><i class="fas fa-star"></i> <span id="cardPopupBadge">₱1,500</span></span>
-        <span class="card-popup-discount" id="cardPopupDiscount">-22%</span>
-      </div>
-      
+      <!-- Price Row: Old Price → New Price → Discount -->
       <div class="card-popup-price-row">
         <span class="old-price" id="cardPopupOldPrice">₱700</span>
         <span class="new-price"><span class="peso">₱</span><span id="cardPopupNewPrice">545</span></span>
+        <span class="card-popup-discount-badge" id="cardPopupDiscount">-22%</span>
       </div>
       
+      <!-- Label -->
       <div class="card-popup-label"><i class="fas fa-gift"></i> Treat Reward</div>
-      <div class="card-popup-reward"><span class="peso">₱</span><span id="cardPopupReward">1,500</span></div>
       
+      <!-- Reward Amount -->
+      <div class="card-popup-reward"><span class="peso">₱</span><span id="cardPopupReward">1500</span></div>
+      
+      <!-- Star Icon -->
+      <div class="card-popup-star">
+        <i class="fas fa-star"></i>
+        <span class="star-label">Card Reward</span>
+      </div>
+      
+      <!-- Select Button -->
       <button class="card-popup-btn-select" id="cardPopupSelectBtn">
         <i class="fas fa-check-circle"></i> Select Treat
       </button>
     </div>
   </div>
 
-  <!-- Claim Now Popup -->
+  <!-- ===== CLAIM POPUP ===== -->
   <div class="claim-popup-overlay" id="claimPopupOverlay">
     <div class="claim-popup-content">
       <button class="claim-popup-close" id="claimPopupClose">
         <i class="fas fa-times"></i>
       </button>
       
+      <!-- User Info -->
       <div class="claim-popup-user-info">
         <div class="user-phone"><i class="fas fa-phone"></i> <span id="claimPopupPhone">09171234567</span></div>
-        <div class="user-reward">Reward: <span id="claimPopupReward">₱1,500</span></div>
+        <div class="user-reward">Reward: <span id="claimPopupReward">₱1500</span></div>
       </div>
       
       <div class="claim-popup-image-wrapper">
         <img src="" alt="Reward" id="claimPopupImage" />
       </div>
       
-      <div class="claim-popup-badge-row">
-        <span class="claim-popup-badge"><i class="fas fa-star"></i> <span id="claimPopupBadge">₱1,500</span></span>
-        <span class="claim-popup-discount" id="claimPopupDiscount">-22%</span>
-      </div>
-      
+      <!-- Price Row: Old Price → New Price → Discount -->
       <div class="claim-popup-price-row">
         <span class="old-price" id="claimPopupOldPrice">₱700</span>
         <span class="new-price"><span class="peso">₱</span><span id="claimPopupNewPrice">545</span></span>
+        <span class="claim-popup-discount-badge" id="claimPopupDiscount">-22%</span>
       </div>
       
-      <div class="claim-popup-reward"><span class="peso">₱</span><span id="claimPopupRewardAmount">1,500</span></div>
+      <!-- Label -->
+      <div class="claim-popup-label"><i class="fas fa-gift"></i> Treat Reward</div>
       
+      <!-- Reward Amount -->
+      <div class="claim-popup-reward"><span class="peso">₱</span><span id="claimPopupRewardAmount">1500</span></div>
+      
+      <!-- Star Icon -->
+      <div class="claim-popup-star">
+        <i class="fas fa-star"></i>
+        <span class="star-label">Card Reward</span>
+      </div>
+      
+      <!-- Steps -->
       <div class="claim-popup-steps">
         <div class="step-item">
           <span class="step-icon"><i class="fas fa-check-circle"></i></span>
@@ -214,6 +230,7 @@
         </div>
       </div>
       
+      <!-- Help Widget -->
       <div class="claim-popup-help-row">
         <span class="claim-popup-help-text"><i class="fas fa-life-ring"></i> For any concern</span>
         <a class="claim-popup-help-link" href="#" onclick="openHelp()">
@@ -222,6 +239,7 @@
         </a>
       </div>
       
+      <!-- PAY TREATS Button -->
       <button class="claim-popup-btn-pay" id="claimPayBtn">
         <i class="fas fa-credit-card"></i> PAY TREATS
         <span class="timer-display" id="claimTimerDisplay"></span>
