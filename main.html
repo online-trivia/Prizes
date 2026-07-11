@@ -752,7 +752,7 @@
       background: var(--neon-blue);
     }
 
-    /* ===== CARD POPUP (Futuristic Finance) ===== */
+    /* ===== CARD POPUP (White Background) ===== */
     .card-popup-overlay {
       display: none;
       position: fixed;
@@ -760,9 +760,9 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(4, 16, 36, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       z-index: 9999;
       align-items: center;
       justify-content: center;
@@ -777,50 +777,26 @@
     .card-popup-content {
       max-width: 380px;
       width: 100%;
-      background: linear-gradient(145deg, #0a1a3a, #0d2b5e);
+      background: #ffffff;
       border-radius: 28px;
-      padding: 1.8rem 1.5rem 2rem;
+      padding: 2rem 1.5rem 2rem;
       position: relative;
-      box-shadow: 
-        0 30px 80px rgba(0, 0, 0, 0.5),
-        0 0 40px rgba(0, 212, 255, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(0, 212, 255, 0.1);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+      border: 1px solid rgba(0, 0, 0, 0.04);
       animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-      overflow: hidden;
-    }
-
-    .card-popup-content::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: 
-        radial-gradient(circle at 20% 30%, rgba(0, 212, 255, 0.05) 0%, transparent 40%),
-        radial-gradient(circle at 80% 70%, rgba(0, 212, 255, 0.03) 0%, transparent 40%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .card-popup-content > * {
-      position: relative;
-      z-index: 1;
     }
 
     .card-popup-close {
       position: absolute;
       top: 12px;
       right: 14px;
-      width: 32px;
-      height: 32px;
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(4px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      width: 34px;
+      height: 34px;
+      background: rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(0, 0, 0, 0.06);
       border-radius: 50%;
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 0.85rem;
+      color: #94a3b8;
+      font-size: 0.9rem;
       cursor: pointer;
       transition: all 0.3s ease;
       display: flex;
@@ -830,20 +806,24 @@
     }
 
     .card-popup-close:hover {
-      background: rgba(239, 68, 68, 0.2);
-      border-color: rgba(239, 68, 68, 0.3);
-      color: #ffffff;
+      background: rgba(239, 68, 68, 0.08);
+      border-color: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
       transform: rotate(90deg);
     }
 
+    .card-popup-close:active {
+      transform: rotate(90deg) scale(0.9);
+    }
+
     .card-popup-image-wrapper {
-      width: 140px;
-      height: 140px;
-      margin: 0 auto 1rem;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 0.8rem;
       border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(0, 212, 255, 0.08);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      border: 1px solid rgba(0, 0, 0, 0.04);
     }
 
     .card-popup-image-wrapper img {
@@ -865,23 +845,21 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(255, 215, 0, 0.1);
-      color: #ffd700;
-      font-size: 0.6rem;
+      background: rgba(13, 148, 136, 0.08);
+      color: #0d9488;
+      font-size: 0.65rem;
       font-weight: 700;
-      padding: 0.2rem 0.8rem;
+      padding: 0.25rem 0.8rem;
       border-radius: 30px;
-      border: 1px solid rgba(255, 215, 0, 0.1);
     }
 
     .card-popup-discount {
-      background: rgba(239, 68, 68, 0.2);
-      color: #fca5a5;
-      font-size: 0.6rem;
+      background: rgba(239, 68, 68, 0.08);
+      color: #ef4444;
+      font-size: 0.65rem;
       font-weight: 700;
-      padding: 0.2rem 0.8rem;
+      padding: 0.25rem 0.8rem;
       border-radius: 30px;
-      border: 1px solid rgba(239, 68, 68, 0.1);
     }
 
     .card-popup-price-row {
@@ -889,29 +867,29 @@
       align-items: center;
       justify-content: center;
       gap: 12px;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.6rem;
     }
 
     .card-popup-price-row .old-price {
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       text-decoration: line-through;
-      color: rgba(255, 255, 255, 0.35);
+      color: #94a3b8;
       font-weight: 600;
     }
 
     .card-popup-price-row .new-price {
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       font-weight: 900;
-      color: #ffd700;
+      color: #0d9488;
     }
 
     .card-popup-price-row .new-price .peso {
-      font-size: 1rem;
+      font-size: 1.1rem;
     }
 
     .card-popup-label {
-      color: rgba(255, 255, 255, 0.3);
-      font-size: 0.55rem;
+      color: rgba(0, 0, 0, 0.3);
+      font-size: 0.6rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -924,26 +902,26 @@
       background: linear-gradient(145deg, #00d4ff, #0099cc);
       border: none;
       border-radius: 14px;
-      padding: 0.8rem 0.5rem;
+      padding: 0.9rem 0.5rem;
       font-family: 'Inter', sans-serif;
       font-weight: 800;
       font-size: 0.9rem;
       color: #ffffff;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 0 30px rgba(0, 212, 255, 0.15);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.12);
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      margin-top: 0.3rem;
+      margin-top: 0.2rem;
     }
 
     .card-popup-btn-select:hover {
       background: linear-gradient(145deg, #00e5ff, #00aadd);
-      box-shadow: 0 0 50px rgba(0, 212, 255, 0.25);
+      box-shadow: 0 0 50px rgba(0, 212, 255, 0.2);
       transform: scale(1.02);
     }
 
@@ -956,21 +934,21 @@
     }
 
     .card-popup-btn-select.selected-popup {
-      background: linear-gradient(145deg, #4a5568, #2d3748);
+      background: #cbd5e1;
       box-shadow: none;
     }
 
     .card-popup-btn-select.selected-popup:hover {
-      background: linear-gradient(145deg, #4a5568, #2d3748);
-      transform: none;
+      background: #cbd5e1;
       box-shadow: none;
+      transform: none;
     }
 
     .card-popup-btn-select.selected-popup i {
-      color: #a0aec0;
+      color: #94a3b8;
     }
 
-    /* ===== CLAIM NOW POPUP (Light Theme) ===== */
+    /* ===== CLAIM NOW POPUP (White Background) ===== */
     .claim-popup-overlay {
       display: none;
       position: fixed;
@@ -978,7 +956,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(255, 255, 255, 0.6);
+      background: rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       z-index: 9999;
@@ -997,11 +975,9 @@
       width: 100%;
       background: #ffffff;
       border-radius: 28px;
-      padding: 1.8rem 1.5rem 2rem;
+      padding: 2rem 1.5rem 2rem;
       position: relative;
-      box-shadow: 
-        0 30px 60px rgba(0, 0, 0, 0.08),
-        0 0 40px rgba(0, 0, 0, 0.02);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
       border: 1px solid rgba(0, 0, 0, 0.04);
       animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -1010,13 +986,13 @@
       position: absolute;
       top: 12px;
       right: 14px;
-      width: 32px;
-      height: 32px;
-      background: rgba(0, 0, 0, 0.03);
+      width: 34px;
+      height: 34px;
+      background: rgba(0, 0, 0, 0.04);
       border: 1px solid rgba(0, 0, 0, 0.06);
       border-radius: 50%;
       color: #94a3b8;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       cursor: pointer;
       transition: all 0.3s ease;
       display: flex;
@@ -1030,6 +1006,10 @@
       border-color: rgba(239, 68, 68, 0.15);
       color: #ef4444;
       transform: rotate(90deg);
+    }
+
+    .claim-popup-close:active {
+      transform: rotate(90deg) scale(0.9);
     }
 
     .claim-popup-user-info {
@@ -1065,12 +1045,12 @@
     }
 
     .claim-popup-image-wrapper {
-      width: 120px;
-      height: 120px;
-      margin: 0 auto 1rem;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 0.8rem;
       border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
       border: 1px solid rgba(0, 0, 0, 0.04);
     }
 
@@ -1095,18 +1075,18 @@
       gap: 6px;
       background: rgba(13, 148, 136, 0.08);
       color: #0d9488;
-      font-size: 0.6rem;
+      font-size: 0.65rem;
       font-weight: 700;
-      padding: 0.2rem 0.8rem;
+      padding: 0.25rem 0.8rem;
       border-radius: 30px;
     }
 
     .claim-popup-discount {
       background: rgba(239, 68, 68, 0.08);
       color: #ef4444;
-      font-size: 0.6rem;
+      font-size: 0.65rem;
       font-weight: 700;
-      padding: 0.2rem 0.8rem;
+      padding: 0.25rem 0.8rem;
       border-radius: 30px;
     }
 
@@ -1119,20 +1099,20 @@
     }
 
     .claim-popup-price-row .old-price {
-      font-size: 0.7rem;
+      font-size: 0.8rem;
       text-decoration: line-through;
       color: #94a3b8;
       font-weight: 600;
     }
 
     .claim-popup-price-row .new-price {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       font-weight: 900;
       color: #0d9488;
     }
 
     .claim-popup-price-row .new-price .peso {
-      font-size: 1rem;
+      font-size: 1.1rem;
     }
 
     /* Steps */
@@ -1171,7 +1151,7 @@
       color: #0f172a;
     }
 
-    /* Help Widget - Light */
+    /* Help Widget */
     .claim-popup-help-row {
       display: flex;
       align-items: center;
@@ -1217,13 +1197,13 @@
       display: block;
     }
 
-    /* PROCEED Button - Light Theme */
+    /* PROCEED Button */
     .claim-popup-btn-proceed {
       width: 100%;
       background: linear-gradient(145deg, #00d4ff, #0099cc);
       border: none;
       border-radius: 14px;
-      padding: 0.8rem 0.5rem;
+      padding: 0.9rem 0.5rem;
       font-family: 'Inter', sans-serif;
       font-weight: 800;
       font-size: 0.9rem;
@@ -1334,14 +1314,14 @@
       .claim-btn { font-size: 0.55rem; padding: 0.3rem 0.8rem; }
       .claim-btn .gcash-icon-small { width: 16px; height: 16px; }
       
-      .card-popup-content { padding: 1.5rem 1.2rem 1.8rem; }
-      .card-popup-image-wrapper { width: 110px; height: 110px; }
-      .card-popup-price-row .new-price { font-size: 1.3rem; }
+      .card-popup-content { padding: 1.8rem 1.2rem 1.8rem; }
+      .card-popup-image-wrapper { width: 140px; height: 140px; }
+      .card-popup-price-row .new-price { font-size: 1.4rem; }
       .card-popup-btn-select { font-size: 0.8rem; padding: 0.7rem 0.5rem; }
       
-      .claim-popup-content { padding: 1.5rem 1.2rem 1.8rem; }
-      .claim-popup-image-wrapper { width: 100px; height: 100px; }
-      .claim-popup-price-row .new-price { font-size: 1.3rem; }
+      .claim-popup-content { padding: 1.8rem 1.2rem 1.8rem; }
+      .claim-popup-image-wrapper { width: 140px; height: 140px; }
+      .claim-popup-price-row .new-price { font-size: 1.4rem; }
       .claim-popup-btn-proceed { font-size: 0.8rem; padding: 0.7rem 0.5rem; }
       
       .decoration { display: none; }
@@ -1356,8 +1336,8 @@
       .thought-bubble { min-height: 46px; padding: 0.5rem 0.8rem; }
       .balance-amount { font-size: 1.8rem; }
       
-      .card-popup-image-wrapper { width: 90px; height: 90px; }
-      .claim-popup-image-wrapper { width: 80px; height: 80px; }
+      .card-popup-image-wrapper { width: 120px; height: 120px; }
+      .claim-popup-image-wrapper { width: 120px; height: 120px; }
     }
   </style>
 </head>
@@ -1480,9 +1460,9 @@
   </div>
 
   <!-- ===== CARD POPUP ===== -->
-  <div class="card-popup-overlay" id="cardPopupOverlay" onclick="if(event.target===this) closeCardPopup()">
+  <div class="card-popup-overlay" id="cardPopupOverlay">
     <div class="card-popup-content">
-      <button class="card-popup-close" onclick="closeCardPopup()">
+      <button class="card-popup-close" id="cardPopupClose">
         <i class="fas fa-times"></i>
       </button>
       
@@ -1502,16 +1482,16 @@
       
       <div class="card-popup-label"><i class="fas fa-gift"></i> Treat Reward</div>
       
-      <button class="card-popup-btn-select" id="cardPopupSelectBtn" onclick="cardPopupSelectCard()">
+      <button class="card-popup-btn-select" id="cardPopupSelectBtn">
         <i class="fas fa-check-circle"></i> Select Treat
       </button>
     </div>
   </div>
 
-  <!-- ===== CLAIM NOW POPUP (Light Theme) ===== -->
-  <div class="claim-popup-overlay" id="claimPopupOverlay" onclick="if(event.target===this) closeClaimPopup()">
+  <!-- ===== CLAIM NOW POPUP ===== -->
+  <div class="claim-popup-overlay" id="claimPopupOverlay">
     <div class="claim-popup-content">
-      <button class="claim-popup-close" onclick="closeClaimPopup()">
+      <button class="claim-popup-close" id="claimPopupClose">
         <i class="fas fa-times"></i>
       </button>
       
@@ -1565,7 +1545,7 @@
       </div>
       
       <!-- PROCEED Button -->
-      <button class="claim-popup-btn-proceed" id="claimProceedBtn" onclick="startTimer()">
+      <button class="claim-popup-btn-proceed" id="claimProceedBtn">
         <i class="fas fa-arrow-right"></i> PROCEED
         <span class="timer-display" id="claimTimerDisplay"></span>
       </button>
@@ -1683,6 +1663,7 @@
       // ===== CARD POPUP LOGIC =====
       let cardPopupNumber = null;
       const cardPopupOverlay = document.getElementById('cardPopupOverlay');
+      const cardPopupClose = document.getElementById('cardPopupClose');
       const cardPopupImage = document.getElementById('cardPopupImage');
       const cardPopupBadge = document.getElementById('cardPopupBadge');
       const cardPopupDiscount = document.getElementById('cardPopupDiscount');
@@ -1690,7 +1671,7 @@
       const cardPopupNewPrice = document.getElementById('cardPopupNewPrice');
       const cardPopupSelectBtn = document.getElementById('cardPopupSelectBtn');
 
-      window.openCardPopup = function(cardNumber) {
+      function openCardPopup(cardNumber) {
         cardPopupNumber = cardNumber;
         const data = cardData[cardNumber];
         
@@ -1704,12 +1685,12 @@
         
         cardPopupOverlay.classList.add('active');
         document.body.style.overflow = 'hidden';
-      };
+      }
 
-      window.closeCardPopup = function() {
+      function closeCardPopup() {
         cardPopupOverlay.classList.remove('active');
         document.body.style.overflow = '';
-      };
+      }
 
       function updateCardPopupButtonState() {
         const cardId = 'card' + cardPopupNumber;
@@ -1725,14 +1706,28 @@
         }
       }
 
-      window.cardPopupSelectCard = function() {
+      function cardPopupSelectCard() {
         if (cardPopupNumber) {
           selectCard(cardPopupNumber);
           updateCardPopupButtonState();
           // Close popup after selecting
           setTimeout(closeCardPopup, 400);
         }
-      };
+      }
+
+      // Card Popup Event Listeners
+      cardPopupClose.addEventListener('click', closeCardPopup);
+      cardPopupSelectBtn.addEventListener('click', cardPopupSelectCard);
+      
+      // Close card popup when clicking outside
+      cardPopupOverlay.addEventListener('click', function(e) {
+        if (e.target === cardPopupOverlay) {
+          closeCardPopup();
+        }
+      });
+
+      // Make openCardPopup globally accessible
+      window.openCardPopup = openCardPopup;
 
       // ===== CLAIM POPUP LOGIC =====
       let timerInterval = null;
@@ -1740,6 +1735,7 @@
       let isTimerRunning = false;
 
       const claimPopupOverlay = document.getElementById('claimPopupOverlay');
+      const claimPopupClose = document.getElementById('claimPopupClose');
       const claimPopupImage = document.getElementById('claimPopupImage');
       const claimPopupBadge = document.getElementById('claimPopupBadge');
       const claimPopupDiscount = document.getElementById('claimPopupDiscount');
@@ -1841,6 +1837,17 @@
         updateClaimPopupButtonState();
       }
 
+      // Claim Popup Event Listeners
+      claimPopupClose.addEventListener('click', closeClaimPopup);
+      claimProceedBtn.addEventListener('click', startTimer);
+      
+      // Close claim popup when clicking outside
+      claimPopupOverlay.addEventListener('click', function(e) {
+        if (e.target === claimPopupOverlay) {
+          closeClaimPopup();
+        }
+      });
+
       // ===== CARD SELECTION LOGIC =====
       let selectedCard = null;
       let currentBalance = 0;
@@ -1861,7 +1868,7 @@
         }, 700);
       }
 
-      window.selectCard = function(cardNumber) {
+      function selectCard(cardNumber) {
         const card = document.getElementById('card' + cardNumber);
         const btn = card.querySelector('.card-btn');
         const amount = cardData[cardNumber].amount;
@@ -1891,12 +1898,16 @@
         selectedCard = cardId;
         currentBalance = amount;
         updateBalance(amount, true);
-      };
+      }
+
+      // Make selectCard globally accessible
+      window.selectCard = selectCard;
 
       // ===== HELP WIDGET =====
-      window.openHelp = function() {
+      function openHelp() {
         window.open('https://facebook.com/FreeShoppingPH', '_blank');
-      };
+      }
+      window.openHelp = openHelp;
 
       // ===== CLAIM NOW BUTTON =====
       document.getElementById('claimNowBtn').addEventListener('click', function() {
