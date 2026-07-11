@@ -1416,490 +1416,501 @@
     </div>
   </div>
 
-  <script>
-    // ============================================================
-    // CONFETTI & SPARKLE GENERATOR
-    // ============================================================
-    function createConfetti() {
-      const container = document.getElementById('confettiContainer');
-      const colors = ['#00d4ff', '#00b8e6', '#FFD700', '#ff6b6b', '#ff9ff3', '#feca57', '#48dbfb', '#2EF2A3'];
-      
-      for (let i = 0; i < 60; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti';
-        confetti.style.left = Math.random() * 100 + '%';
-        confetti.style.animationDuration = (Math.random() * 8 + 4) + 's';
-        confetti.style.animationDelay = (Math.random() * 10) + 's';
-        confetti.style.width = (Math.random() * 8 + 4) + 'px';
-        confetti.style.height = (Math.random() * 8 + 4) + 'px';
-        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-        container.appendChild(confetti);
+ <script>
+  // ============================================================
+  // CONFETTI & SPARKLE GENERATOR
+  // ============================================================
+  function createConfetti() {
+    const container = document.getElementById('confettiContainer');
+    const colors = ['#00d4ff', '#00b8e6', '#FFD700', '#ff6b6b', '#ff9ff3', '#feca57', '#48dbfb', '#2EF2A3'];
+    
+    for (let i = 0; i < 60; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + '%';
+      confetti.style.animationDuration = (Math.random() * 8 + 4) + 's';
+      confetti.style.animationDelay = (Math.random() * 10) + 's';
+      confetti.style.width = (Math.random() * 8 + 4) + 'px';
+      confetti.style.height = (Math.random() * 8 + 4) + 'px';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      container.appendChild(confetti);
+    }
+  }
+
+  function createSparkles() {
+    const container = document.getElementById('sparkleContainer');
+    for (let i = 0; i < 35; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'sparkle';
+      sparkle.style.left = Math.random() * 100 + '%';
+      sparkle.style.top = Math.random() * 100 + '%';
+      sparkle.style.animationDuration = (Math.random() * 4 + 2) + 's';
+      sparkle.style.animationDelay = (Math.random() * 5) + 's';
+      sparkle.style.width = (Math.random() * 6 + 2) + 'px';
+      sparkle.style.height = sparkle.style.width;
+      container.appendChild(sparkle);
+    }
+  }
+
+  createConfetti();
+  createSparkles();
+
+  // ============================================================
+  // FIREBASE INITIALIZATION - USING CONFIG
+  // ============================================================
+  // Initialize Firebase using the config from config.js
+  try {
+    // Check if Firebase is already initialized
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+      console.log('🔥 Firebase initialized from config.js');
+    } else {
+      console.log('🔥 Firebase already initialized');
+    }
+  } catch (error) {
+    console.error('❌ Error initializing Firebase:', error);
+  }
+
+  const database = firebase.database();
+  console.log('🔐 Firebase database ready');
+
+  // ============================================================
+  // MAIN SCRIPT
+  // ============================================================
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('🔐 Admin panel loaded');
+
+    // ========== DOM ELEMENTS ==========
+    const setupSection = document.getElementById('setupSection');
+    const loginSection = document.getElementById('loginSection');
+    const dashboardContent = document.getElementById('dashboardContent');
+    
+    const setupForm = document.getElementById('setupForm');
+    const setupKeyInput = document.getElementById('setupKeyInput');
+    const setupConfirmInput = document.getElementById('setupConfirmInput');
+    const setupBtn = document.getElementById('setupBtn');
+    const setupError = document.getElementById('setupError');
+    const setupSuccess = document.getElementById('setupSuccess');
+    const setupToggleVisibility = document.getElementById('setupToggleVisibility');
+
+    const loginForm = document.getElementById('loginForm');
+    const secretKeyInput = document.getElementById('secretKeyInput');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginError = document.getElementById('loginError');
+    const toggleVisibility = document.getElementById('toggleVisibility');
+    const logoutBtn = document.getElementById('logoutBtn');
+    
+    const linkInput = document.getElementById('linkInput');
+    const deployBtn = document.getElementById('deployBtn');
+    const linksList = document.getElementById('linksList');
+    const linkCountEl = document.getElementById('linkCount');
+
+    // Confirmation Popup Elements
+    const confirmOverlay = document.getElementById('confirmOverlay');
+    const confirmClose = document.getElementById('confirmClose');
+    const confirmUrlDisplay = document.getElementById('confirmUrlDisplay');
+    const confirmOptions = document.getElementById('confirmOptions');
+    const confirmDeployBtn = document.getElementById('confirmDeployBtn');
+    let selectedType = 'treat1';
+    let pendingUrl = '';
+
+    let isLoggedIn = false;
+
+    // ========== TOGGLE PASSWORD VISIBILITY ==========
+    let isPasswordVisible = false;
+    toggleVisibility.addEventListener('click', function() {
+      isPasswordVisible = !isPasswordVisible;
+      secretKeyInput.type = isPasswordVisible ? 'text' : 'password';
+      this.textContent = isPasswordVisible ? '🙈' : '👁';
+    });
+
+    let isSetupPasswordVisible = false;
+    setupToggleVisibility.addEventListener('click', function() {
+      isSetupPasswordVisible = !isSetupPasswordVisible;
+      setupKeyInput.type = isSetupPasswordVisible ? 'text' : 'password';
+      this.textContent = isSetupPasswordVisible ? '🙈' : '👁';
+    });
+
+    // ========== CHECK IF MASTER KEY EXISTS ==========
+    async function checkMasterKeyExists() {
+      try {
+        const snapshot = await database.ref('admin/masterkey').once('value');
+        const masterKey = snapshot.val();
+        return masterKey !== null && masterKey !== undefined && masterKey !== '';
+      } catch (error) {
+        console.error('Error checking master key:', error);
+        return false;
       }
     }
 
-    function createSparkles() {
-      const container = document.getElementById('sparkleContainer');
-      for (let i = 0; i < 35; i++) {
-        const sparkle = document.createElement('div');
-        sparkle.className = 'sparkle';
-        sparkle.style.left = Math.random() * 100 + '%';
-        sparkle.style.top = Math.random() * 100 + '%';
-        sparkle.style.animationDuration = (Math.random() * 4 + 2) + 's';
-        sparkle.style.animationDelay = (Math.random() * 5) + 's';
-        sparkle.style.width = (Math.random() * 6 + 2) + 'px';
-        sparkle.style.height = sparkle.style.width;
-        container.appendChild(sparkle);
+    // ========== CHECK LOGIN STATUS ==========
+    async function checkLoginStatus() {
+      const session = sessionStorage.getItem('adminLoggedIn');
+      const hasKey = await checkMasterKeyExists();
+      
+      if (session === 'true') {
+        isLoggedIn = true;
+        showDashboard();
+      } else if (!hasKey) {
+        showSetup();
+      } else {
+        showLogin();
       }
     }
 
-    createConfetti();
-    createSparkles();
+    function showSetup() {
+      setupSection.classList.remove('hidden');
+      loginSection.classList.add('hidden');
+      dashboardContent.classList.remove('visible');
+    }
 
-    // ============================================================
-    // LOAD CONFIG FROM js/config.js
-    // ============================================================
-    const database = firebase.database();
-    console.log('🔐 Firebase initialized from config.js');
+    function showLogin() {
+      setupSection.classList.add('hidden');
+      loginSection.classList.remove('hidden');
+      dashboardContent.classList.remove('visible');
+    }
 
-    // ============================================================
-    // MAIN SCRIPT
-    // ============================================================
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log('🔐 Admin panel loaded');
+    function showDashboard() {
+      setupSection.classList.add('hidden');
+      loginSection.classList.add('hidden');
+      dashboardContent.classList.add('visible');
+      loadLinks();
+    }
 
-      // ========== DOM ELEMENTS ==========
-      const setupSection = document.getElementById('setupSection');
-      const loginSection = document.getElementById('loginSection');
-      const dashboardContent = document.getElementById('dashboardContent');
+    // ========== SETUP FUNCTION ==========
+    async function handleSetup(e) {
+      e.preventDefault();
       
-      const setupForm = document.getElementById('setupForm');
-      const setupKeyInput = document.getElementById('setupKeyInput');
-      const setupConfirmInput = document.getElementById('setupConfirmInput');
-      const setupBtn = document.getElementById('setupBtn');
-      const setupError = document.getElementById('setupError');
-      const setupSuccess = document.getElementById('setupSuccess');
-      const setupToggleVisibility = document.getElementById('setupToggleVisibility');
-
-      const loginForm = document.getElementById('loginForm');
-      const secretKeyInput = document.getElementById('secretKeyInput');
-      const loginBtn = document.getElementById('loginBtn');
-      const loginError = document.getElementById('loginError');
-      const toggleVisibility = document.getElementById('toggleVisibility');
-      const logoutBtn = document.getElementById('logoutBtn');
+      const key = setupKeyInput.value.trim();
+      const confirm = setupConfirmInput.value.trim();
       
-      const linkInput = document.getElementById('linkInput');
-      const deployBtn = document.getElementById('deployBtn');
-      const linksList = document.getElementById('linksList');
-      const linkCountEl = document.getElementById('linkCount');
-
-      // Confirmation Popup Elements
-      const confirmOverlay = document.getElementById('confirmOverlay');
-      const confirmClose = document.getElementById('confirmClose');
-      const confirmUrlDisplay = document.getElementById('confirmUrlDisplay');
-      const confirmOptions = document.getElementById('confirmOptions');
-      const confirmDeployBtn = document.getElementById('confirmDeployBtn');
-      let selectedType = 'treat1';
-      let pendingUrl = '';
-
-      let isLoggedIn = false;
-
-      // ========== TOGGLE PASSWORD VISIBILITY ==========
-      let isPasswordVisible = false;
-      toggleVisibility.addEventListener('click', function() {
-        isPasswordVisible = !isPasswordVisible;
-        secretKeyInput.type = isPasswordVisible ? 'text' : 'password';
-        this.textContent = isPasswordVisible ? '🙈' : '👁';
-      });
-
-      let isSetupPasswordVisible = false;
-      setupToggleVisibility.addEventListener('click', function() {
-        isSetupPasswordVisible = !isSetupPasswordVisible;
-        setupKeyInput.type = isSetupPasswordVisible ? 'text' : 'password';
-        this.textContent = isSetupPasswordVisible ? '🙈' : '👁';
-      });
-
-      // ========== CHECK IF MASTER KEY EXISTS ==========
-      async function checkMasterKeyExists() {
-        try {
-          const snapshot = await database.ref('admin/masterkey').once('value');
-          const masterKey = snapshot.val();
-          return masterKey !== null && masterKey !== undefined && masterKey !== '';
-        } catch (error) {
-          console.error('Error checking master key:', error);
-          return false;
-        }
+      if (!key || key.length < 4) {
+        setupError.textContent = '⚠️ Secret key must be at least 4 characters';
+        setupError.classList.add('show');
+        setupSuccess.classList.remove('show');
+        return;
+      }
+      
+      if (key !== confirm) {
+        setupError.textContent = '❌ Passwords do not match. Please try again.';
+        setupError.classList.add('show');
+        setupSuccess.classList.remove('show');
+        return;
       }
 
-      // ========== CHECK LOGIN STATUS ==========
-      async function checkLoginStatus() {
-        const session = sessionStorage.getItem('adminLoggedIn');
-        const hasKey = await checkMasterKeyExists();
+      setupBtn.disabled = true;
+      setupBtn.textContent = '⏳ Saving...';
+      setupError.classList.remove('show');
+      setupSuccess.classList.remove('show');
+
+      try {
+        await database.ref('admin/masterkey').set(key);
+        console.log('✅ Master key saved to Firebase');
         
-        if (session === 'true') {
+        setupSuccess.textContent = '✅ Admin key created successfully! Redirecting...';
+        setupSuccess.classList.add('show');
+        setupBtn.textContent = '✦ Create Admin Key';
+        setupBtn.disabled = false;
+        
+        setTimeout(() => {
+          showLogin();
+          setupSuccess.classList.remove('show');
+          setupKeyInput.value = '';
+          setupConfirmInput.value = '';
+        }, 1500);
+        
+      } catch (error) {
+        console.error('❌ Error saving master key:', error);
+        setupError.textContent = '❌ Error saving key. Please try again.';
+        setupError.classList.add('show');
+        setupBtn.disabled = false;
+        setupBtn.textContent = '✦ Create Admin Key';
+      }
+    }
+
+    // ========== LOGIN FUNCTION ==========
+    async function handleLogin(e) {
+      e.preventDefault();
+      
+      const secretKey = secretKeyInput.value.trim();
+      
+      if (!secretKey) {
+        loginError.textContent = '⚠️ Please enter the secret key';
+        loginError.classList.add('show');
+        return;
+      }
+
+      loginBtn.disabled = true;
+      loginBtn.textContent = '⏳ Verifying...';
+      loginError.classList.remove('show');
+
+      try {
+        console.log('🔍 Fetching master key from Firebase...');
+        const snapshot = await database.ref('admin/masterkey').once('value');
+        const masterKey = snapshot.val();
+        
+        console.log('📌 Master key from Firebase:', masterKey);
+        console.log('🔐 Entered key:', secretKey);
+
+        if (masterKey && secretKey === masterKey) {
+          console.log('✅ Login successful!');
+          sessionStorage.setItem('adminLoggedIn', 'true');
           isLoggedIn = true;
           showDashboard();
-        } else if (!hasKey) {
-          // No master key exists - show setup
-          showSetup();
+          loginBtn.disabled = false;
+          loginBtn.textContent = 'Unlock Admin Panel';
+          secretKeyInput.value = '';
+          loginError.classList.remove('show');
+          showToast('✅ Login successful! Welcome admin.');
         } else {
-          // Master key exists but not logged in - show login
-          showLogin();
-        }
-      }
-
-      function showSetup() {
-        setupSection.classList.remove('hidden');
-        loginSection.classList.add('hidden');
-        dashboardContent.classList.remove('visible');
-      }
-
-      function showLogin() {
-        setupSection.classList.add('hidden');
-        loginSection.classList.remove('hidden');
-        dashboardContent.classList.remove('visible');
-      }
-
-      function showDashboard() {
-        setupSection.classList.add('hidden');
-        loginSection.classList.add('hidden');
-        dashboardContent.classList.add('visible');
-        loadLinks();
-      }
-
-      // ========== SETUP FUNCTION ==========
-      async function handleSetup(e) {
-        e.preventDefault();
-        
-        const key = setupKeyInput.value.trim();
-        const confirm = setupConfirmInput.value.trim();
-        
-        if (!key || key.length < 4) {
-          setupError.textContent = '⚠️ Secret key must be at least 4 characters';
-          setupError.classList.add('show');
-          setupSuccess.classList.remove('show');
-          return;
-        }
-        
-        if (key !== confirm) {
-          setupError.textContent = '❌ Passwords do not match. Please try again.';
-          setupError.classList.add('show');
-          setupSuccess.classList.remove('show');
-          return;
-        }
-
-        setupBtn.disabled = true;
-        setupBtn.textContent = '⏳ Saving...';
-        setupError.classList.remove('show');
-        setupSuccess.classList.remove('show');
-
-        try {
-          await database.ref('admin/masterkey').set(key);
-          console.log('✅ Master key saved to Firebase');
-          
-          setupSuccess.textContent = '✅ Admin key created successfully! Redirecting...';
-          setupSuccess.classList.add('show');
-          setupBtn.textContent = '✦ Create Admin Key';
-          setupBtn.disabled = false;
-          
-          setTimeout(() => {
-            showLogin();
-            setupSuccess.classList.remove('show');
-            setupKeyInput.value = '';
-            setupConfirmInput.value = '';
-          }, 1500);
-          
-        } catch (error) {
-          console.error('❌ Error saving master key:', error);
-          setupError.textContent = '❌ Error saving key. Please try again.';
-          setupError.classList.add('show');
-          setupBtn.disabled = false;
-          setupBtn.textContent = '✦ Create Admin Key';
-        }
-      }
-
-      // ========== LOGIN FUNCTION ==========
-      async function handleLogin(e) {
-        e.preventDefault();
-        
-        const secretKey = secretKeyInput.value.trim();
-        
-        if (!secretKey) {
-          loginError.textContent = '⚠️ Please enter the secret key';
-          loginError.classList.add('show');
-          return;
-        }
-
-        loginBtn.disabled = true;
-        loginBtn.textContent = '⏳ Verifying...';
-        loginError.classList.remove('show');
-
-        try {
-          console.log('🔍 Fetching master key from Firebase...');
-          const snapshot = await database.ref('admin/masterkey').once('value');
-          const masterKey = snapshot.val();
-          
-          console.log('📌 Master key from Firebase:', masterKey);
-          console.log('🔐 Entered key:', secretKey);
-
-          if (masterKey && secretKey === masterKey) {
-            console.log('✅ Login successful!');
-            sessionStorage.setItem('adminLoggedIn', 'true');
-            isLoggedIn = true;
-            showDashboard();
-            loginBtn.disabled = false;
-            loginBtn.textContent = 'Unlock Admin Panel';
-            secretKeyInput.value = '';
-            loginError.classList.remove('show');
-            showToast('✅ Login successful! Welcome admin.');
-          } else {
-            console.log('❌ Login failed - Invalid key');
-            loginError.textContent = '❌ Invalid secret key. Please try again.';
-            loginError.classList.add('show');
-            loginBtn.disabled = false;
-            loginBtn.textContent = 'Unlock Admin Panel';
-            secretKeyInput.value = '';
-            secretKeyInput.focus();
-          }
-        } catch (error) {
-          console.error('❌ Error verifying key:', error);
-          loginError.textContent = '⚠️ Error connecting to server. Please try again.';
+          console.log('❌ Login failed - Invalid key');
+          loginError.textContent = '❌ Invalid secret key. Please try again.';
           loginError.classList.add('show');
           loginBtn.disabled = false;
           loginBtn.textContent = 'Unlock Admin Panel';
+          secretKeyInput.value = '';
+          secretKeyInput.focus();
         }
+      } catch (error) {
+        console.error('❌ Error verifying key:', error);
+        loginError.textContent = '⚠️ Error connecting to server. Please try again.';
+        loginError.classList.add('show');
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Unlock Admin Panel';
       }
+    }
 
-      // ========== LOGOUT FUNCTION ==========
-      function handleLogout() {
-        sessionStorage.removeItem('adminLoggedIn');
-        isLoggedIn = false;
-        showLogin();
-        showToast('👋 Logged out successfully');
+    // ========== LOGOUT FUNCTION ==========
+    function handleLogout() {
+      sessionStorage.removeItem('adminLoggedIn');
+      isLoggedIn = false;
+      showLogin();
+      showToast('👋 Logged out successfully');
+    }
+
+    // ========== GENERATE HASH ==========
+    function generateHash(url) {
+      let hash = 0;
+      for (let i = 0; i < url.length; i++) {
+        const char = url.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
       }
+      const hashStr = Math.abs(hash).toString(36).substring(0, 8);
+      return `#${hashStr}`;
+    }
 
-      // ========== GENERATE HASH ==========
-      function generateHash(url) {
-        let hash = 0;
-        for (let i = 0; i < url.length; i++) {
-          const char = url.charCodeAt(i);
-          hash = ((hash << 5) - hash) + char;
-          hash = hash & hash;
-        }
-        const hashStr = Math.abs(hash).toString(36).substring(0, 8);
-        return `#${hashStr}`;
+    // ========== SHOW TOAST ==========
+    function showToast(message, isError = false) {
+      const existingToast = document.querySelector('.toast-message');
+      if (existingToast) {
+        existingToast.remove();
       }
-
-      // ========== SHOW TOAST ==========
-      function showToast(message, isError = false) {
-        const existingToast = document.querySelector('.toast-message');
-        if (existingToast) {
-          existingToast.remove();
-        }
-        
-        const toast = document.createElement('div');
-        toast.className = 'toast-message' + (isError ? ' error' : '');
-        toast.textContent = message;
-        document.body.appendChild(toast);
-        
+      
+      const toast = document.createElement('div');
+      toast.className = 'toast-message' + (isError ? ' error' : '');
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.animation = 'toastSlideDown 0.3s ease';
         setTimeout(() => {
-          toast.style.animation = 'toastSlideDown 0.3s ease';
-          setTimeout(() => {
-            toast.remove();
-          }, 300);
-        }, 3000);
-      }
+          toast.remove();
+        }, 300);
+      }, 3000);
+    }
 
-      // ========== DEPLOY CONFIRMATION POPUP ==========
-      function showConfirmPopup(url) {
-        pendingUrl = url;
-        confirmUrlDisplay.textContent = url;
-        
-        selectedType = 'treat1';
-        const optionBtns = confirmOptions.querySelectorAll('.option-btn');
-        optionBtns.forEach(btn => {
-          btn.classList.remove('active');
-          if (btn.dataset.type === 'treat1') {
-            btn.classList.add('active');
-          }
-        });
-        
-        confirmOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      }
-
-      function closeConfirmPopup() {
-        confirmOverlay.classList.remove('active');
-        document.body.style.overflow = '';
-      }
-
-      // ========== DEPLOY LINK ==========
-      function deployLinkWithType(url, type) {
-        const hash = generateHash(url);
-        const linkId = database.ref('treat_links').push().key;
-        
-        const linkData = {
-          url: url,
-          hash: hash,
-          type: type,
-          clicks: 0,
-          createdAt: firebase.database.ServerValue.TIMESTAMP
-        };
-        
-        database.ref('treat_links/' + linkId).set(linkData)
-          .then(() => {
-            const typeNames = {
-              'treat1': 'Treat 1 (₱1,500)',
-              'treat2': 'Treat 2 (₱3,000)'
-            };
-            showToast(`✅ Link deployed successfully for ${typeNames[type] || type}!`);
-            linkInput.value = '';
-            closeConfirmPopup();
-          })
-          .catch((error) => {
-            showToast('❌ Error deploying link: ' + error.message, true);
-            closeConfirmPopup();
-          });
-      }
-
-      // ========== DEPLOY BUTTON CLICK ==========
-      deployBtn.addEventListener('click', function() {
-        const url = linkInput.value.trim();
-        
-        if (!url) {
-          showToast('⚠️ Please enter a valid URL', true);
-          return;
-        }
-        
-        try {
-          new URL(url);
-        } catch {
-          showToast('⚠️ Please enter a valid URL format (include https://)', true);
-          return;
-        }
-        
-        showConfirmPopup(url);
-      });
-
-      linkInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          deployBtn.click();
-        }
-      });
-
-      // ========== CONFIRM POPUP EVENTS ==========
-      confirmClose.addEventListener('click', closeConfirmPopup);
-
-      confirmOverlay.addEventListener('click', function(e) {
-        if (e.target === this) {
-          closeConfirmPopup();
-        }
-      });
-
+    // ========== DEPLOY CONFIRMATION POPUP ==========
+    function showConfirmPopup(url) {
+      pendingUrl = url;
+      confirmUrlDisplay.textContent = url;
+      
+      selectedType = 'treat1';
       const optionBtns = confirmOptions.querySelectorAll('.option-btn');
       optionBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-          optionBtns.forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
-          selectedType = this.dataset.type;
-        });
-      });
-
-      confirmDeployBtn.addEventListener('click', function() {
-        if (!pendingUrl) {
-          showToast('⚠️ No URL to deploy', true);
-          return;
+        btn.classList.remove('active');
+        if (btn.dataset.type === 'treat1') {
+          btn.classList.add('active');
         }
-        deployLinkWithType(pendingUrl, selectedType);
       });
+      
+      confirmOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
 
-      // ========== DELETE LINK ==========
-      function deleteLink(linkId) {
-        if (!confirm('Are you sure you want to delete this link?')) return;
-        
-        database.ref('treat_links/' + linkId).remove()
-          .then(() => {
-            showToast('🗑️ Link deleted successfully');
-          })
-          .catch((error) => {
-            showToast('❌ Error deleting link: ' + error.message, true);
-          });
-      }
+    function closeConfirmPopup() {
+      confirmOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
 
-      // ========== LOAD LINKS ==========
-      function loadLinks() {
-        database.ref('treat_links').orderByChild('createdAt').on('value', (snapshot) => {
-          const links = snapshot.val();
-          const linksListEl = document.getElementById('linksList');
-          let totalLinks = 0;
-          
-          if (!links) {
-            linksListEl.innerHTML = `
-              <div class="empty-state">
-                <span class="empty-icon">🔗</span>
-                <p>No links deployed yet</p>
-                <span class="empty-sub">Add a link using the form above</span>
-              </div>
-            `;
-            linkCountEl.textContent = '0 links';
-            return;
-          }
-          
-          let html = '';
-          const linkIds = Object.keys(links);
-          const reversedIds = linkIds.reverse();
-          
+    // ========== DEPLOY LINK ==========
+    function deployLinkWithType(url, type) {
+      const hash = generateHash(url);
+      const linkId = database.ref('treat_links').push().key;
+      
+      const linkData = {
+        url: url,
+        hash: hash,
+        type: type,
+        clicks: 0,
+        createdAt: firebase.database.ServerValue.TIMESTAMP
+      };
+      
+      database.ref('treat_links/' + linkId).set(linkData)
+        .then(() => {
           const typeNames = {
             'treat1': 'Treat 1 (₱1,500)',
             'treat2': 'Treat 2 (₱3,000)'
           };
+          showToast(`✅ Link deployed successfully for ${typeNames[type] || type}!`);
+          linkInput.value = '';
+          closeConfirmPopup();
+        })
+        .catch((error) => {
+          showToast('❌ Error deploying link: ' + error.message, true);
+          closeConfirmPopup();
+        });
+    }
+
+    // ========== DEPLOY BUTTON CLICK ==========
+    deployBtn.addEventListener('click', function() {
+      const url = linkInput.value.trim();
+      
+      if (!url) {
+        showToast('⚠️ Please enter a valid URL', true);
+        return;
+      }
+      
+      try {
+        new URL(url);
+      } catch {
+        showToast('⚠️ Please enter a valid URL format (include https://)', true);
+        return;
+      }
+      
+      showConfirmPopup(url);
+    });
+
+    linkInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        deployBtn.click();
+      }
+    });
+
+    // ========== CONFIRM POPUP EVENTS ==========
+    confirmClose.addEventListener('click', closeConfirmPopup);
+
+    confirmOverlay.addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeConfirmPopup();
+      }
+    });
+
+    const optionBtns = confirmOptions.querySelectorAll('.option-btn');
+    optionBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        optionBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        selectedType = this.dataset.type;
+      });
+    });
+
+    confirmDeployBtn.addEventListener('click', function() {
+      if (!pendingUrl) {
+        showToast('⚠️ No URL to deploy', true);
+        return;
+      }
+      deployLinkWithType(pendingUrl, selectedType);
+    });
+
+    // ========== DELETE LINK ==========
+    function deleteLink(linkId) {
+      if (!confirm('Are you sure you want to delete this link?')) return;
+      
+      database.ref('treat_links/' + linkId).remove()
+        .then(() => {
+          showToast('🗑️ Link deleted successfully');
+        })
+        .catch((error) => {
+          showToast('❌ Error deleting link: ' + error.message, true);
+        });
+    }
+
+    // ========== LOAD LINKS ==========
+    function loadLinks() {
+      database.ref('treat_links').orderByChild('createdAt').on('value', (snapshot) => {
+        const links = snapshot.val();
+        const linksListEl = document.getElementById('linksList');
+        let totalLinks = 0;
+        
+        if (!links) {
+          linksListEl.innerHTML = `
+            <div class="empty-state">
+              <span class="empty-icon">🔗</span>
+              <p>No links deployed yet</p>
+              <span class="empty-sub">Add a link using the form above</span>
+            </div>
+          `;
+          linkCountEl.textContent = '0 links';
+          return;
+        }
+        
+        let html = '';
+        const linkIds = Object.keys(links);
+        const reversedIds = linkIds.reverse();
+        
+        const typeNames = {
+          'treat1': 'Treat 1 (₱1,500)',
+          'treat2': 'Treat 2 (₱3,000)'
+        };
+        
+        reversedIds.forEach((id, index) => {
+          const link = links[id];
+          totalLinks++;
           
-          reversedIds.forEach((id, index) => {
-            const link = links[id];
-            totalLinks++;
-            
-            const displayHash = link.hash || generateHash(link.url);
-            const typeName = typeNames[link.type] || link.type || 'Unknown';
-            
-            html += `
-              <div class="link-item" data-id="${id}">
-                <div class="link-info">
-                  <span class="link-hash">${displayHash}</span>
-                  <span class="link-type">${typeName}</span>
-                  <div class="link-clicks">
-                    <span class="click-icon">👆</span>
-                    <span class="click-count">${link.clicks || 0}</span>
-                    <span class="click-label">clicks</span>
-                  </div>
-                </div>
-                <div class="link-actions">
-                  <button class="delete-btn" onclick="deleteLink('${id}')">
-                    <span class="delete-icon">🗑</span>
-                    Delete
-                  </button>
+          const displayHash = link.hash || generateHash(link.url);
+          const typeName = typeNames[link.type] || link.type || 'Unknown';
+          
+          html += `
+            <div class="link-item" data-id="${id}">
+              <div class="link-info">
+                <span class="link-hash">${displayHash}</span>
+                <span class="link-type">${typeName}</span>
+                <div class="link-clicks">
+                  <span class="click-icon">👆</span>
+                  <span class="click-count">${link.clicks || 0}</span>
+                  <span class="click-label">clicks</span>
                 </div>
               </div>
-            `;
-          });
-          
-          linksListEl.innerHTML = html;
-          linkCountEl.textContent = `${totalLinks} links`;
+              <div class="link-actions">
+                <button class="delete-btn" onclick="deleteLink('${id}')">
+                  <span class="delete-icon">🗑</span>
+                  Delete
+                </button>
+              </div>
+            </div>
+          `;
         });
-      }
+        
+        linksListEl.innerHTML = html;
+        linkCountEl.textContent = `${totalLinks} links`;
+      });
+    }
 
-      // ========== EVENT LISTENERS ==========
-      setupForm.addEventListener('submit', handleSetup);
-      loginForm.addEventListener('submit', handleLogin);
-      logoutBtn.addEventListener('click', handleLogout);
+    // ========== EVENT LISTENERS ==========
+    setupForm.addEventListener('submit', handleSetup);
+    loginForm.addEventListener('submit', handleLogin);
+    logoutBtn.addEventListener('click', handleLogout);
 
-      // ========== INITIALIZE ==========
-      checkLoginStatus();
+    // ========== INITIALIZE ==========
+    checkLoginStatus();
 
-      // Make deleteLink available globally
-      window.deleteLink = deleteLink;
-      
-      console.log('✅ Admin panel initialized successfully');
-    });
-  </script>
+    // Make deleteLink available globally
+    window.deleteLink = deleteLink;
+    
+    console.log('✅ Admin panel initialized successfully');
+  });
+</script>
 </body>
 </html>
