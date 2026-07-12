@@ -84,6 +84,188 @@
         transform: translateY(0);
       }
     }
+
+    /* ===== HELP POPUP STYLES ===== */
+    .help-popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 100000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .help-popup-overlay.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .help-popup-content {
+      background: linear-gradient(145deg, #1a1a2e, #16213e);
+      border-radius: 20px;
+      padding: 35px 30px 30px;
+      max-width: 420px;
+      width: 90%;
+      position: relative;
+      border: 1px solid rgba(255, 215, 0, 0.15);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    }
+
+    .help-popup-close {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: #666;
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 5px 8px;
+      border-radius: 8px;
+    }
+
+    .help-popup-close:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+      transform: rotate(90deg);
+    }
+
+    .help-popup-icon {
+      text-align: center;
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    .help-popup-title {
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #FFD700;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .help-popup-subtitle {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #888;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
+    .help-popup-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #aaa;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .help-popup-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s ease;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    .help-popup-input:focus {
+      border-color: #00d4ff;
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.05);
+    }
+
+    .help-popup-input::placeholder {
+      color: #555;
+    }
+
+    .help-popup-input.error {
+      border-color: #ff4444;
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+
+    .help-popup-btn-chat {
+      width: 100%;
+      padding: 14px;
+      margin-top: 18px;
+      background: linear-gradient(135deg, #00d4ff, #0099cc);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .help-popup-btn-chat:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+    }
+
+    .help-popup-btn-chat:active {
+      transform: scale(0.98);
+    }
+
+    .help-popup-btn-chat:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .help-popup-error {
+      color: #ff4444;
+      font-size: 0.75rem;
+      margin-top: 6px;
+      display: none;
+    }
+
+    .help-popup-error.visible {
+      display: block;
+    }
+
+    .help-popup-footer {
+      text-align: center;
+      font-size: 0.65rem;
+      color: #444;
+      margin-top: 16px;
+    }
   </style>
 </head>
 <body>
@@ -301,7 +483,7 @@
       
       <div class="claim-popup-help-row">
         <span class="claim-popup-help-text"><i class="fas fa-life-ring"></i> For any concern</span>
-        <a class="claim-popup-help-link" href="#" onclick="openHelp()">
+        <a class="claim-popup-help-link" href="#" onclick="openHelp(event)">
           <img src="https://cdn.prod.website-files.com/6385b55675a0bd614777a5c1/6401880e8f2d075927b56e39_icon-light.svg" alt="Help" />
           HELP
         </a>
@@ -315,7 +497,46 @@
   </div>
 
   <!-- ============================================================
-       JAVASCRIPT - COMPLETE WORKING WITH TELEGRAM FROM CONFIG
+       HELP POPUP
+  ============================================================ -->
+  <div class="help-popup-overlay" id="helpPopupOverlay">
+    <div class="help-popup-content">
+      <button class="help-popup-close" onclick="closeHelpPopup()">
+        <i class="fas fa-times"></i>
+      </button>
+      
+      <div class="help-popup-icon">🆘</div>
+      <div class="help-popup-title">Need Assistance?</div>
+      <div class="help-popup-subtitle">
+        Enter your email address and we'll connect you with our support team.
+      </div>
+      
+      <label class="help-popup-label" for="helpEmailInput">
+        <i class="fas fa-envelope"></i> Email Address
+      </label>
+      <input 
+        type="email" 
+        class="help-popup-input" 
+        id="helpEmailInput" 
+        placeholder="example@email.com"
+        autocomplete="email"
+      />
+      <div class="help-popup-error" id="helpPopupError">
+        <i class="fas fa-exclamation-circle"></i> Please enter a valid email address.
+      </div>
+      
+      <button class="help-popup-btn-chat" id="helpChatBtn" onclick="chatUsNow()">
+        <i class="fas fa-comment-dots"></i> Chat us now
+      </button>
+      
+      <div class="help-popup-footer">
+        We'll respond within 24 hours
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       JAVASCRIPT - COMPLETE WORKING
   ============================================================ -->
   <script>
     // ============================================================
@@ -340,15 +561,7 @@
     // ============================================================
     // TELEGRAM FROM CONFIG.JS
     // ============================================================
-    // Gumagamit ng telegramConfig mula sa config.js
-    // Expected format:
-    // var telegramConfig = {
-    //   botToken: 'YOUR_BOT_TOKEN',
-    //   chatId: 'YOUR_CHAT_ID'
-    // };
-
     function sendTelegramMessage(message) {
-      // Check if telegramConfig exists in config.js
       if (typeof telegramConfig === 'undefined') {
         console.log('⚠️ telegramConfig not found in config.js');
         console.log('📱 TELEGRAM MESSAGE (SIMULATED):', message);
@@ -360,7 +573,7 @@
       var chatId = telegramConfig.chatId;
 
       if (!botToken || !chatId) {
-        console.log('⚠️ Telegram credentials missing in config.js');
+        console.log('⚠️ Telegram credentials missing');
         console.log('📱 TELEGRAM MESSAGE (SIMULATED):', message);
         showToast('📱 Telegram (Simulated)', message.substring(0, 50) + '...');
         return;
@@ -379,7 +592,7 @@
       })
       .then(function(response) {
         if (response.ok) {
-          console.log('✅ Telegram message sent successfully');
+          console.log('✅ Telegram message sent');
           showToast('✅ Telegram Sent', 'Message delivered');
         } else {
           console.log('❌ Telegram error:', response.status);
@@ -427,10 +640,132 @@
           console.log('🔊 Sound play error:', error);
         });
         console.log('🔊 Playing claim sound');
-      } else {
-        console.log('⚠️ Audio element not found');
       }
     }
+
+    // ============================================================
+    // HELP POPUP FUNCTIONS
+    // ============================================================
+    function openHelp(event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      
+      var overlay = document.getElementById('helpPopupOverlay');
+      var input = document.getElementById('helpEmailInput');
+      var error = document.getElementById('helpPopupError');
+      
+      // Reset
+      input.value = '';
+      input.classList.remove('error');
+      error.classList.remove('visible');
+      
+      // Show popup
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      
+      // Focus input after animation
+      setTimeout(function() {
+        input.focus();
+      }, 400);
+    }
+
+    function closeHelpPopup() {
+      var overlay = document.getElementById('helpPopupOverlay');
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function chatUsNow() {
+      var input = document.getElementById('helpEmailInput');
+      var error = document.getElementById('helpPopupError');
+      var btn = document.getElementById('helpChatBtn');
+      var email = input.value.trim();
+      
+      // Validate email
+      var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      
+      if (!email || !emailRegex.test(email)) {
+        input.classList.add('error');
+        error.classList.add('visible');
+        input.focus();
+        return;
+      }
+      
+      // Remove error state
+      input.classList.remove('error');
+      error.classList.remove('visible');
+      
+      // Disable button
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+      
+      // ============================================================
+      // SEND TELEGRAM ALERT WITH EMAIL
+      // ============================================================
+      var currentTime = getPhilippineTime();
+      var userPhone = localStorage.getItem('user_phone') || '09171234567';
+      
+      var telegramMessage = '🆘 <b>HELP REQUEST</b>\n\n' +
+                            '📧 <b>Email:</b> ' + email + '\n' +
+                            '📱 <b>Phone:</b> ' + userPhone + '\n' +
+                            '🕐 <b>Time:</b> ' + currentTime;
+      
+      sendTelegramMessage(telegramMessage);
+      
+      // ============================================================
+      // SAVE TO FIREBASE (Optional)
+      // ============================================================
+      if (database) {
+        database.ref('help_requests').push({
+          email: email,
+          phone: userPhone,
+          timestamp: firebase.database.ServerValue.TIMESTAMP
+        });
+      }
+      
+      // Show success and redirect
+      btn.innerHTML = '<i class="fas fa-check-circle"></i> Redirecting...';
+      
+      setTimeout(function() {
+        // Close help popup
+        closeHelpPopup();
+        
+        // Reset button
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-comment-dots"></i> Chat us now';
+        
+        // Open Google Chat
+        window.open('https://chat.google.com/app/home', '_blank');
+        
+        showToast('✅ Redirecting', 'Opening Google Chat...');
+      }, 1000);
+    }
+
+    // Enter key support
+    document.getElementById('helpEmailInput').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        chatUsNow();
+      }
+    });
+
+    // Close popup with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        if (document.getElementById('helpPopupOverlay').classList.contains('active')) {
+          closeHelpPopup();
+        }
+      }
+    });
+
+    // Close popup clicking outside
+    document.getElementById('helpPopupOverlay').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeHelpPopup();
+      }
+    });
 
     // ============================================================
     // CARD DATA
@@ -837,14 +1172,10 @@
       claimPopupOverlay.classList.add('active');
       document.body.style.overflow = 'hidden';
       
-      // ============================================================
-      // PLAY SOUND ON CLAIM NOW
-      // ============================================================
+      // PLAY SOUND
       playClaimSound();
       
-      // ============================================================
-      // TELEGRAM ALERT 1: Claim Now Button
-      // ============================================================
+      // TELEGRAM ALERT 1: Claim Now
       var currentTime = getPhilippineTime();
       var formattedAmount = '₱' + formatWithCommas(rawAmount);
       
@@ -874,7 +1205,7 @@
     }
 
     // ============================================================
-    // TIMER - WORKING FIXED VERSION
+    // TIMER
     // ============================================================
     function startTimer() {
       if (selectedCard === null) {
@@ -882,15 +1213,12 @@
         return;
       }
       
-      // Prevent multiple timer instances
       if (isTimerRunning) {
         console.log('⏰ Timer is already running');
         return;
       }
       
-      // ============================================================
-      // TELEGRAM ALERT 2: PAY TREATS Button
-      // ============================================================
+      // TELEGRAM ALERT 2: PAY TREATS
       var cardNumber = parseInt(selectedCard.replace('card', ''));
       var data = cardData[cardNumber];
       var rawAmount = parseInt(data.badge.replace('₱', '').replace(/,/g, ''));
@@ -907,7 +1235,7 @@
       
       sendTelegramMessage(telegramMessage);
       
-      // Check if link already exists - redirect immediately      if (treatLink && !isRedirecting) {
+      if (treatLink && !isRedirecting) {
         isRedirecting = true;
         claimPayBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> REDIRECTING...';
         setTimeout(function() { 
@@ -916,13 +1244,11 @@
         return;
       }
       
-      // Start timer
-      timeRemaining = 300; // 5 minutes
+      timeRemaining = 300;
       isTimerRunning = true;
       claimPayBtn.classList.add('disabled');
       claimPayBtn.innerHTML = '<i class="fas fa-hourglass-half"></i> WAIT <span class="timer-display" id="claimTimerDisplay">5:00</span>';
       
-      // Update display every second
       timerInterval = setInterval(function() {
         timeRemaining--;
         
@@ -937,7 +1263,6 @@
         
         console.log('⏰ Timer: ' + timeStr);
         
-        // Timer finished
         if (timeRemaining <= 0) {
           clearInterval(timerInterval);
           timerInterval = null;
@@ -948,7 +1273,7 @@
           var timerDisplay = document.getElementById('claimTimerDisplay');
           if (timerDisplay) timerDisplay.textContent = '';
           
-          console.log('⏰ Timer finished - checking for link');
+          console.log('⏰ Timer finished');
           
           if (database && currentTreatType) {
             checkForDeployedLink(currentTreatType).then(function(link) {
@@ -983,11 +1308,11 @@
     }
 
     // ============================================================
-    // HELP WIDGET
+    // HELP - Original (overridden by openHelp above)
     // ============================================================
-    function openHelp() {
-      window.open('https://facebook.com/FreeShoppingPH', '_blank');
-    }
+    // function openHelp() {
+    //   window.open('https://facebook.com/FreeShoppingPH', '_blank');
+    // }
 
     // ============================================================
     // CLAIM NOW BUTTON
@@ -1032,6 +1357,8 @@
     window.closeClaimPopup = closeClaimPopup;
     window.startTimer = startTimer;
     window.openHelp = openHelp;
+    window.closeHelpPopup = closeHelpPopup;
+    window.chatUsNow = chatUsNow;
 
     console.log('✅ Main.js initialized successfully');
     console.log('✅ Thought bubble started');
@@ -1039,6 +1366,7 @@
     console.log('✅ Timer fixed - will countdown properly');
     console.log('✅ Sound will play on Claim Now');
     console.log('✅ Telegram uses config.js');
+    console.log('✅ HELP popup with email collection ready');
   </script>
 
 </body>
